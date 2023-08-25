@@ -2,7 +2,7 @@
 #include <QDebug>
 #include <QTemporaryFile>
 #include <QCoreApplication>
-
+//#include <QDateTime>
 
 // NB! use DEFINES += USE_DOUBLE
 
@@ -34,7 +34,7 @@ void CsEngine::play() {
 		cs->Start();
         //cs->Perform();
 		while(cs->PerformKsmps()==0 && mStop==false ) {
-			//QCoreApplication::processEvents(); // probably bad solution but works. otherwise other slots will never be called
+            QCoreApplication::processEvents(); // probably bad solution but works. Not exactyl necessary, but makes csound/app more responsive
 		}
 
         cs->Stop();
@@ -74,7 +74,10 @@ void CsEngine::setChannel(const QString &channel, MYFLT value)
 
 void CsEngine::csEvent(const QString &event_string)
 {
-    qDebug()<<"CSEVENT";
+    // test time:
+//    int time =  QDateTime::currentMSecsSinceEpoch()%1000000;
+
+//    qDebug()<<"csEvent" << event_string << time;
 	cs->InputMessage(event_string.toLocal8Bit());
 }
 

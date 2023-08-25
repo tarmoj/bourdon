@@ -15,7 +15,8 @@ Button {
             eventLine = `i -${instrument} 0 -0 ${sound}`;
         }
 
-        console.log(eventLine);
+//        const time = new Date().getTime()%1000000;
+//        console.log(eventLine, time);
         csound.csEvent(eventLine);
     }
 
