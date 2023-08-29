@@ -63,13 +63,21 @@ ApplicationWindow {
 
     //Component.onCompleted: searchButton.clicked()
 
-//    SwipeView {
-//            anchors.fill:parent
-//            currentIndex: 1
+    SwipeView {
+            anchors.fill:parent
+            //currentIndex: 1
 
-//    }
+    Page {
 
+    }
 
+    Page {
+
+    }
+
+    }
+
+/*
     Row {
         id: statusRow
         x: 5;
@@ -105,6 +113,6 @@ ApplicationWindow {
 
 
     }
-
+*/
 
 }
