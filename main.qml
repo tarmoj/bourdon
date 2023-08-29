@@ -10,10 +10,12 @@ ApplicationWindow {
     width: 640
     height: 480
     visible: true
-
-    Material.theme: Material.Dark
-
     title: qsTr("Bourdon test")
+
+
+    property var presets: ["G,d", "c,g", "e,g"]
+
+
 
     header: ToolBar {
 
@@ -90,7 +92,26 @@ ApplicationWindow {
         Page {
             id: bourdonPage
             title: qsTr("Bourdons")
-            BourdonForm {}
+
+            property int currentPreset: -1
+            property bool isPlaying: false
+
+
+            BourdonForm {
+
+                nextButton.onClicked: {
+                    if (bourdonPage.currentPreset < app.presets.length-1 ) {
+                        bourdonPage.currentPreset++ ;
+                    } else {
+                        bourdonPage.currentPreset = 0;
+                    }
+
+                    console.log("New preset: ", bourdonPage.currentPreset)
+                    presetLabel.text = bourdonPage.currentPreset+1;
+                }
+
+            }
+
 
 
         }
@@ -98,7 +119,17 @@ ApplicationWindow {
         Page {
             id: presetPage
             title: qsTr("Presets")
-            PresetForm {}
+
+            function  setPresets(text) {
+                console.log("presets: ", text.split("\n"));
+                // TODO: trim and simplify, maybe into arrays
+            }
+
+            PresetForm {
+
+
+
+            }
 
         }
 

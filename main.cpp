@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     QObject::connect(csoundThread, &QThread::finished, csoundThread, &QThread::deleteLater);
 
     QObject::connect(csoundThread, &QThread::started, cs, &CsEngine::play);
-    csoundThread->start();
+    //csoundThread->start();
 
 
     QQmlApplicationEngine engine;

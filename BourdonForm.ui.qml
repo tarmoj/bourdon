@@ -12,8 +12,7 @@ Rectangle {
     property alias bourdonButtons: bourdonButtons
     property alias playButton: playButton
     property alias nextButton: nextButton
-
-    Material.theme: Material.Dark
+    property alias presetLabel: presetLabel
 
 
     ColumnLayout {
@@ -94,7 +93,7 @@ Rectangle {
                 }
 
                 Label {
-                    id: presentLabel
+                    id: presetLabel
                     font.pointSize: 22
                     font.bold: true
                     text: "0"

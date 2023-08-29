@@ -24,19 +24,22 @@ Item {
             topPadding: 20
             font.pointSize: 14
 
-            //            background: Rectangle {
-            //                color: "darkgrey"
-            //                gradient: Gradient {
-            //                    GradientStop {
-            //                        position: 0.00;
-            //                        color: "#625c6d";
-            //                    }
-            //                    GradientStop {
-            //                        position: 1.00;
-            //                        color: "#9095a0";
-            //                    }
-            //                }
-            //            }
+
+            background: Rectangle {
+                gradient: Gradient {
+                    GradientStop {
+                        position: 0.00;
+                        color: Material.backgroundColor;
+                    }
+                    GradientStop {
+                        position: 1.00;
+                        color: Material.backgroundDimColor;
+                    }
+                }
+                border.color:  presetArea.focus ?  Material.accentColor : Material.frameColor
+                border.width: presetArea.focus ? 1.5 : 1
+                radius: 8
+            }
             text: "G,d\nF,c"
         }
     }
