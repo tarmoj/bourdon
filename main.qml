@@ -15,34 +15,18 @@ ApplicationWindow {
 
     title: qsTr("Bourdon test")
 
-    header:
-        Rectangle {
-            id: headerRect
-            width:parent.width
-            anchors.margins: 5
-            color: "darkgrey"
-
-            Label {
-                id: titleLabel;
-                anchors.horizontalCenter: parent.horizontalCenter
-                font.pointSize: 14
-                font.bold: true
-                text: app.title
-            }
-
-            Button {
-                text: qsTr("Presets ->");
-                scale: 0.6
-                anchors.right: parent.right
-            }
-
+    header: Label {
+            font.pointSize: 16
+            text: swipeView.currentItem.title
+            horizontalAlignment: Text.AlignHCenter
         }
+
 
     Connections {
             target: Application
             function onAboutToQuit() {
                 console.log("Bye!")
-                csound.stop(); // still some exiting error between the threads
+                csound.stop();
             }
         }
 
@@ -64,18 +48,30 @@ ApplicationWindow {
     //Component.onCompleted: searchButton.clicked()
 
     SwipeView {
-            anchors.fill:parent
-            //currentIndex: 1
+        id: swipeView
+        width: parent.width
+        anchors.fill: parent
+        //currentIndex: 1
 
-    Page {
+        Page {
+            id: bourdonPage
+            title: qsTr("Bourdons")
+            Label { text: "Bourdon page"}
+
+
+        }
+
+        Page {
+            id: presetPage
+            title: qsTr("Presets")
+            PresetForm {
+
+            }
+
+        }
 
     }
 
-    Page {
-
-    }
-
-    }
 
 /*
     Row {

@@ -3,46 +3,43 @@ import QtQuick.Controls 2.15
 import QtQuick.Controls.Material
 
 
-Item {
+
+
+Rectangle {
     width: 400
     height: 600
+    color: Material.backgroundColor
 
     anchors.fill: parent
 
-
-    Row {
-        id: titleRow
-        width: parent.width
-
-        Label {
-            id: presetsTitle;
-            anchors.horizontalCenter: parent.horizontalCenter
-            font.pointSize: 14
-            font.bold: true
-            text: qsTr("Presets")
-        }
-
-    }
+    Material.theme: Material.Dark
 
 
     ScrollView {
         id: presetView
-        width: parent.width*0.9
-        anchors.top: titleRow.bottom
-        anchors.topMargin: 10
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin:  10
+        anchors.fill: parent
+        anchors.margins: 10
+//        width: parent.width*0.9
+//        anchors.top: parent.bo
+//        anchors.topMargin: 10
+//        anchors.bottom: parent.bottom
+//        anchors.bottomMargin:  10
 
-        anchors.horizontalCenter: parent.horizontalCenter
+        //anchors.horizontalCenter: parent.horizontalCenter
 
         TextArea {
             id: presetArea
-            background: Rectangle { anchors.fill: parent }
+            anchors.fill: parent
 
-            placeholderText: "G,d\nF,c"
+            //background: Rectangle { anchors.fill: parent }
+
+            text: "G,d\nF,c"
+
         }
 
     }
+
+
 
 
 }
