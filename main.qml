@@ -86,7 +86,7 @@ ApplicationWindow {
         id: swipeView
         width: parent.width
         anchors.fill: parent
-        //currentIndex: 1
+        currentIndex: 1
 
         Page {
             id: bourdonPage

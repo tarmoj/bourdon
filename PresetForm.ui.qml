@@ -2,44 +2,42 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Material
 
-
-
-
-Rectangle {
+Item {
     width: 400
     height: 600
-    color: Material.backgroundColor
 
+    //color: "darkgreen" //Material.backgroundColor
     anchors.fill: parent
+    property alias presetArea: presetArea
 
     Material.theme: Material.Dark
-
 
     ScrollView {
         id: presetView
         anchors.fill: parent
         anchors.margins: 10
-//        width: parent.width*0.9
-//        anchors.top: parent.bo
-//        anchors.topMargin: 10
-//        anchors.bottom: parent.bottom
-//        anchors.bottomMargin:  10
-
-        //anchors.horizontalCenter: parent.horizontalCenter
 
         TextArea {
+            //anchors.margins: 20
             id: presetArea
             anchors.fill: parent
+            topPadding: 20
+            font.pointSize: 14
 
-            //background: Rectangle { anchors.fill: parent }
-
+            //            background: Rectangle {
+            //                color: "darkgrey"
+            //                gradient: Gradient {
+            //                    GradientStop {
+            //                        position: 0.00;
+            //                        color: "#625c6d";
+            //                    }
+            //                    GradientStop {
+            //                        position: 1.00;
+            //                        color: "#9095a0";
+            //                    }
+            //                }
+            //            }
             text: "G,d\nF,c"
-
         }
-
     }
-
-
-
-
 }
