@@ -4,5 +4,6 @@
         <file>BourdonButton.qml</file>
         <file>bourdon.csd</file>
         <file>PresetForm.ui.qml</file>
+        <file>BourdonForm.ui.qml</file>
     </qresource>
 </RCC>

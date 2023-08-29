@@ -84,14 +84,13 @@ ApplicationWindow {
 
     SwipeView {
         id: swipeView
-        width: parent.width
         anchors.fill: parent
         currentIndex: 1
 
         Page {
             id: bourdonPage
             title: qsTr("Bourdons")
-            Label { text: "Bourdon page"}
+            BourdonForm {}
 
 
         }
@@ -99,9 +98,7 @@ ApplicationWindow {
         Page {
             id: presetPage
             title: qsTr("Presets")
-            PresetForm {
-
-            }
+            PresetForm {}
 
         }
 

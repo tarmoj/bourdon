@@ -20,7 +20,7 @@ Item {
         TextArea {
             //anchors.margins: 20
             id: presetArea
-            anchors.fill: parent
+            //anchors.fill: parent
             topPadding: 20
             font.pointSize: 14
 
