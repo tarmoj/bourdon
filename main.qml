@@ -15,11 +15,46 @@ ApplicationWindow {
 
     title: qsTr("Bourdon test")
 
-    header: Label {
+    header: ToolBar {
+
+        background: Rectangle {color: "transparent" }
+
+        RowLayout {
+            anchors.fill: parent
+            ToolButton {
+                text: qsTr("<")
+                visible: swipeView.currentIndex===1
+                onClicked: swipeView.currentIndex=0
+            }
+            Label {
+                text: swipeView.currentItem.title
+                //elide: Label.ElideRight
+                font.pointSize: 16
+                font.bold: true
+                horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+            }
+            ToolButton {
+                text: qsTr(">")
+                visible: swipeView.currentIndex===0
+                onClicked: swipeView.currentIndex=1
+            }
+        }
+    }
+
+
+
+
+
+        Label {
             font.pointSize: 16
             text: swipeView.currentItem.title
             horizontalAlignment: Text.AlignHCenter
         }
+
+
+
 
 
     Connections {
