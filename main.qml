@@ -1,15 +1,42 @@
-import QtQuick 2.15
-import QtQuick.Window 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
+import QtQuick.Controls.Material
+import QtQuick.Layouts
 
-Window {
+
+ApplicationWindow {
+    id: app
     width: 640
     height: 480
-    color: "darkblue"
     visible: true
 
+    Material.theme: Material.Dark
 
     title: qsTr("Bourdon test")
+
+    header:
+        Rectangle {
+            id: headerRect
+            width:parent.width
+            anchors.margins: 5
+            color: "darkgrey"
+
+            Label {
+                id: titleLabel;
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pointSize: 14
+                font.bold: true
+                text: app.title
+            }
+
+            Button {
+                text: qsTr("Presets ->");
+                scale: 0.6
+                anchors.right: parent.right
+            }
+
+        }
 
     Connections {
             target: Application
@@ -34,12 +61,21 @@ Window {
         }
     }
 
-    Component.onCompleted: searchButton.clicked()
+    //Component.onCompleted: searchButton.clicked()
+
+//    SwipeView {
+//            anchors.fill:parent
+//            currentIndex: 1
+
+//    }
+
 
     Row {
         id: statusRow
-        x: 5; y:5
+        x: 5;
+        anchors.top: headerRect.bottom
         spacing: 5
+        visible: false
 
         Button { id: searchButton; text:qsTr("Scan"); onClicked: device.startDeviceDiscovery() }
 
@@ -67,68 +103,8 @@ Window {
 
         }
 
-//        BourdonButton {
-//            id: sound1
-//            sound: 1
-//            text: qsTr("G")
-//        }
-
-//        BourdonButton {
-//            id: sound2
-//            sound: 2
-//            text: qsTr("d")
-//        }
-
-//        BourdonButton {
-//            id: sound3
-//            sound: 3
-//            text: qsTr("e")
-//        }
 
     }
-
-//    Grid {
-//        spacing: 5
-//        columns: 3
-
-//        Button {
-//            text: "Start discovery"
-//            onClicked: device.startDeviceDiscovery();
-//        }
-
-//        Button {
-//            text: "Scan Services";
-//            onClicked: device.scanServices("DB:DB:C0:4B:5C:3A"); // hex address of Airturn Duo
-//        }
-
-//        Button {
-//            text: "Service characteristucs";
-//            onClicked: device.connectToService(service.text); // hex address of Device info
-//        }
-
-//        Button {
-//            text: "Service characteristucs";
-//            onClicked: device.connectToService(service.text); // hex address of Device info
-//        }
-
-//        Label { text: "Service hex code";}
-
-
-//        TextInput {
-//            id: service
-//            color: "white"
-//            text: "34452f38-9e44-46ab-b171-0cc578feb928"
-//        }
-
-//        Button {
-//            text:"Read"
-//            onClicked: device.testReadValue()
-//        }
-//    }
-
-
-
-
 
 
 }
