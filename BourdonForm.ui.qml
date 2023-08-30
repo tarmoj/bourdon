@@ -19,6 +19,31 @@ Item {
 
     property int roundedScale: Material.ExtraSmallScale
 
+    Rectangle {
+        id: background
+        anchors.fill: parent
+        color: Material.backgroundColor
+
+        gradient: Gradient {
+            GradientStop {
+                position: 0
+                color: Material.backgroundColor
+            }
+            GradientStop {
+                position: 0.5
+                color: "#3c243d"
+            }
+
+            GradientStop {
+                position: 1.00
+                color: "#a8549d"
+            }
+        }
+        border.color: presetArea.focus ? Material.accentColor : Material.frameColor
+        border.width: presetArea.focus ? 1.5 : 1
+        radius: 8
+    }
+
     ColumnLayout {
         id: column
         anchors.fill: parent
