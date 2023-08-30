@@ -14,13 +14,14 @@ Rectangle {
     property alias nextButton: nextButton
     property alias presetLabel: presetLabel
 
-
     ColumnLayout {
         id: column
         anchors.fill: parent
         spacing: 10
 
-        Item { Layout.preferredHeight: column.height *0.1 } // spacer
+        Item {
+            Layout.preferredHeight: column.height * 0.1
+        } // spacer
 
         Item {
             id: bourdonArea
@@ -28,13 +29,14 @@ Rectangle {
             Layout.preferredHeight: bourdonButtonGrid.height
             Layout.fillWidth: true
 
-            Flow {
+            GridLayout {
                 id: bourdonButtonGrid
                 width: parent.width * 0.95
+                columns: width / bourdonButtons.itemAt(0).width
 
                 anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 2
 
+                //spacing: 2
                 Repeater {
                     id: bourdonButtons
                     model: ["G", "c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"]
@@ -42,7 +44,7 @@ Rectangle {
                     BourdonButton {
                         required property int index
                         required property string modelData
-                        sound: index+1
+                        sound: index + 1
                         text: modelData
                         Material.roundedScale: Material.ExtraSmallScale
                     }
@@ -55,7 +57,6 @@ Rectangle {
 
             Layout.fillWidth: true
 
-
             Row {
                 id: mainButtonRow
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -63,7 +64,7 @@ Rectangle {
 
                 Button {
                     id: nextButton
-                    width: Math.min (column.width, column.height) / 3
+                    width: Math.min(column.width, column.height) / 3
                     height: width
                     text: "NEXT"
                     Material.roundedScale: Material.NotRounded
@@ -101,6 +102,8 @@ Rectangle {
             }
         }
 
-        Item { Layout.fillHeight: true } // spacer
+        Item {
+            Layout.fillHeight: true
+        } // spacer
     }
 }

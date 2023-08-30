@@ -18,26 +18,36 @@ ApplicationWindow {
 
 
     header: ToolBar {
+        width: parent.width
+        height: backButton.height
 
         background: Rectangle {color: "transparent" }
 
-        RowLayout {
+        Item {
             anchors.fill: parent
             ToolButton {
+                id: backButton
+                anchors.left: parent.left
+                anchors.leftMargin: 5
                 text: qsTr("<")
                 visible: swipeView.currentIndex===1
                 onClicked: swipeView.currentIndex=0
             }
+
             Label {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: backButton.verticalCenter
                 text: swipeView.currentItem.title
                 //elide: Label.ElideRight
                 font.pointSize: 16
                 font.bold: true
                 horizontalAlignment: Qt.AlignHCenter
-                verticalAlignment: Qt.AlignVCenter
-                Layout.fillWidth: true
+                //verticalAlignment: Qt.AlignVCenter
+                //Layout.fillWidth: true
             }
             ToolButton {
+                anchors.right: parent.right
+                anchors.rightMargin: 5
                 text: qsTr(">")
                 visible: swipeView.currentIndex===0
                 onClicked: swipeView.currentIndex=1
