@@ -30,6 +30,8 @@ Item {
         RowLayout {
             id: stopAndAddRow
             Layout.fillWidth: true
+            Layout.leftMargin: 10
+            Layout.rightMargin: 10
             spacing: 2
 
             Button {

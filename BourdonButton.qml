@@ -8,11 +8,6 @@ Button {
     checkable: true
     property int sound: 0
 
-//    FontMetrics {
-//        id: fontMetrics
-//    }
-
-
 
     onClicked: {
         const instrument = "1."+sound.toString()

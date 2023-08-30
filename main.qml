@@ -12,6 +12,8 @@ implement setPresetsFromText() -  check if correct labels etc;
 samples, playback
 settings (presetsArray)
 bluetooth
+bourdonform background
+BourdonButton view, background (FoxButton)
 
 */
 
@@ -26,8 +28,22 @@ ApplicationWindow {
     property var presetsArray: [ ["G","d"], ["c","g"] ]
 
     function  setPresetsFromText(text) {
-        console.log("presets: ", text.split("\n"));
-        // TODO: trim and simplify, maybe into arrays
+        const arr = []
+        const rows = text.split("\n");
+        console.log("Rows found: ", rows.length)
+        for (let row of rows) {
+            row = row.replace(/\s/g, ""); // remove white spaces
+            const preset = row.split(",")
+            console.log("Preset as array: ", preset)
+            //TODO: check if only allowed elements in array
+            if (preset.length>0 && preset[0] ) { // check if not empty
+                arr.push(preset)
+            }
+        }
+
+        console.log("New array: ", arr);
+        app.presetsArray = arr;
+
     }
 
     function getPresetsText() { // turns presets array
@@ -192,6 +208,8 @@ ApplicationWindow {
                 }
 
                 playButton.onCheckedChanged:  {
+
+                    console.log("Playbutton checked: ", checked)
 
                     if (checked) {
                         if (bourdonPage.isPlaying) {
