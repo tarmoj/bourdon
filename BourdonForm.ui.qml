@@ -96,7 +96,7 @@ Item {
                     width: Math.min(column.width, column.height) / 3
                     height: width
                     text: "NEXT"
-                    Material.roundedScale: Material.ExtraSmallScale
+                    Material.roundedScale: roundedScale
                 }
 
                 Button {
@@ -105,7 +105,8 @@ Item {
                     height: width
                     text: qsTr("Play/Stop")
                     checkable: true
-                    Material.roundedScale: Material.ExtraSmallScale
+                    checked: false
+                    Material.roundedScale: roundedScale
                 }
             }
 

@@ -8,12 +8,13 @@ import Qt.labs.settings
 /*
 
   TODO:
-implement setPresetsFromText() -  check if correct labels etc;
-samples, playback
+playButton functionality
 settings (presetsArray)
 bluetooth
 bourdonform background
+samples, playback
 BourdonButton view, background (FoxButton)
+
 
 */
 
@@ -26,6 +27,8 @@ ApplicationWindow {
 
 
     property var presetsArray: [ ["G","d"], ["c","g"] ]
+    property var bourdonNotes: ["G", "c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"] // make sure the notes are loaded to tables in Csound with according numbers (index+1)
+
 
     function  setPresetsFromText(text) {
         const arr = []
@@ -178,9 +181,34 @@ ApplicationWindow {
                     return preset;
                 }
 
+
+                function playFromPreset(preset) { // preset is an array of the notest to be played like [G,d,e]
+                    for  (let note of preset) {
+                        const index = app.bourdonNotes.indexOf(note);
+                        if (index>=0) {
+                            const b = bourdonButtons.itemAt(index);
+                            b.checked = true;
+                            b.clicked();
+                        }
+                    }
+                }
+
+                bourdonButtons.model: app.bourdonNotes
+
                 bourdonButtonGrid.columns:  bourdonButtonGrid.width / bourdonButtons.itemAt(0).width
 
                 bourdonArea.Layout.preferredHeight:bourdonButtonGrid.height
+
+                onCurrentPresetChanged: {
+                    if (currentPreset>=0) {
+                        presetLabel.text = (currentPreset+1).toString() + " " + presetsArray[currentPreset].join(",");
+                        if (playButton.checked) {
+                            stopAll();
+                            playFromPreset(app.presetsArray[currentPreset])
+                        }
+                    }
+                }
+
 
                 nextButton.onClicked: {
                     if (currentPreset < app.presetsArray.length-1 ) {
@@ -188,9 +216,7 @@ ApplicationWindow {
                     } else {
                         currentPreset = 0;
                     }
-
                     console.log("New preset: ", currentPreset)
-                    presetLabel.text = (currentPreset+1).toString() + " " + presetsArray[currentPreset].join(",");
                 }
 
                 stopButton.onClicked: stopAll()
@@ -209,12 +235,16 @@ ApplicationWindow {
 
                 playButton.onCheckedChanged:  {
 
-                    console.log("Playbutton checked: ", checked)
+                    console.log("Playbutton checked: ", playButton.checked)
 
-                    if (checked) {
-                        if (bourdonPage.isPlaying) {
-                            stopAll();
+                    if (playButton.checked) {
+                        stopAll();
+                        if (currentPreset<0 ) {
+                            currentPreset = 0; // changing preset triggers also playback
+                        } else {
+                            playFromPreset(app.presetsArray[currentPreset] );
                         }
+
                     } else {
                         stopAll();
                     }
