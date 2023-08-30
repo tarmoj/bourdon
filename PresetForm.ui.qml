@@ -10,7 +10,6 @@ Item {
     anchors.fill: parent
     property alias presetArea: presetArea
 
-    Material.theme: Material.Dark
 
     ScrollView {
         id: presetView

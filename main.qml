@@ -3,7 +3,17 @@ import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
+import Qt.labs.settings
 
+/*
+
+  TODO:
+implement setPresetsFromText() -  check if correct labels etc;
+samples, playback
+settings (presetsArray)
+bluetooth
+
+*/
 
 ApplicationWindow {
     id: app
@@ -13,9 +23,22 @@ ApplicationWindow {
     title: qsTr("Bourdon test")
 
 
-    property var presets: ["G,d", "c,g", "e,g"]
+    property var presetsArray: [ ["G","d"], ["c","g"] ]
 
+    function  setPresetsFromText(text) {
+        console.log("presets: ", text.split("\n"));
+        // TODO: trim and simplify, maybe into arrays
+    }
 
+    function getPresetsText() { // turns presets array
+        let text = "";
+
+        for (let p of presetsArray ) {
+            text += p.join(",") + "\n"
+        }
+        console.log("presets as text: ", text)
+        return text
+    }
 
     header: ToolBar {
         width: parent.width
@@ -31,7 +54,10 @@ ApplicationWindow {
                 anchors.leftMargin: 5
                 text: qsTr("<")
                 visible: swipeView.currentIndex===1
-                onClicked: swipeView.currentIndex=0
+                onClicked:  {
+                    setPresetsFromText(presetForm.presetArea.text) // update if there has been change
+                    swipeView.currentIndex=0
+                }
             }
 
             Label {
@@ -50,14 +76,12 @@ ApplicationWindow {
                 anchors.rightMargin: 5
                 text: qsTr(">")
                 visible: swipeView.currentIndex===0
-                onClicked: swipeView.currentIndex=1
+                onClicked: {
+                    swipeView.currentIndex=1
+                }
             }
         }
     }
-
-
-
-
 
         Label {
             font.pointSize: 16
@@ -66,7 +90,7 @@ ApplicationWindow {
         }
 
 
-
+    Settings { }
 
 
     Connections {
@@ -92,35 +116,91 @@ ApplicationWindow {
         }
     }
 
-    //Component.onCompleted: searchButton.clicked()
+    Component.onCompleted: {
+        presetForm.presetArea.text = getPresetsText()
+        //searchButton.clicked()
+    }
 
     SwipeView {
         id: swipeView
         anchors.fill: parent
-        currentIndex: 1
+        //currentIndex: 1
 
         Page {
             id: bourdonPage
             title: qsTr("Bourdons")
 
-            property int currentPreset: -1
-            property bool isPlaying: false
 
 
             BourdonForm {
+                id: bourdonForm
+                property int currentPreset: -1
+                property bool isPlaying: false
+
+                function stopAll() {
+                    for (let i=0; i<bourdonButtons.count; i++) {
+                        const b = bourdonButtons.itemAt(i);
+                        if (b.checked) {
+                            b.clicked();
+                            b.checked = false
+                            console.log("Stopping ", b.text)
+                        }
+                    }
+                }
+
+                function getPresetFromButtons() {
+
+                    const preset = [];
+                    for (let i=0; i<bourdonButtons.count; i++) {
+                        const b = bourdonButtons.itemAt(i);
+                        if (b.checked) {
+                            preset.push(b.text)
+                        }
+                    }
+                    console.log("Preset: ", preset)
+
+                    return preset;
+                }
 
                 bourdonButtonGrid.columns:  bourdonButtonGrid.width / bourdonButtons.itemAt(0).width
 
+                bourdonArea.Layout.preferredHeight:bourdonButtonGrid.height
 
                 nextButton.onClicked: {
-                    if (bourdonPage.currentPreset < app.presets.length-1 ) {
-                        bourdonPage.currentPreset++ ;
+                    if (currentPreset < app.presetsArray.length-1 ) {
+                        currentPreset++ ;
                     } else {
-                        bourdonPage.currentPreset = 0;
+                        currentPreset = 0;
                     }
 
-                    console.log("New preset: ", bourdonPage.currentPreset)
-                    presetLabel.text = bourdonPage.currentPreset+1;
+                    console.log("New preset: ", currentPreset)
+                    presetLabel.text = (currentPreset+1).toString() + " " + presetsArray[currentPreset].join(",");
+                }
+
+                stopButton.onClicked: stopAll()
+
+                addButton.onClicked: {
+                    const preset = getPresetFromButtons()
+                    if (preset.length>0) {
+                        presetsArray.push(preset)
+                        presetForm.presetArea.text = getPresetsText()
+                        swipeView.currentIndex = 1
+                    } else {
+                        console.log("No playing buttons")
+                    }
+
+                }
+
+                playButton.onCheckedChanged:  {
+
+                    if (checked) {
+                        if (bourdonPage.isPlaying) {
+                            stopAll();
+                        }
+                    } else {
+                        stopAll();
+                    }
+
                 }
 
             }
@@ -133,16 +213,8 @@ ApplicationWindow {
             id: presetPage
             title: qsTr("Presets")
 
-            function  setPresets(text) {
-                console.log("presets: ", text.split("\n"));
-                // TODO: trim and simplify, maybe into arrays
-            }
 
-            PresetForm {
-
-
-
-            }
+            PresetForm { id:presetForm }
 
         }
 

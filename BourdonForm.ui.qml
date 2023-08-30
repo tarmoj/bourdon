@@ -7,27 +7,53 @@ Item {
     width: 300
     height: 600
     anchors.fill: parent
+    property alias addButton: addButton
+    property alias stopButton: stopButton
     property alias bourdonButtonGrid: bourdonButtonGrid
 
     property alias bourdonButtons: bourdonButtons
     property alias playButton: playButton
     property alias nextButton: nextButton
     property alias presetLabel: presetLabel
+    property alias bourdonArea: bourdonArea
 
+    property int roundedScale: Material.ExtraSmallScale
 
     ColumnLayout {
         id: column
         anchors.fill: parent
         spacing: 10
 
-        Item {
-            Layout.preferredHeight: column.height * 0.1
-        } // spacer
+        //        Item {
+        //            Layout.preferredHeight: column.height * 0.1
+        //        } // spacer
+        RowLayout {
+            id: stopAndAddRow
+            Layout.fillWidth: true
+            spacing: 2
+
+            Button {
+                id: stopButton
+                text: qsTr("Stop all")
+                Material.roundedScale: roundedScale
+            }
+
+            Item {
+                Layout.fillWidth: true
+            }
+
+            Button {
+                id: addButton
+                //icon.name: "add"
+                text: qsTr("Add to presets")
+                Material.roundedScale: roundedScale
+            }
+        }
 
         Item {
             id: bourdonArea
 
-            Layout.preferredHeight: bourdonButtonGrid.height
+            Layout.preferredHeight: column.height * 0.3 //bourdonButtonGrid.height //
             Layout.fillWidth: true
 
             GridLayout {
@@ -47,7 +73,7 @@ Item {
                         required property string modelData
                         sound: index + 1
                         text: modelData
-                        Material.roundedScale: Material.ExtraSmallScale
+                        Material.roundedScale: roundedScale
                     }
                 }
             }
@@ -68,15 +94,16 @@ Item {
                     width: Math.min(column.width, column.height) / 3
                     height: width
                     text: "NEXT"
-                    Material.roundedScale: Material.NotRounded
+                    Material.roundedScale: Material.ExtraSmallScale
                 }
 
                 Button {
                     id: playButton
                     width: nextButton.width
                     height: width
-                    text: "Play/Stop"
-                    Material.roundedScale: Material.NotRounded
+                    text: qsTr("Play/Stop")
+                    checkable: true
+                    Material.roundedScale: Material.ExtraSmallScale
                 }
             }
 
