@@ -31,6 +31,10 @@ int main(int argc, char *argv[])
 #endif
     QGuiApplication app(argc, argv);
 
+    app.setOrganizationName("Tarmo Johannes Events and Software");
+    app.setOrganizationDomain("bourdon-app.org");
+    app.setApplicationName("Bourdon App");
+
 #ifdef Q_OS_ANDROID
 
     // check permissions

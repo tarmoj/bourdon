@@ -3,16 +3,14 @@ import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
-import Qt.labs.settings
-
+import QtCore
 /*
 
   TODO:
-playButton functionality
-settings (presetsArray)
-bluetooth
+
 bourdonform background
 samples, playback
+bluetooth
 BourdonButton view, background (FoxButton)
 
 
@@ -28,6 +26,10 @@ ApplicationWindow {
 
     property var presetsArray: [ ["G","d"], ["c","g"] ]
     property var bourdonNotes: ["G", "c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"] // make sure the notes are loaded to tables in Csound with according numbers (index+1)
+
+    Settings {
+        property alias presetsArray: app.presetsArray
+    }
 
 
     function  setPresetsFromText(text) {
@@ -108,8 +110,6 @@ ApplicationWindow {
             horizontalAlignment: Text.AlignHCenter
         }
 
-
-    Settings { }
 
 
     Connections {
