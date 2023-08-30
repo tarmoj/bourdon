@@ -109,6 +109,9 @@ ApplicationWindow {
 
             BourdonForm {
 
+                bourdonButtonGrid.columns:  bourdonButtonGrid.width / bourdonButtons.itemAt(0).width
+
+
                 nextButton.onClicked: {
                     if (bourdonPage.currentPreset < app.presets.length-1 ) {
                         bourdonPage.currentPreset++ ;

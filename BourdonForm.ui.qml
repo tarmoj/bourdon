@@ -3,16 +3,17 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Controls.Material
 
-Rectangle {
+Item {
     width: 300
     height: 600
     anchors.fill: parent
-    color: Material.background
+    property alias bourdonButtonGrid: bourdonButtonGrid
 
     property alias bourdonButtons: bourdonButtons
     property alias playButton: playButton
     property alias nextButton: nextButton
     property alias presetLabel: presetLabel
+
 
     ColumnLayout {
         id: column
@@ -32,7 +33,7 @@ Rectangle {
             GridLayout {
                 id: bourdonButtonGrid
                 width: parent.width * 0.95
-                columns: width / bourdonButtons.itemAt(0).width
+                columns: 6 //width / bourdonButtons.itemAt(0).width
 
                 anchors.horizontalCenter: parent.horizontalCenter
 
