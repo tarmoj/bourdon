@@ -12,7 +12,7 @@ CsEngine::CsEngine(QObject *parent) : QObject(parent)
 #ifdef Q_OS_ANDROID
 	cs = new AndroidCsound();
 	cs->setOpenSlCallbacks(); // for android audio to work
-    cs->SetOption("--env:SSDIR=/sdcard/Music/Bourdon/samples");
+    cs->SetOption("--env:SSDIR=/sdcard/Music/Bourdon/samples/");
 
 # else
 	cs = new Csound();

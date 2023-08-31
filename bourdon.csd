@@ -1,7 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
 -odac -d
---env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/
+; --env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/
 </CsOptions>
 <CsInstruments>
 
@@ -28,7 +28,7 @@ giSound9 ftgen 9, 0, 0, 1, "d1.wav", 0, 0, 1
 giSound10 ftgen 10, 0, 0, 1, "e1.wav", 0, 0, 1
 giSound11 ftgen 11, 0, 0, 1, "g1.wav", 0, 0, 1
 giSound12 ftgen 12, 0, 0, 1, "a1.wav", 0, 0, 1
-giSound13 ftgen 13, 0, 0, 1, "h1.wav", 0, 0, 1
+giSound13 ftgen 13, 0, 0, 1, "/sdcard/Music/Bourdon/samples/h1.wav", 0, 0, 1
 
 instr Bourdon
 	iTable =  p4
@@ -39,6 +39,12 @@ instr Bourdon
 	kVolume = 0.3 ; chnget   
 	aOut = aSound * aEnv * kVolume
 	outall aOut 	
+endin
+
+schedule "Test", 0, 5
+instr Test
+	aSig poscil 0.1, 440
+	outall aSig
 endin
 
 </CsInstruments>

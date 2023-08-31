@@ -57,9 +57,10 @@ Item {
             Layout.rightMargin: 10
             spacing: 10
 
-            Button {
+            ToolButton {
                 id: stopButton
-                text: qsTr("Stop all")
+                text: "S"
+                //text: qsTr("Stop all")
                 Material.roundedScale: roundedScale
             }
 
@@ -81,10 +82,10 @@ Item {
 
 
 
-            Button {
+            ToolButton {
                 id: addButton
                 //icon.name: "add"
-                text: qsTr("Add to presets")
+                text: "+" // qsTr("Add to presets")
                 Material.roundedScale: roundedScale
             }
         }
