@@ -21,10 +21,13 @@ public:
 
 	void play();
 	int open(QString csd);
-	Q_INVOKABLE void stop();
-	Q_INVOKABLE void setChannel(const QString &channel, MYFLT value);
-	Q_INVOKABLE void csEvent(const QString &event_string);
-	Q_INVOKABLE void compileOrc(const QString &code);
+
+public slots:
+
+    Q_INVOKABLE void stop();
+    void setChannel(const QString &channel, double value);
+    void readScore(const QString &event);
+    void compileOrc(const QString &code);
 
 	//Q_INVOKABLE double getChannel(const char *channel);
 

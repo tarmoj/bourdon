@@ -47,9 +47,13 @@ Item {
         anchors.fill: parent
         spacing: 10
 
-        //        Item {
-        //            Layout.preferredHeight: column.height * 0.1
-        //        } // spacer
+
+
+                Item {
+                    Layout.fillHeight: true
+                    Layout.maximumHeight: column.height * 0.1
+                } // spacer
+
         RowLayout {
             id: stopAndAddRow
             Layout.fillWidth: true
@@ -103,7 +107,7 @@ Item {
 
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                //spacing: 2
+
                 Repeater {
                     id: bourdonButtons
                     model: ["G", "c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"]

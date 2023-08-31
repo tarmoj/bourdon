@@ -11,16 +11,17 @@ Button {
 
     onClicked: {
         const instrument = "1."+sound.toString()
-        let eventLine = "";
+        let scoreLine = "";
         if (checked) {
-            eventLine = `i ${instrument} 0 -1 ${sound}`;
+            scoreLine = `i ${instrument} 0 -1 ${sound}`;
         } else {
-            eventLine = `i -${instrument} 0 -0 ${sound}`;
+            scoreLine = `i -${instrument} 0 -0 ${sound}`;
         }
 
 //        const time = new Date().getTime()%1000000;
-//        console.log(eventLine, time);
-        csound.csEvent(eventLine);
+//        console.log(scoreLine, time);
+        //csound.csEvent(scoreLine);
+        app.readScore(scoreLine)
     }
 
 

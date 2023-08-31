@@ -121,6 +121,9 @@ ApplicationWindow {
         }
 
 
+    signal setChannel(channel: string, value: double)
+    signal readScore(scoreLine: string)
+
 
     Connections {
             target: Application
@@ -224,7 +227,7 @@ ApplicationWindow {
 
                 bourdonButtons.model: app.bourdonNotes
 
-                bourdonButtonGrid.columns:  bourdonButtonGrid.width / bourdonButtons.itemAt(0).width
+                bourdonButtonGrid.columns:  Math.floor(bourdonButtonGrid.width / bourdonButtons.itemAt(0).width)
 
                 bourdonArea.Layout.preferredHeight:bourdonButtonGrid.height
 
@@ -240,7 +243,8 @@ ApplicationWindow {
 
                 a4SpinBox.onValueChanged: {
                     console.log("A4: ", a4SpinBox.value )
-                    csound.setChannel("a4", a4SpinBox.value);
+                    app.setChannel("a4", a4SpinBox.value)
+                    //csound.setChannel("a4", a4SpinBox.value);
                 }
 
                 nextButton.onClicked: {

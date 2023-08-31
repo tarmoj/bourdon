@@ -34,6 +34,7 @@ void CsEngine::play() {
 		cs->Start();
         //cs->Perform();
 		while(cs->PerformKsmps()==0 && mStop==false ) {
+            // Android: - ilma selleta ei tööta. Mingi Threadide jama...
             QCoreApplication::processEvents(); // probably bad solution but works. Not exactyl necessary, but makes csound/app more responsive
 		}
 
@@ -68,17 +69,17 @@ void CsEngine::stop()
 
 void CsEngine::setChannel(const QString &channel, MYFLT value)
 {
-	//qDebug()<<"setChannel "<<channel<<" value: "<<value;
-	cs->SetChannel(channel.toLocal8Bit(), value); // does not work
+    qDebug()<<"setChannel "<<channel<<" value: "<<value;
+    cs->SetChannel(channel.toLocal8Bit(), value);
 }
 
-void CsEngine::csEvent(const QString &event_string)
+void CsEngine::readScore(const QString &scoreLine)
 {
     // test time:
 //    int time =  QDateTime::currentMSecsSinceEpoch()%1000000;
 
 //    qDebug()<<"csEvent" << event_string << time;
-	cs->InputMessage(event_string.toLocal8Bit());
+    cs->ReadScore(scoreLine.toLocal8Bit());
 }
 
 void CsEngine::compileOrc(const QString &code)

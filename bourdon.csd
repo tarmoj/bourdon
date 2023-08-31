@@ -33,8 +33,11 @@ giSound13 ftgen 13, 0, 0, 1, "h1.wav", 0, 0, 1
 instr Bourdon
 	iTable =  p4
 	kSpeed init 1
-	kSpeed = chnget:k("a4")/440
-	aSound loscil3 1, kSpeed, iTable, 1
+	kA4 = chnget:k("a4")
+	printk2 kA4
+	kSpeed = kA4/440
+	;aSine poscil 0.1, kA4
+	aSound loscil 1, kSpeed, iTable, 1
 	aEnv linenr 1, 0.1, 0.5, 0.01
 	kVolume = 0.3 ; chnget   
 	aOut = aSound * aEnv * kVolume
@@ -56,10 +59,10 @@ endin
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
+ <x>0</x>
+ <y>0</y>
+ <width>354</width>
+ <height>183</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
