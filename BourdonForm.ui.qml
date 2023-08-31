@@ -16,6 +16,7 @@ Item {
     property alias nextButton: nextButton
     property alias presetLabel: presetLabel
     property alias bourdonArea: bourdonArea
+     property alias a4SpinBox: a4SpinBox
 
     property int roundedScale: Material.ExtraSmallScale
 
@@ -39,9 +40,6 @@ Item {
                 color: "#a8549d"
             }
         }
-        border.color: presetArea.focus ? Material.accentColor : Material.frameColor
-        border.width: presetArea.focus ? 1.5 : 1
-        radius: 8
     }
 
     ColumnLayout {
@@ -57,7 +55,7 @@ Item {
             Layout.fillWidth: true
             Layout.leftMargin: 10
             Layout.rightMargin: 10
-            spacing: 2
+            spacing: 10
 
             Button {
                 id: stopButton
@@ -65,9 +63,23 @@ Item {
                 Material.roundedScale: roundedScale
             }
 
-            Item {
-                Layout.fillWidth: true
+            Item {Layout.fillWidth: true}
+
+            Label { text: qsTr("A4")}
+
+            SpinBox {
+                id: a4SpinBox
+                scale:0.75
+                from: 430
+                to: 450
+                stepSize: 1
+                value: 440
+
             }
+
+            Item {Layout.fillWidth: true}
+
+
 
             Button {
                 id: addButton

@@ -160,8 +160,8 @@ ApplicationWindow {
                     for (let i=0; i<bourdonButtons.count; i++) {
                         const b = bourdonButtons.itemAt(i);
                         if (b.checked) {
-                            b.clicked();
                             b.checked = false
+                            b.clicked();
                             console.log("Stopping ", b.text)
                         }
                     }
@@ -209,6 +209,10 @@ ApplicationWindow {
                     }
                 }
 
+                a4SpinBox.onValueChanged: {
+                    console.log("A4: ", a4SpinBox.value )
+                    csound.setChannel("a4", a4SpinBox.value);
+                }
 
                 nextButton.onClicked: {
                     if (currentPreset < app.presetsArray.length-1 ) {

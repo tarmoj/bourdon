@@ -25,6 +25,7 @@ public:
 	Q_INVOKABLE void setChannel(const QString &channel, MYFLT value);
 	Q_INVOKABLE void csEvent(const QString &event_string);
 	Q_INVOKABLE void compileOrc(const QString &code);
+
 	//Q_INVOKABLE double getChannel(const char *channel);
 
 private:
