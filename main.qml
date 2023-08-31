@@ -243,8 +243,8 @@ ApplicationWindow {
 
                 a4SpinBox.onValueChanged: {
                     console.log("A4: ", a4SpinBox.value )
-                    app.setChannel("a4", a4SpinBox.value)
-                    //csound.setChannel("a4", a4SpinBox.value);
+                    //app.setChannel("a4", a4SpinBox.value)
+                    csound.setChannel("a4", a4SpinBox.value);
                 }
 
                 nextButton.onClicked: {

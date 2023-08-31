@@ -20,8 +20,8 @@ Button {
 
 //        const time = new Date().getTime()%1000000;
 //        console.log(scoreLine, time);
-        //csound.csEvent(scoreLine);
-        app.readScore(scoreLine)
+        //app.readScore(scoreLine); // this does not, when no QCoreApplication::processEvents() in while loop...
+        csound.readScore(scoreLine) // this works
     }
 
 

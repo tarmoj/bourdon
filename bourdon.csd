@@ -1,6 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
 -odac -d
+; -b 256 -B 1024 ; et äkki see mõjutab Androidi, aga vist mitte....
 ; --env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/
 </CsOptions>
 <CsInstruments>
@@ -34,10 +35,13 @@ instr Bourdon
 	iTable =  p4
 	kSpeed init 1
 	kA4 = chnget:k("a4")
-	printk2 kA4
+	;printk2 kA4
 	kSpeed = kA4/440
 	;aSine poscil 0.1, kA4
-	aSound loscil 1, kSpeed, iTable, 1
+	aSound loscil3 1, kSpeed, iTable, 1 ; kõrguse muutmine Androidi peal ei toimi sel moel...
+	
+	
+	
 	aEnv linenr 1, 0.1, 0.5, 0.01
 	kVolume = 0.3 ; chnget   
 	aOut = aSound * aEnv * kVolume
@@ -164,7 +168,7 @@ endin
   <minimum>430</minimum>
   <maximum>450</maximum>
   <randomizable group="0">false</randomizable>
-  <value>450</value>
+  <value>440</value>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

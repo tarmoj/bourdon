@@ -9,6 +9,9 @@
 
 CsEngine::CsEngine(QObject *parent) : QObject(parent)
 {
+
+    csoundInitialize(CSOUNDINIT_NO_ATEXIT | CSOUNDINIT_NO_SIGNAL_HANDLER); // not sure if necessary, but Steven Yi claims, it should be there
+
 #ifdef Q_OS_ANDROID
 	cs = new AndroidCsound();
 	cs->setOpenSlCallbacks(); // for android audio to work
@@ -34,7 +37,6 @@ void CsEngine::play() {
 		cs->Start();
         //cs->Perform();
 		while(cs->PerformKsmps()==0 && mStop==false ) {
-            // Android: - ilma selleta ei tööta. Mingi Threadide jama...
             QCoreApplication::processEvents(); // probably bad solution but works. Not exactyl necessary, but makes csound/app more responsive
 		}
 
@@ -78,7 +80,7 @@ void CsEngine::readScore(const QString &scoreLine)
     // test time:
 //    int time =  QDateTime::currentMSecsSinceEpoch()%1000000;
 
-//    qDebug()<<"csEvent" << event_string << time;
+    qDebug()<<"csEvent" << scoreLine ; // << time;
     cs->ReadScore(scoreLine.toLocal8Bit());
 }
 
