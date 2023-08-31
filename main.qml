@@ -8,7 +8,7 @@ import QtCore
 
   TODO:
 
-bluetooth, Keyboard shortcuts
+
 BourdonForm -  lisa ülesse spacer, Grid -  arvuta nuppude arv koos spacing
 Mõtle Stop ja Add nupu peale pigem norm nupud ikoonidega, spacing väiksemaks (5)
 ikoonid > ja < asemele
@@ -202,6 +202,25 @@ ApplicationWindow {
                         }
                     }
                 }
+
+
+                // These are bluetooth shortcuts, Airturn Duo, mode 2 (keyboard mode)
+                Shortcut {
+                        sequence: "Up"
+                        onActivated: {
+                            console.log("for button 1");
+                            bourdonForm.nextButton.clicked();
+                        }
+                    }
+
+                Shortcut {
+                        sequence: "Down"
+                        onActivated: {
+                            console.log("for button 2");
+                            bourdonForm.playButton.checked = !bourdonForm.playButton.checked
+                        }
+                    }
+
 
                 bourdonButtons.model: app.bourdonNotes
 
