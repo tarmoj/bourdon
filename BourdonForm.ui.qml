@@ -77,6 +77,7 @@ Item {
                 scale:0.75
                 from: 430
                 to: 450
+                editable: true
                 stepSize: 1
                 value: 440
 

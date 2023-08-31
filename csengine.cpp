@@ -10,7 +10,8 @@
 CsEngine::CsEngine(QObject *parent) : QObject(parent)
 {
 
-    csoundInitialize(CSOUNDINIT_NO_ATEXIT | CSOUNDINIT_NO_SIGNAL_HANDLER); // not sure if necessary, but Steven Yi claims, it should be there
+    // should be probably in main.cpp
+    //csoundInitialize(CSOUNDINIT_NO_ATEXIT | CSOUNDINIT_NO_SIGNAL_HANDLER); // not sure if necessary, but Steven Yi claims, it should be there
 
 #ifdef Q_OS_ANDROID
 	cs = new AndroidCsound();

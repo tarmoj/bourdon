@@ -38,13 +38,16 @@ instr Bourdon
 	;printk2 kA4
 	kSpeed = kA4/440
 	;aSine poscil 0.1, kA4
-	aSound loscil3 1, kSpeed, iTable, 1 ; kõrguse muutmine Androidi peal ei toimi sel moel...
-	
+	aSound loscil3 1, 1, iTable, 1 ; kõrguse muutmine Androidi peal ei toimi sel moel...
+	iSize = 2048
+	f1 pvsanal aSound, iSize, iSize/4, iSize, 1
+	f2 pvscale f1, kSpeed
+	aF pvsynth f2
 	
 	
 	aEnv linenr 1, 0.1, 0.5, 0.01
 	kVolume = 0.3 ; chnget   
-	aOut = aSound * aEnv * kVolume
+	aOut = aF * aEnv * kVolume
 	outall aOut 	
 endin
 
@@ -168,7 +171,7 @@ endin
   <minimum>430</minimum>
   <maximum>450</maximum>
   <randomizable group="0">false</randomizable>
-  <value>440</value>
+  <value>445</value>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
