@@ -28,14 +28,14 @@ BourdonButton view, background (FoxButton)
 
 ApplicationWindow {
     id: app
-    width: 640
-    height: 480
+    width: 720
+    height: 520
     visible: true
     title: qsTr("Bourdon test")
 
 
     property var presetsArray: [ ["G","d"], ["c","g"] ]
-    property var bourdonNotes: ["G", "c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"] // make sure the notes are loaded to tables in Csound with according numbers (index+1)
+    property var bourdonNotes: ["G", "A", "c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"] // make sure the notes are loaded to tables in Csound with according numbers (index+1)
 
     Settings {
         property alias presetsArray: app.presetsArray
@@ -209,7 +209,7 @@ ApplicationWindow {
 
                 // These are bluetooth shortcuts, Airturn Duo, mode 2 (keyboard mode)
                 Shortcut {
-                        sequence: "Up"
+                        sequences: ["Up","PgUp"]
                         onActivated: {
                             console.log("for button 1");
                             bourdonForm.nextButton.clicked();
@@ -217,13 +217,15 @@ ApplicationWindow {
                     }
 
                 Shortcut {
-                        sequence: "Down"
+                        sequences: ["PgDown", "Down" ]
                         onActivated: {
                             console.log("for button 2");
                             bourdonForm.playButton.checked = !bourdonForm.playButton.checked
                         }
                     }
 
+
+                sawWaveSwitch.onCheckedChanged: csound.setChannel("sawtooth", sawWaveSwitch.checked ? 1 : 0  )
 
                 bourdonButtons.model: app.bourdonNotes
 

@@ -7,6 +7,7 @@ Item {
     width: 300
     height: 600
     anchors.fill: parent
+    property alias sawWaveSwitch: sawWaveSwitch
     property alias addButton: addButton
     property alias stopButton: stopButton
     property alias bourdonButtonGrid: bourdonButtonGrid
@@ -16,7 +17,7 @@ Item {
     property alias nextButton: nextButton
     property alias presetLabel: presetLabel
     property alias bourdonArea: bourdonArea
-     property alias a4SpinBox: a4SpinBox
+    property alias a4SpinBox: a4SpinBox
 
     property int roundedScale: Material.ExtraSmallScale
 
@@ -47,12 +48,15 @@ Item {
         anchors.fill: parent
         spacing: 10
 
+        Item {
+            Layout.fillHeight: true
+            Layout.maximumHeight: column.height * 0.1
 
-
-                Item {
-                    Layout.fillHeight: true
-                    Layout.maximumHeight: column.height * 0.1
-                } // spacer
+            Switch {
+                id: sawWaveSwitch
+                text: qsTr("Use saw wave")
+            }
+        } // spacer
 
         RowLayout {
             id: stopAndAddRow
@@ -68,24 +72,27 @@ Item {
                 Material.roundedScale: roundedScale
             }
 
-            Item {Layout.fillWidth: true}
+            Item {
+                Layout.fillWidth: true
+            }
 
-            Label { text: qsTr("A4")}
+            Label {
+                text: qsTr("A4")
+            }
 
             SpinBox {
                 id: a4SpinBox
-                scale:0.75
+                scale: 0.75
                 from: 430
                 to: 450
                 editable: true
                 stepSize: 1
                 value: 440
-
             }
 
-            Item {Layout.fillWidth: true}
-
-
+            Item {
+                Layout.fillWidth: true
+            }
 
             ToolButton {
                 id: addButton
@@ -107,7 +114,6 @@ Item {
                 columns: 6 //width / bourdonButtons.itemAt(0).width
 
                 anchors.horizontalCenter: parent.horizontalCenter
-
 
                 Repeater {
                     id: bourdonButtons
