@@ -49,14 +49,37 @@ Item {
         spacing: 10
 
         Item {
-            Layout.fillHeight: true
-            Layout.maximumHeight: column.height * 0.1
+            id: configRow
+            Layout.fillWidth: true
+            Layout.preferredHeight: a4SpinBox.height + 4
 
-            Switch {
-                id: sawWaveSwitch
-                text: qsTr("Use saw wave")
+            RowLayout {
+                anchors.fill: parent
+                Switch {
+                    id: sawWaveSwitch
+                    text: qsTr("Use saw wave")
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                }
+
+                Label {
+                    text: "A4:"
+                }
+
+
+                SpinBox {
+                    id: a4SpinBox
+                    scale: 0.75
+                    from: 430
+                    to: 450
+                    editable: true
+                    stepSize: 1
+                    value: 440
+                }
             }
-        } // spacer
+        }
 
         RowLayout {
             id: stopAndAddRow
@@ -67,38 +90,20 @@ Item {
 
             ToolButton {
                 id: stopButton
-                text: "S"
+                icon.source: "qrc:/images/stop-button.png"
                 //text: qsTr("Stop all")
-                Material.roundedScale: roundedScale
             }
 
             Item {
                 Layout.fillWidth: true
             }
 
-            Label {
-                text: qsTr("A4")
-            }
-
-            SpinBox {
-                id: a4SpinBox
-                scale: 0.75
-                from: 430
-                to: 450
-                editable: true
-                stepSize: 1
-                value: 440
-            }
-
-            Item {
-                Layout.fillWidth: true
-            }
 
             ToolButton {
                 id: addButton
-                //icon.name: "add"
-                text: "+" // qsTr("Add to presets")
-                Material.roundedScale: roundedScale
+                icon.source: "qrc:/images/add.png"
+                //text: "+" // qsTr("Add to presets")
+                //Material.roundedScale: roundedScale
             }
         }
 
