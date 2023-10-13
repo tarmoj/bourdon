@@ -29,12 +29,13 @@ ApplicationWindow {
     width: 720
     height: 520
     visible: true
-    title: qsTr("Bourdon test")
+    property string version: "0.2.1"
+    title: qsTr("Bourdon app "+ version)
 
 
-    property var presetsArray: [ ["G","d"], ["c","g"] ]
+    property var presetsArray: [ [], ["G","d"], ["c","g"] ]
     property var bourdonNotes: ["G", "A", "c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"] // make sure the notes are loaded to tables in Csound with according numbers (index+1)
-    property var lastPressTime: 0
+    property int lastPressTime: 0
 
 
     Settings {
@@ -59,7 +60,6 @@ ApplicationWindow {
 
             onActivated: {
                 console.log("for button 1");
-                //bourdonForm.nextButton.clicked();
                 if (Date.now() - lastPressTime < 300) {
                     console.log("Double press detected!")
                     bourdonForm.advancePreset(-1);
@@ -82,7 +82,8 @@ ApplicationWindow {
 
 
     function  setPresetsFromText(text) {
-        const arr = []
+        const arr = [ [] ]; // define with one empty array for 0-preset
+
         const rows = text.split("\n");
         console.log("Rows found: ", rows.length)
         for (let row of rows) {
@@ -103,8 +104,8 @@ ApplicationWindow {
     function getPresetsText() { // turns presets array
         let text = "";
 
-        for (let p of presetsArray ) {
-            text += p.join(",") + "\n"
+        for (let i=1;i<presetsArray.length;i++ ) { // NB! start from 1, 0 is for non-saved temporary array
+            text += presetsArray[i] .join(",") + "\n"
         }
         console.log("presets as text: ", text)
         return text
@@ -133,13 +134,11 @@ ApplicationWindow {
             Label {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: backButton.verticalCenter
-                text: swipeView.currentItem.title
-                //elide: Label.ElideRight
+                text: swipeView.currentItem.title + "  v" + app.version
                 font.pointSize: 16
                 font.bold: true
                 horizontalAlignment: Qt.AlignHCenter
-                //verticalAlignment: Qt.AlignVCenter
-                //Layout.fillWidth: true
+
             }
             ToolButton {
                 anchors.right: parent.right
@@ -175,10 +174,8 @@ ApplicationWindow {
     Connections {
         target: device
         function onButtonPressed(button) {
-            console.log("Button pressed in qml: ", button)
-            const b = bourdonButtons.itemAt(button-1);
-            b.checked = !b.checked;
-            b.clicked();
+            console.log("Button pressed on blutetooth call: ", button)
+            //TODO: implement next and playbutton connection
         }
 
         function onStatusMessage(message) {
@@ -197,9 +194,6 @@ ApplicationWindow {
         anchors.fill: parent
         //currentIndex: 1
 
-
-
-
         Page {
             id: bourdonPage
             title: qsTr("Bourdons")
@@ -207,18 +201,29 @@ ApplicationWindow {
 
             BourdonForm {
                 id: bourdonForm
-                property int currentPreset: -1
-                property bool isPlaying: false
+                property int currentPreset: 0
+
+                signal presetZeroChanged;
+
 
                 function stopAll() {
                     for (let i=0; i<bourdonButtons.count; i++) {
                         const b = bourdonButtons.itemAt(i);
                         if (b.checked) {
                             b.checked = false
-                            b.clicked();
                             console.log("Stopping ", b.text)
                         }
                     }
+                }
+
+                function isPlaying() {
+                    for (let i=0; i<bourdonButtons.count; i++) {
+                        const b = bourdonButtons.itemAt(i);
+                        if (b.checked) {
+                            return true;
+                        }
+                    }
+                    return false;
                 }
 
                 function getPresetFromButtons() {
@@ -242,7 +247,6 @@ ApplicationWindow {
                         if (index>=0) {
                             const b = bourdonButtons.itemAt(index);
                             b.checked = true;
-                            b.clicked();
                         }
                     }
                 }
@@ -255,17 +259,23 @@ ApplicationWindow {
 
                 bourdonButtons.model: app.bourdonNotes
 
-                bourdonButtonGrid.columns:  Math.floor(bourdonButtonGrid.width / bourdonButtons.itemAt(0).width)
+                bourdonButtonGrid.columns:  Math.floor(bourdonButtonGrid.width / (bourdonButtons.itemAt(0).width + 10 ) )
 
                 bourdonArea.Layout.preferredHeight:bourdonButtonGrid.height
 
+
+                function updatePresetLabelText() {
+                    presetLabel.text = currentPreset.toString() + " " + presetsArray[currentPreset].join(",");
+
+                }
+
+                onPresetZeroChanged: updatePresetLabelText()
+
                 onCurrentPresetChanged: {
-                    if (currentPreset>=0) {
-                        presetLabel.text = (currentPreset+1).toString() + " " + presetsArray[currentPreset].join(",");
-                        if (playButton.checked) {
-                            stopAll();
-                            playFromPreset(app.presetsArray[currentPreset])
-                        }
+                    updatePresetLabelText()
+                    if (playButton.checked) {
+                        stopAll();
+                        playFromPreset(app.presetsArray[currentPreset])
                     }
                 }
 
@@ -278,8 +288,8 @@ ApplicationWindow {
                 function advancePreset(advance=1) { // either +1 or -1
                     let newPreset = currentPreset + advance
                     if (newPreset >= app.presetsArray.length ) {
-                        currentPreset = 0 ;
-                    } else if (newPreset<0) {
+                        currentPreset = 0 ; // should it go preset 0 that is for temporary, non saved experiments
+                    } else if (newPreset<0) { // or <1?
                         currentPreset = app.presetsArray.length-1;
                     } else {
                         currentPreset = newPreset
@@ -291,6 +301,9 @@ ApplicationWindow {
                 nextButton.onClicked: {
                     advancePreset(1);
                 }
+
+                // TODO: implement double click also on double click
+                //nextButton.onDoubleClicked: advancePreset(-1)
 
                 stopButton.onClicked: stopAll()
 
@@ -308,16 +321,21 @@ ApplicationWindow {
 
                 playButton.onCheckedChanged:  {
 
-                    console.log("Playbutton checked: ", playButton.checked)
+                    console.log("Playbutton checked: ", playButton.checked, bourdonForm.isPlaying() )
+
+                    if ( currentPreset==0 && bourdonForm.isPlaying() ) {
+                        playButton.checked = false; // stop will happen below
+                    }
 
                     if (playButton.checked) {
-                        stopAll();
-                        if (currentPreset<0 ) {
-                            currentPreset = 0; // changing preset triggers also playback
+                        if (app.presetsArray[currentPreset].length>0) {
+                            console.log("Starting: ", currentPreset, app.presetsArray[currentPreset])
+                            stopAll();
                         } else {
-                            playFromPreset(app.presetsArray[currentPreset] );
+                            playButton.checked = false;
                         }
 
+                        playFromPreset(app.presetsArray[currentPreset] );
                     } else {
                         stopAll();
                     }
@@ -341,43 +359,5 @@ ApplicationWindow {
 
     }
 
-
-/*
-    Row {
-        id: statusRow
-        x: 5;
-        anchors.top: headerRect.bottom
-        spacing: 5
-        visible: false
-
-        Button { id: searchButton; text:qsTr("Scan"); onClicked: device.startDeviceDiscovery() }
-
-        Label {color: "white"; text: qsTr("BT status")}
-        Label {color: "lightgrey"; id: bluetoothStatus}
-    }
-
-    Row {
-        id: centerRow
-        anchors.centerIn: parent
-        spacing: 5
-
-
-        Repeater {
-            id: bourdonButtons
-            model: ["G", "d", "e"]
-
-            BourdonButton {
-                required property string modelData
-                required property int index
-
-                sound: index+1
-                text: modelData
-            }
-
-        }
-
-
-    }
-*/
 
 }

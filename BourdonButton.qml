@@ -8,8 +8,7 @@ Button {
     checkable: true
     property int sound: 0
 
-
-    onClicked: {
+    onCheckedChanged: {
         const instrument = "1."+sound.toString()
         let scoreLine = "";
         if (checked) {
@@ -17,11 +16,23 @@ Button {
         } else {
             scoreLine = `i -${instrument} 0 -0 ${sound}`;
         }
-
-//        const time = new Date().getTime()%1000000;
-//        console.log(scoreLine, time);
         //app.readScore(scoreLine); // this does not, when no QCoreApplication::processEvents() in while loop...
         csound.readScore(scoreLine) // this works
+    }
+
+    onClicked: {
+
+
+        // if in prest 0 (tryout mode), set/update the preset:
+        console.log("Clicked")
+        if (bourdonForm.currentPreset==0) {
+
+            app.presetsArray[0] =  bourdonForm.getPresetFromButtons()
+            bourdonForm.presetZeroChanged()
+        }
+//        const time = new Date().getTime()%1000000;
+//        console.log(scoreLine, time);
+
     }
 
 
