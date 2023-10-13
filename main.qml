@@ -21,8 +21,6 @@ ikoon
 
 bourdonform background -  otsi õige tooni
 
-BourdonButton view, background (FoxButton)
-
 
 */
 
@@ -36,10 +34,51 @@ ApplicationWindow {
 
     property var presetsArray: [ ["G","d"], ["c","g"] ]
     property var bourdonNotes: ["G", "A", "c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"] // make sure the notes are loaded to tables in Csound with according numbers (index+1)
+    property var lastPressTime: 0
+
 
     Settings {
         property alias presetsArray: app.presetsArray
     }
+
+
+    Timer {
+        id: singlePressTimer
+        interval: 350 // Set the interval in milliseconds (adjust as needed)
+        onTriggered: {
+            console.log("Single press detected!")
+            bourdonForm.nextButton.clicked();
+        }
+        repeat: false
+    }
+
+
+    // These are bluetooth shortcuts, Airturn Duo, mode 2 (keyboard mode)
+    Shortcut {
+            sequences: ["Up","PgUp"] // change preset
+
+            onActivated: {
+                console.log("for button 1");
+                //bourdonForm.nextButton.clicked();
+                if (Date.now() - lastPressTime < 300) {
+                    console.log("Double press detected!")
+                    bourdonForm.advancePreset(-1);
+                    singlePressTimer.stop()
+                } else {
+                    singlePressTimer.start()
+                }
+
+                lastPressTime = Date.now()
+            }
+        }
+
+    Shortcut {
+            sequences: ["PgDown", "Down" ]
+            onActivated: {
+                console.log("for button 2");
+                bourdonForm.playButton.checked = !bourdonForm.playButton.checked
+            }
+        }
 
 
     function  setPresetsFromText(text) {
@@ -49,14 +88,14 @@ ApplicationWindow {
         for (let row of rows) {
             row = row.replace(/\s/g, ""); // remove white spaces
             const preset = row.split(",")
-            console.log("Preset as array: ", preset)
+            //console.log("Preset as array: ", preset)
             //TODO: check if only allowed elements in array
             if (preset.length>0 && preset[0] ) { // check if not empty
                 arr.push(preset)
             }
         }
 
-        console.log("New array: ", arr);
+        //console.log("New array: ", arr);
         app.presetsArray = arr;
 
     }
@@ -158,10 +197,12 @@ ApplicationWindow {
         anchors.fill: parent
         //currentIndex: 1
 
+
+
+
         Page {
             id: bourdonPage
             title: qsTr("Bourdons")
-
 
 
             BourdonForm {
@@ -207,22 +248,7 @@ ApplicationWindow {
                 }
 
 
-                // These are bluetooth shortcuts, Airturn Duo, mode 2 (keyboard mode)
-                Shortcut {
-                        sequences: ["Up","PgUp"]
-                        onActivated: {
-                            console.log("for button 1");
-                            bourdonForm.nextButton.clicked();
-                        }
-                    }
 
-                Shortcut {
-                        sequences: ["PgDown", "Down" ]
-                        onActivated: {
-                            console.log("for button 2");
-                            bourdonForm.playButton.checked = !bourdonForm.playButton.checked
-                        }
-                    }
 
 
                 sawWaveSwitch.onCheckedChanged: csound.setChannel("sawtooth", sawWaveSwitch.checked ? 1 : 0  )
@@ -249,13 +275,21 @@ ApplicationWindow {
                     csound.setChannel("a4", a4SpinBox.value);
                 }
 
-                nextButton.onClicked: {
-                    if (currentPreset < app.presetsArray.length-1 ) {
-                        currentPreset++ ;
+                function advancePreset(advance=1) { // either +1 or -1
+                    let newPreset = currentPreset + advance
+                    if (newPreset >= app.presetsArray.length ) {
+                        currentPreset = 0 ;
+                    } else if (newPreset<0) {
+                        currentPreset = app.presetsArray.length-1;
                     } else {
-                        currentPreset = 0;
+                        currentPreset = newPreset
                     }
+
                     console.log("New preset: ", currentPreset)
+                }
+
+                nextButton.onClicked: {
+                    advancePreset(1);
                 }
 
                 stopButton.onClicked: stopAll()
