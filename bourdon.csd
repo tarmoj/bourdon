@@ -1,6 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
--odac -d
+-odac 
+; -d
 ; -b 256 -B 1024 ; et äkki see mõjutab Androidi, aga vist mitte....
 ; --env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/
 </CsOptions>
@@ -12,6 +13,7 @@ nchnls = 2
 0dbfs = 1
 
 ;;channels
+chn_k "type",3
 chn_k "sawtooth",3
 chn_k "a4",3
 
@@ -36,18 +38,90 @@ giSound12 ftgen 12, 0, 0, 1, "g1.wav", 0, 0, 1
 giSound13 ftgen 13, 0, 0, 1, "a1.wav", 0, 0, 1
 giSound14 ftgen 14, 0, 0, 1, "h1.wav", 0, 0, 1
 
+giPartials1 ftgen 101, 0, 64, -2, 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60
+
+giAmps1 ftgen 201, 0, 64, -2, 0.4263,
+1	,
+0.7491	,
+0.4129	,
+0.1433	,
+0.527	,
+0.165	,
+0.0677	,
+0.1643	,
+0.1017	,
+0.1505	,
+0.0399	,
+0.0243	,
+0.0104	,
+0.0243	,
+0.0256 ,
+0.0462	,
+0.0081	,
+0.009	,
+0.0062	,
+0.0148	,
+0.0147	,
+0.0078	,
+0.0116	,
+0.0191	,
+0.0105	,
+0.0256	,
+0.0283	,
+0.0306	,
+0.0353	,
+0.0324,
+0.0463	,
+0.0398	,
+0.0177	,
+0.0135	,
+0.0105	,
+0.0175	,
+0.0186	,
+0.0124	,
+0.0116	,
+0.0148	,
+0.0152	,
+0.0108	,
+0.0122	,
+0.0104	,
+0.01	,
+0.0111	,
+0.0088	,
+0.0088	,
+0.0113	,
+0.0099
+		
+
+
+
+
 instr Bourdon
 	iTable =  p4
 	kSpeed init 1
 	kA4 = chnget:k("a4")
 	;printk2 kA4
 	kScale = kA4/440
+	kType chnget "type"
 	
-	if (chnget:k("sawtooth")>0) then
+	if (kType==1) then
 		iamp = 0.4
-		aSaw vco2 0.4, giFrequencies[iTable]*kScale
-		aOut butterlp aSaw, 6000
-		;aOut = aSaw
+		kFreq = giFrequencies[iTable]*kScale
+		aSaw vco2 0.4, kFreq, 10
+		aSaw butterlp aSaw, 6000
+	  aBuzz buzz 0.1*(1+jspline(0.2, 1/4, 1/2)), kFreq, 128, -1
+	  aBuzz butterlp aBuzz, 12000
+	  
+	  aOut = aSaw*0.1+aBuzz
+
+	elseif (kType==2) then ; synthesized sound
+		iamp = 0.3
+		kFreq = giFrequencies[iTable]*kScale
+		
+		aWave adsynt iamp, kFreq, -1, giPartials1 , giAmps1 , 40
+		aBuzz buzz 0.04*(1+jspline(0.1, 1/4, 1/2)), kFreq, 256, -1
+		aOut = aWave+aBuzz
+	
 	else
 		aSound loscil3 1, 1, iTable, 1 ; kõrguse muutmine Androidi peal ei toimi sel moel...
 	
@@ -64,6 +138,8 @@ instr Bourdon
 		endif
 	endif 
 	
+	dispfft aOut, 0.1, 2048
+		
 	;aSine poscil 0.1, kA4
 	
 	
@@ -93,13 +169,17 @@ endin
 
 
 
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>0</x>
  <y>0</y>
- <width>354</width>
- <height>183</height>
+ <width>1034</width>
+ <height>649</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -107,7 +187,7 @@ endin
   <g>237</g>
   <b>240</b>
  </bgcolor>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>button0</objectName>
   <x>23</x>
   <y>96</y>
@@ -129,7 +209,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>a4</objectName>
   <x>101</x>
   <y>46</y>
@@ -159,7 +239,7 @@ endin
   <randomizable group="0">false</randomizable>
   <value>440</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>16</x>
   <y>46</y>
@@ -190,7 +270,7 @@ endin
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonA</objectName>
   <x>88</x>
   <y>96</y>
@@ -212,7 +292,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonc</objectName>
   <x>25</x>
   <y>143</y>
@@ -234,7 +314,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttond</objectName>
   <x>92</x>
   <y>143</y>
@@ -256,7 +336,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttone</objectName>
   <x>159</x>
   <y>143</y>
@@ -278,7 +358,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttong</objectName>
   <x>227</x>
   <y>143</y>
@@ -300,7 +380,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttona</objectName>
   <x>295</x>
   <y>143</y>
@@ -322,7 +402,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonh</objectName>
   <x>363</x>
   <y>143</y>
@@ -344,7 +424,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonc1</objectName>
   <x>26</x>
   <y>189</y>
@@ -366,7 +446,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttond1</objectName>
   <x>93</x>
   <y>189</y>
@@ -388,7 +468,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttone1</objectName>
   <x>160</x>
   <y>189</y>
@@ -410,7 +490,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttong1</objectName>
   <x>228</x>
   <y>189</y>
@@ -432,7 +512,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttona1</objectName>
   <x>296</x>
   <y>189</y>
@@ -454,7 +534,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonh1</objectName>
   <x>364</x>
   <y>189</y>
@@ -476,7 +556,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>sawtooth</objectName>
   <x>118</x>
   <y>271</y>
@@ -492,7 +572,7 @@ endin
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>21</x>
   <y>270</y>
@@ -522,6 +602,64 @@ endin
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBGraph" version="2">
+  <objectName/>
+  <x>23</x>
+  <y>314</y>
+  <width>1011</width>
+  <height>335</height>
+  <uuid>{396deab4-9066-4e20-b52e-abad46a8d7f9}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <value>16</value>
+  <objectName2/>
+  <zoomx>1.00000000</zoomx>
+  <zoomy>1.00000000</zoomy>
+  <dispx>1.00000000</dispx>
+  <dispy>1.00000000</dispy>
+  <modex>lin</modex>
+  <modey>lin</modey>
+  <showSelector>true</showSelector>
+  <showGrid>true</showGrid>
+  <showTableInfo>true</showTableInfo>
+  <showScrollbars>true</showScrollbars>
+  <enableTables>true</enableTables>
+  <enableDisplays>true</enableDisplays>
+  <all>true</all>
+ </bsbObject>
+ <bsbObject type="BSBDropdown" version="2">
+  <objectName>type</objectName>
+  <x>181</x>
+  <y>269</y>
+  <width>80</width>
+  <height>30</height>
+  <uuid>{3ecddafa-45ff-4a50-a912-220ee809b0f8}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>sample</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>saw</name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>additive</name>
+    <value>2</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>2</selectedIndex>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
