@@ -7,7 +7,7 @@ Item {
     width: 300
     height: 600
     anchors.fill: parent
-    property alias sawWaveSwitch: sawWaveSwitch
+    //property alias sawWaveSwitch: sawWaveSwitch
     property alias addButton: addButton
     property alias stopButton: stopButton
     property alias bourdonButtonGrid: bourdonButtonGrid
@@ -18,6 +18,7 @@ Item {
     property alias presetLabel: presetLabel
     property alias bourdonArea: bourdonArea
     property alias a4SpinBox: a4SpinBox
+    property alias soundTypeCombobox: soundTypeCombobox
 
     property int roundedScale: Material.ExtraSmallScale
 
@@ -55,10 +56,16 @@ Item {
 
             RowLayout {
                 anchors.fill: parent
-                Switch {
-                    id: sawWaveSwitch
-                    text: qsTr("Use saw wave")
+
+                ComboBox {
+                    id: soundTypeCombobox
+                    model: [qsTr("Sample"), qsTr("Saw wave"), qsTr("Snthesized") ]
                 }
+
+//                Switch {
+//                    id: sawWaveSwitch
+//                    text: qsTr("Use saw wave")
+//                }
 
                 Item {
                     Layout.fillWidth: true

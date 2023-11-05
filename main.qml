@@ -254,8 +254,8 @@ ApplicationWindow {
 
 
 
-
-                sawWaveSwitch.onCheckedChanged: csound.setChannel("sawtooth", sawWaveSwitch.checked ? 1 : 0  )
+                soundTypeCombobox.onCurrentIndexChanged: csound.setChannel("type", soundTypeCombobox.currentIndex)
+                //sawWaveSwitch.onCheckedChanged: csound.setChannel("sawtooth", sawWaveSwitch.checked ? 1 : 0  )
 
                 bourdonButtons.model: app.bourdonNotes
 
