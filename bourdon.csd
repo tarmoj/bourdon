@@ -18,6 +18,7 @@ chn_k "sawtooth",3
 chn_k "a4",3
 
 chnset 440, "a4"
+chnset 2, "type"
 
 giFrequencies[] array 100, cpspch(6.07), cpspch(6.09),
  cpspch(7.00), cpspch(7.02), cpspch(7.04), cpspch(7.07), cpspch(7.09),cpspch(7.11),
@@ -107,20 +108,19 @@ instr Bourdon
 	if (kType==1) then
 		iamp = 0.4
 		kFreq = giFrequencies[iTable]*kScale
-		aSaw vco2 0.4, kFreq, 10
+		aSaw vco2 0.4, kFreq ;, 10
 		aSaw butterlp aSaw, 6000
-	  aBuzz buzz 0.1*(1+jspline(0.2, 1/4, 1/2)), kFreq, 128, -1
-	  aBuzz butterlp aBuzz, 12000
 	  
-	  aOut = aSaw*0.1+aBuzz
+	  aOut = aSaw
 
 	elseif (kType==2) then ; synthesized sound
 		iamp = 0.3
 		kFreq = giFrequencies[iTable]*kScale
 		
-		aWave adsynt iamp, kFreq, -1, giPartials1 , giAmps1 , 40
-		aBuzz buzz 0.04*(1+jspline(0.1, 1/4, 1/2)), kFreq, 256, -1
+		aWave adsynt iamp, kFreq, -1, giPartials1 , giAmps1 , 64
+		aBuzz buzz 0.1*(1+jspline(0.1, 1/4, 1/2)), kFreq, 256, -1
 		aOut = aWave+aBuzz
+		aOut butterlp aOut, 8000
 	
 	else
 		aSound loscil3 1, 1, iTable, 1 ; kõrguse muutmine Androidi peal ei toimi sel moel...

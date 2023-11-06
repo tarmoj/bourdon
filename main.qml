@@ -271,9 +271,17 @@ ApplicationWindow {
 
                 onPresetZeroChanged: updatePresetLabelText()
 
+                presetNullButton.onClicked:  {
+                    currentPreset = 0
+                    if (isPlaying()) {
+                        stopAll()
+                        playButton.checked = false
+                    }
+                }
+
                 onCurrentPresetChanged: {
                     updatePresetLabelText()
-                    if (playButton.checked) {
+                    if (isPlaying()) {
                         stopAll();
                         playFromPreset(app.presetsArray[currentPreset])
                     }
@@ -288,7 +296,7 @@ ApplicationWindow {
                 function advancePreset(advance=1) { // either +1 or -1
                     let newPreset = currentPreset + advance
                     if (newPreset >= app.presetsArray.length ) {
-                        currentPreset = 0 ; // should it go preset 0 that is for temporary, non saved experiments
+                        currentPreset = 1 ; // should it go preset 0 that is for temporary, non saved experiments
                     } else if (newPreset<0) { // or <1?
                         currentPreset = app.presetsArray.length-1;
                     } else {
@@ -323,7 +331,7 @@ ApplicationWindow {
 
                     console.log("Playbutton checked: ", playButton.checked, bourdonForm.isPlaying() )
 
-                    if ( currentPreset==0 && bourdonForm.isPlaying() ) {
+                    if ( bourdonForm.isPlaying() ) {
                         playButton.checked = false; // stop will happen below
                     }
 

@@ -19,6 +19,7 @@ Item {
     property alias bourdonArea: bourdonArea
     property alias a4SpinBox: a4SpinBox
     property alias soundTypeCombobox: soundTypeCombobox
+    property alias presetNullButton: presetNullButton
 
     property int roundedScale: Material.ExtraSmallScale
 
@@ -51,6 +52,8 @@ Item {
 
         Item {
             id: configRow
+            Layout.leftMargin: 10
+            Layout.rightMargin: 10
             Layout.fillWidth: true
             Layout.preferredHeight: a4SpinBox.height + 4
 
@@ -59,6 +62,7 @@ Item {
 
                 ComboBox {
                     id: soundTypeCombobox
+                    currentIndex: 2
                     model: [qsTr("Sample"), qsTr("Saw wave"), qsTr("Snthesized") ]
                 }
 
@@ -97,8 +101,14 @@ Item {
 
             ToolButton {
                 id: stopButton
+                visible: false
                 icon.source: "qrc:/images/stop-button.png"
                 //text: qsTr("Stop all")
+            }
+
+            ToolButton {
+                id: presetNullButton
+                text: qsTr("Preset 0")
             }
 
             Item {
