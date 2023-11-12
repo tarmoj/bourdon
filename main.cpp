@@ -3,7 +3,7 @@
 #include <QThread>
 #include <QQmlContext>
 #include "csengine.h"
-#include "bluetooth/device.h"
+// #include "bluetooth/device.h"
 
 
 #ifdef Q_OS_ANDROID
@@ -72,12 +72,6 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("csound", cs); // forward c++ object that can be reached form qml by object name "csound" NB! include <QQmlContext>
-
-    // bluetooth
-    Device d;
-    engine.rootContext()->setContextProperty("device", &d);
-
-
 
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
