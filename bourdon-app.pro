@@ -1,7 +1,5 @@
 lessThan(QT_MAJOR_VERSION,6): error("Qt6 is required for this build.")
 
-# changes to remove bluetooth
-
 QT += quick core
 
 # You can make your code fail to compile if it uses deprecated APIs.

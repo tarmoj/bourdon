@@ -260,7 +260,7 @@ ApplicationWindow {
 
                 presetNullButton.onClicked:  {
                     currentPreset = 0
-                    if (isPlaying()) {
+                    if (isPlaying() || playButton.checked) {
                         stopAll()
                         playButton.checked = false
                     }
