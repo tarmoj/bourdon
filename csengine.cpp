@@ -94,28 +94,25 @@ void CsEngine::compileOrc(const QString &code)
 
 QVariant CsEngine::getAudioDevices()
 {
-    QList<QPair<QString, QString> > deviceList;
+    QStringList deviceList; // mapped in pairs: device_name, device_id, device_name2, device_id2, ...
 
 
-    CSOUND *csound = cs->GetCsound();
-    //csoundSetRTAudioModule(csound, "pa");
+    CSOUND *csound = csoundCreate(nullptr);
+    csoundSetRTAudioModule(csound, "pa"); // on Android probably does not work...
     int i,newn, n = csoundGetAudioDevList(csound, nullptr, 1);
     CS_AUDIODEVICE *devs = (CS_AUDIODEVICE *) malloc(n*sizeof(CS_AUDIODEVICE));
     newn = csoundGetAudioDevList(csound,devs,1);
     if (newn != n) {
         qDebug()  << "OutputDevices Device number changed";
-        //return QVariant(deviceList);
+        return QVariant(deviceList);
     }
     for (i = 0; i < n; i++) {
-        qDebug()  << devs[i].device_name;
-        deviceList.append(QPair <QString, QString> (devs[i].device_name, devs[i].device_id));
+        qDebug()  << devs[i].device_name << devs[i].device_id;
+        deviceList << QString(devs[i].device_name) << QString(devs[i].device_id);
     }
     free(devs);
     csoundDestroy(csound);
 
-    //return deviceList;
-
-    QVariant result(123);
-    return result;
+    return  QVariant(deviceList);
 
 }

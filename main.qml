@@ -176,6 +176,7 @@ ApplicationWindow {
         anchors.fill: parent
         //currentIndex: 1
 
+
         Page {
             id: bourdonPage
             title: qsTr("Bourdons")
@@ -187,6 +188,15 @@ ApplicationWindow {
 
                 signal presetZeroChanged;
 
+
+                // TEST
+                //Button { text: "Devices"; onClicked: bourdonForm.getAudioDevices()}
+
+
+                function getAudioDevices() {
+                    var deviceList = csound.getAudioDevices();
+                    console.log("Device list: ", deviceList);
+                }
 
                 function stopAll() {
                     for (let i=0; i<bourdonButtons.count; i++) {
