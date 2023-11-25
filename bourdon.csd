@@ -3,7 +3,7 @@
 -odac 
 ; -d
 ; -b 256 -B 1024 ; et äkki see mõjutab Androidi, aga vist mitte....
-; --env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/
+; --env:SSDIR=/home/tarmo/tarmo/programm/qt-projects/bourdon/samples/
 </CsOptions>
 <CsInstruments>
 
@@ -24,20 +24,6 @@ giFrequencies[] array 100, cpspch(6.07), cpspch(6.09),
  cpspch(7.00), cpspch(7.02), cpspch(7.04), cpspch(7.07), cpspch(7.09),cpspch(7.11),
  cpspch(8.00), cpspch(8.02), cpspch(8.04), cpspch(8.07), cpspch(8.09), cpspch(8.11)
 
-giSound1 ftgen 1, 0, 0, 1, "G0.wav", 0, 0, 1
-giSound2 ftgen 2, 0, 0, 1, "A0.wav", 0, 0, 1
-giSound3 ftgen 3, 0, 0, 1, "c.wav", 0, 0, 1
-giSound4 ftgen 4, 0, 0, 1, "d.wav", 0, 0, 1
-giSound5 ftgen 5, 0, 0, 1, "e.wav", 0, 0, 1
-giSound6 ftgen 6, 0, 0, 1, "g.wav", 0, 0, 1
-giSound7 ftgen 7, 0, 0, 1, "a.wav", 0, 0, 1
-giSound8 ftgen 8, 0, 0, 1, "h.wav", 0, 0, 1
-giSound9 ftgen 9, 0, 0, 1, "c1.wav", 0, 0, 1
-giSound10 ftgen 10, 0, 0, 1, "d1.wav", 0, 0, 1
-giSound11 ftgen 11, 0, 0, 1, "e1.wav", 0, 0, 1
-giSound12 ftgen 12, 0, 0, 1, "g1.wav", 0, 0, 1
-giSound13 ftgen 13, 0, 0, 1, "a1.wav", 0, 0, 1
-giSound14 ftgen 14, 0, 0, 1, "h1.wav", 0, 0, 1
 
 giPartials1 ftgen 101, 0, 64, -2, 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60
 
@@ -103,15 +89,17 @@ instr Bourdon
 	kA4 = chnget:k("a4")
 	;printk2 kA4
 	kScale = kA4/440
+	kType init 2
 	kType chnget "type"
 	
 	if (kType==1) then
 		iamp = 0.4
 		kFreq = giFrequencies[iTable]*kScale
-		aSaw vco2 0.4, kFreq ;, 10
+		aSaw vco2 0.1, kFreq ;, 10
 		aSaw butterlp aSaw, 6000
 	  
 	  aOut = aSaw
+	  outall aSaw
 
 	elseif (kType==2) then ; synthesized sound
 		iamp = 0.3
@@ -150,11 +138,36 @@ instr Bourdon
 endin
 
 
+; make sure, it can be optional!
+schedule "LoadSamples", 0, 0
+instr LoadSamples
+
+giSound1 ftgen 1, 0, 0, 1, "G0.wav", 0, 0, 1
+giSound2 ftgen 2, 0, 0, 1, "A0.wav", 0, 0, 1
+giSound3 ftgen 3, 0, 0, 1, "c.wav", 0, 0, 1
+giSound4 ftgen 4, 0, 0, 1, "d.wav", 0, 0, 1
+giSound5 ftgen 5, 0, 0, 1, "e.wav", 0, 0, 1
+giSound6 ftgen 6, 0, 0, 1, "g.wav", 0, 0, 1
+giSound7 ftgen 7, 0, 0, 1, "a.wav", 0, 0, 1
+giSound8 ftgen 8, 0, 0, 1, "h.wav", 0, 0, 1
+giSound9 ftgen 9, 0, 0, 1, "c1.wav", 0, 0, 1
+giSound10 ftgen 10, 0, 0, 1, "d1.wav", 0, 0, 1
+giSound11 ftgen 11, 0, 0, 1, "e1.wav", 0, 0, 1
+giSound12 ftgen 12, 0, 0, 1, "g1.wav", 0, 0, 1
+giSound13 ftgen 13, 0, 0, 1, "a1.wav", 0, 0, 1
+giSound14 ftgen 14, 0, 0, 1, "h1.wav", 0, 0, 1
+
+endin
+
 </CsInstruments>
 <CsScore>
 
 </CsScore>
 </CsoundSynthesizer>
+
+
+
+
 
 
 
@@ -187,7 +200,7 @@ endin
   <g>237</g>
   <b>240</b>
  </bgcolor>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>button0</objectName>
   <x>23</x>
   <y>96</y>
@@ -206,10 +219,10 @@ endin
   <eventLine>i1.1 0 -1 1</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBSpinBox" version="2">
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>a4</objectName>
   <x>101</x>
   <y>46</y>
@@ -239,7 +252,7 @@ endin
   <randomizable group="0">false</randomizable>
   <value>440</value>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>16</x>
   <y>46</y>
@@ -270,7 +283,7 @@ endin
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>buttonA</objectName>
   <x>88</x>
   <y>96</y>
@@ -292,7 +305,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>buttonc</objectName>
   <x>25</x>
   <y>143</y>
@@ -314,7 +327,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>buttond</objectName>
   <x>92</x>
   <y>143</y>
@@ -336,7 +349,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>buttone</objectName>
   <x>159</x>
   <y>143</y>
@@ -358,7 +371,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>buttong</objectName>
   <x>227</x>
   <y>143</y>
@@ -380,7 +393,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>buttona</objectName>
   <x>295</x>
   <y>143</y>
@@ -402,7 +415,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>buttonh</objectName>
   <x>363</x>
   <y>143</y>
@@ -424,7 +437,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>buttonc1</objectName>
   <x>26</x>
   <y>189</y>
@@ -446,7 +459,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>buttond1</objectName>
   <x>93</x>
   <y>189</y>
@@ -468,7 +481,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>buttone1</objectName>
   <x>160</x>
   <y>189</y>
@@ -490,7 +503,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>buttong1</objectName>
   <x>228</x>
   <y>189</y>
@@ -509,10 +522,10 @@ endin
   <eventLine>i1.12 0 -1 12</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>buttona1</objectName>
   <x>296</x>
   <y>189</y>
@@ -534,7 +547,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>buttonh1</objectName>
   <x>364</x>
   <y>189</y>
@@ -556,7 +569,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBCheckBox" version="2">
+ <bsbObject version="2" type="BSBCheckBox">
   <objectName>sawtooth</objectName>
   <x>118</x>
   <y>271</y>
@@ -572,7 +585,7 @@ endin
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>21</x>
   <y>270</y>
@@ -603,7 +616,7 @@ endin
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBGraph" version="2">
+ <bsbObject version="2" type="BSBGraph">
   <objectName/>
   <x>23</x>
   <y>314</y>
@@ -614,7 +627,7 @@ endin
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <value>16</value>
+  <value>0</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -630,7 +643,7 @@ endin
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject type="BSBDropdown" version="2">
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>type</objectName>
   <x>181</x>
   <y>269</y>
