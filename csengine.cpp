@@ -2,7 +2,9 @@
 #include <QDebug>
 #include <QTemporaryFile>
 #include <QCoreApplication>
+
 //#include <QDateTime>
+
 
 // NB! use DEFINES += USE_DOUBLE
 
@@ -87,5 +89,33 @@ void CsEngine::readScore(const QString &scoreLine)
 
 void CsEngine::compileOrc(const QString &code)
 {
-	cs->CompileOrc(code.toLocal8Bit());
+    cs->CompileOrc(code.toLocal8Bit());
+}
+
+QVariant CsEngine::getAudioDevices()
+{
+    QList<QPair<QString, QString> > deviceList;
+
+
+    CSOUND *csound = cs->GetCsound();
+    //csoundSetRTAudioModule(csound, "pa");
+    int i,newn, n = csoundGetAudioDevList(csound, nullptr, 1);
+    CS_AUDIODEVICE *devs = (CS_AUDIODEVICE *) malloc(n*sizeof(CS_AUDIODEVICE));
+    newn = csoundGetAudioDevList(csound,devs,1);
+    if (newn != n) {
+        qDebug()  << "OutputDevices Device number changed";
+        //return QVariant(deviceList);
+    }
+    for (i = 0; i < n; i++) {
+        qDebug()  << devs[i].device_name;
+        deviceList.append(QPair <QString, QString> (devs[i].device_name, devs[i].device_id));
+    }
+    free(devs);
+    csoundDestroy(csound);
+
+    //return deviceList;
+
+    QVariant result(123);
+    return result;
+
 }

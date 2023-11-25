@@ -9,14 +9,9 @@ import QtCore
   TODO:
 
 
-BourdonForm -  lisa ülesse spacer, Grid -  arvuta nuppude arv koos spacing
-Mõtle Stop ja Add nupu peale pigem norm nupud ikoonidega, spacing väiksemaks (5)
 ikoonid > ja < asemele
 Landscape layout -  vaja alt ruumi (Current preset võibolla  pedaalinuppud kõrvale? State change?
-Android - ümberhäälestamine -  mingi jama, ei ole stabiilne....
-SpinBox - editable
 
-ikoon
 
 
 bourdonform background -  otsi õige tooni

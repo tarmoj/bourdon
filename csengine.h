@@ -1,6 +1,7 @@
 #ifndef CSENGINE_H
 #define CSENGINE_H
 #include <QObject>
+#include <QVariant>
 
 #ifdef Q_OS_ANDROID
     #include "AndroidCsound.hpp"
@@ -30,6 +31,7 @@ public slots:
     void compileOrc(const QString &code);
 
 	//Q_INVOKABLE double getChannel(const char *channel);
+    Q_INVOKABLE QVariant getAudioDevices();
 
 private:
     bool mStop;
