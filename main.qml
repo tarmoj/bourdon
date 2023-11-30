@@ -344,9 +344,36 @@ ApplicationWindow {
 
                 }
 
+                // does not work properly...
+//                presetMouseArea.onPositionChanged: function(mouse) {
+//                    // Ensure the rectangle stays at the bottom and can be dragged higher
+//                    console.log("mouse.y", mouse.y)
+//                    presetArea.anchors.topMargin = mouse.y
+//                    //parent.anchors.topMargin = mouse.y
+//                }
+
+
+
             }
 
+
+
         }
+
+//        Drawer {
+//                        id: presetDrawer
+//                        height: parent.height * 0.8
+//                        width: parent.width
+//                        edge: Qt.BottomEdge
+
+//                        background: Rectangle {color: "lightgrey"}
+
+
+//                        Label { anchors.centerIn:  parent; text: "SISU" }
+//                        PresetForm { id:presetForm3 }
+
+
+//                    }
 
         Page {
             id: presetPage

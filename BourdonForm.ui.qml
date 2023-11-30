@@ -20,6 +20,8 @@ Item {
     property alias a4SpinBox: a4SpinBox
     property alias soundTypeCombobox: soundTypeCombobox
     property alias presetNullButton: presetNullButton
+    property alias presetArea: presetArea
+    property alias presetMouseArea: presetMouseArea
 
     property int roundedScale: Material.ExtraSmallScale
 
@@ -162,7 +164,7 @@ Item {
                 Item {}
 
                 Repeater {
-                    id: bourdonButtons
+                    id: bourdonButtons // NB! this is not correct any more!!!
                     model: ["c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"]
 
 
@@ -179,128 +181,31 @@ Item {
             }
         }
 
-
-//            RowLayout {
-//                width: parent.width
-//                Repeater {
-//                    model: ["G", "A"]
-
-//                    BourdonButton {
-//                        required property int index
-//                        required property string modelData
-//                        sound: index + 1
-//                        text: modelData
-//                        Material.roundedScale: roundedScale
-//                    }
-//                }
-
-//                Item {Layout.fillWidth: true}
-//            }
-
-//            RowLayout {
-//                width: parent.width
-
-//                Repeater {
-//                    model: ["c", "d", "e", "g", "a", "h"]
-
-//                    BourdonButton {
-//                        required property int index
-//                        required property string modelData
-//                        sound: 2 + index + 1
-//                        text: modelData
-//                        Material.roundedScale: roundedScale
-//                    }
-//                }
-
-//                Item {Layout.fillWidth: true}
-//            }
-
-//            RowLayout {
-//                width: parent.width
-
-//                Repeater {
-//                    model: ["c1", "d1", "e1", "g1", "a1", "h1"]
-
-//                    BourdonButton {
-//                        required property int index
-//                        required property string modelData
-//                        sound: 8 + index + 1
-//                        text: modelData
-//                        Material.roundedScale: roundedScale
-//                    }
-//                }
-
-//                Item {Layout.fillWidth: true}
-//            }
-        }
-
-
-
-
-
-//    }
-
-    ColumnLayout {
-        id: column
-        anchors.fill: parent
-        spacing: 10
-
-        visible: false
-
-
-
-
-
-//        Item {
-//            id: bourdonAreaOld
-
-//            Layout.preferredHeight: column.height * 0.3 //bourdonButtonGrid.height //
-//            Layout.fillWidth: true
-
-//            GridLayout {
-//                id: bourdonButtonGridOld
-//                width: parent.width * 0.95
-//                columns: 6 //width / bourdonButtons.itemAt(0).width
-
-//                anchors.horizontalCenter: parent.horizontalCenter
-
-//                Repeater {
-//                    id: bourdonButtons
-//                    model: ["G", "c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"]
-
-//                    BourdonButton {
-//                        required property int index
-//                        required property string modelData
-//                        sound: index + 1
-//                        text: modelData
-//                        Material.roundedScale: roundedScale
-//                    }
-//                }
-//            }
-//        }
-
         Item {
             id: controlArea
 
-            Layout.fillWidth: true
+            width: parent.width-20
+            anchors.top: bourdonArea.bottom
 
-            Row {
+            anchors.bottom: presetArea.top
+            RowLayout {
+                width: parent.width
                 id: mainButtonRow
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: 20
 
                 Button {
                     id: nextButton
-                    width: Math.min(column.width, column.height) / 3
-                    height: width
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
                     text: "NEXT"
                     Material.roundedScale: roundedScale
                 }
 
                 Button {
                     id: playButton
-                    width: nextButton.width
-                    height: width
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
                     text: qsTr("Play/Stop")
                     checkable: true
                     checked: false
@@ -330,6 +235,52 @@ Item {
                 }
             }
         }
+
+
+
+        Item {
+            id: presetArea
+            width: parent.width-20
+            height: presetForm2.height
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.bottom
+            anchors.topMargin: -100 // Initial margin to keep a small fraction visible
+
+            Rectangle {id: testRect; anchors.fill: parent; color: "lightgrey"
+
+                MouseArea {
+                    id: presetMouseArea
+                    anchors.fill: parent
+                    drag.target: parent
+                    //hoverEnabled: true
+                }
+            }
+
+
+
+            PresetForm { id:presetForm2 }
+
+
+        }
+
+
+
+    }
+
+
+
+
+
+//    }
+
+    ColumnLayout {
+        id: column
+        anchors.fill: parent
+        spacing: 10
+
+        visible: false
+
+
 
         Item {
             Layout.fillHeight: true
