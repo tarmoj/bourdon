@@ -43,22 +43,21 @@ Item {
                 color: "#a8549d"
             }
         }
-    }
 
-    ColumnLayout {
-        id: column
-        anchors.fill: parent
-        spacing: 10
 
-        Item {
-            id: configRow
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            Layout.fillWidth: true
-            Layout.preferredHeight: a4SpinBox.height + 4
+        Column {
+            id: configArea // we need better name. not config any more
+            width: parent.width-20
+            anchors.horizontalCenter: parent.horizontalCenter
+            //height: a4SpinBox.height + 4
+            anchors.top: parent.top
+            //anchors.leftMargin: 10
+            //anchors.rightMargin: 10
+
+            spacing: 5
 
             RowLayout {
-                anchors.fill: parent
+                width: parent.width
 
                 ComboBox {
                     id: soundTypeCombobox
@@ -67,10 +66,6 @@ Item {
                     model: [qsTr("Sample"), qsTr("Saw wave"), qsTr("Snthesized") ]
                 }
 
-//                Switch {
-//                    id: sawWaveSwitch
-//                    text: qsTr("Use saw wave")
-//                }
 
                 Item {
                     Layout.fillWidth: true
@@ -91,39 +86,83 @@ Item {
                     value: 440
                 }
             }
+
+            RowLayout {
+                id: stopAndAddRow
+                width: parent.width
+                spacing: 10
+
+                //TODO: remove stopButton
+                ToolButton {
+                    id: stopButton
+                    visible: false
+                    icon.source: "qrc:/images/stop-button.png"
+                    //text: qsTr("Stop all")
+                }
+
+                ToolButton {
+                    id: presetNullButton
+                    text: qsTr("Preset 0")
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                }
+
+
+                ToolButton {
+                    id: addButton
+                    icon.source: "qrc:/images/add.png"
+                    //text: "+" // qsTr("Add to presets")
+                    //Material.roundedScale: roundedScale
+                }
+            }
         }
 
-        RowLayout {
-            id: stopAndAddRow
-            Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 10
+        Item {
+            id: bourdonArea // name to: bourdonButtonArea
 
-            ToolButton {
-                id: stopButton
-                visible: false
-                icon.source: "qrc:/images/stop-button.png"
-                //text: qsTr("Stop all")
-            }
+            Layout.preferredHeight: column.height * 0.3 //bourdonButtonGrid.height //
+            width: configArea.width
+            height: bourdonButtonGrid.height
+            anchors.top: configArea.bottom
 
-            ToolButton {
-                id: presetNullButton
-                text: qsTr("Preset 0")
-            }
+            GridLayout {
+                id: bourdonButtonGrid
+                width: parent.width * 0.95
+                columns: 6 //width / bourdonButtons.itemAt(0).width
 
-            Item {
-                Layout.fillWidth: true
-            }
+                anchors.horizontalCenter: parent.horizontalCenter
 
+                Repeater {
+                    id: bourdonButtons
+                    model: ["G", "c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"]
 
-            ToolButton {
-                id: addButton
-                icon.source: "qrc:/images/add.png"
-                //text: "+" // qsTr("Add to presets")
-                //Material.roundedScale: roundedScale
+                    BourdonButton {
+                        required property int index
+                        required property string modelData
+                        sound: index + 1
+                        text: modelData
+                        Material.roundedScale: roundedScale
+                    }
+                }
             }
         }
+
+
+
+    }
+
+    ColumnLayout {
+        id: column
+        anchors.fill: parent
+        spacing: 10
+
+        visible: false
+
+
+
+
 
         Item {
             id: bourdonArea
