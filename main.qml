@@ -344,8 +344,6 @@ ApplicationWindow {
 
             }
 
-
-
         }
 
         Page {
