@@ -119,29 +119,59 @@ Item {
             }
         }
 
-        Item {
+        Column {
             id: bourdonArea // name to: bourdonButtonArea
 
-            Layout.preferredHeight: column.height * 0.3 //bourdonButtonGrid.height //
+            //Layout.preferredHeight: column.height * 0.3 //bourdonButtonGrid.height //
             width: configArea.width
-            height: bourdonButtonGrid.height
+            anchors.horizontalCenter: parent.horizontalCenter
+            //height: bourdonButtonGrid.height
             anchors.top: configArea.bottom
+            // how to get the buttons?
+            //property var bourdonButtons:
+
 
             GridLayout {
                 id: bourdonButtonGrid
+                visible: true
                 width: parent.width * 0.95
                 columns: 6 //width / bourdonButtons.itemAt(0).width
+                //
 
                 anchors.horizontalCenter: parent.horizontalCenter
 
+                BourdonButton {
+                    Layout.row: 0
+                    Layout.column: 3
+                    Layout.fillWidth: true
+                    sound: 1
+                    text: "G"
+                    Material.roundedScale: roundedScale
+                }
+
+                BourdonButton {
+                    Layout.row: 0
+                    Layout.column: 4
+                    Layout.fillWidth: true
+
+                    sound: 2
+                    text: "A"
+                    Material.roundedScale: roundedScale
+                }
+
+                Item {}
+
                 Repeater {
                     id: bourdonButtons
-                    model: ["G", "c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"]
+                    model: ["c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"]
+
 
                     BourdonButton {
+                        Layout.fillWidth: true
+
                         required property int index
                         required property string modelData
-                        sound: index + 1
+                        sound: 2 + index + 1
                         text: modelData
                         Material.roundedScale: roundedScale
                     }
@@ -150,8 +180,65 @@ Item {
         }
 
 
+//            RowLayout {
+//                width: parent.width
+//                Repeater {
+//                    model: ["G", "A"]
 
-    }
+//                    BourdonButton {
+//                        required property int index
+//                        required property string modelData
+//                        sound: index + 1
+//                        text: modelData
+//                        Material.roundedScale: roundedScale
+//                    }
+//                }
+
+//                Item {Layout.fillWidth: true}
+//            }
+
+//            RowLayout {
+//                width: parent.width
+
+//                Repeater {
+//                    model: ["c", "d", "e", "g", "a", "h"]
+
+//                    BourdonButton {
+//                        required property int index
+//                        required property string modelData
+//                        sound: 2 + index + 1
+//                        text: modelData
+//                        Material.roundedScale: roundedScale
+//                    }
+//                }
+
+//                Item {Layout.fillWidth: true}
+//            }
+
+//            RowLayout {
+//                width: parent.width
+
+//                Repeater {
+//                    model: ["c1", "d1", "e1", "g1", "a1", "h1"]
+
+//                    BourdonButton {
+//                        required property int index
+//                        required property string modelData
+//                        sound: 8 + index + 1
+//                        text: modelData
+//                        Material.roundedScale: roundedScale
+//                    }
+//                }
+
+//                Item {Layout.fillWidth: true}
+//            }
+        }
+
+
+
+
+
+//    }
 
     ColumnLayout {
         id: column
@@ -164,33 +251,33 @@ Item {
 
 
 
-        Item {
-            id: bourdonArea
+//        Item {
+//            id: bourdonAreaOld
 
-            Layout.preferredHeight: column.height * 0.3 //bourdonButtonGrid.height //
-            Layout.fillWidth: true
+//            Layout.preferredHeight: column.height * 0.3 //bourdonButtonGrid.height //
+//            Layout.fillWidth: true
 
-            GridLayout {
-                id: bourdonButtonGrid
-                width: parent.width * 0.95
-                columns: 6 //width / bourdonButtons.itemAt(0).width
+//            GridLayout {
+//                id: bourdonButtonGridOld
+//                width: parent.width * 0.95
+//                columns: 6 //width / bourdonButtons.itemAt(0).width
 
-                anchors.horizontalCenter: parent.horizontalCenter
+//                anchors.horizontalCenter: parent.horizontalCenter
 
-                Repeater {
-                    id: bourdonButtons
-                    model: ["G", "c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"]
+//                Repeater {
+//                    id: bourdonButtons
+//                    model: ["G", "c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"]
 
-                    BourdonButton {
-                        required property int index
-                        required property string modelData
-                        sound: index + 1
-                        text: modelData
-                        Material.roundedScale: roundedScale
-                    }
-                }
-            }
-        }
+//                    BourdonButton {
+//                        required property int index
+//                        required property string modelData
+//                        sound: index + 1
+//                        text: modelData
+//                        Material.roundedScale: roundedScale
+//                    }
+//                }
+//            }
+//        }
 
         Item {
             id: controlArea
@@ -249,3 +336,4 @@ Item {
         } // spacer
     }
 }
+

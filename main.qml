@@ -23,6 +23,7 @@ ApplicationWindow {
     id: app
     width: 720
     height: 520
+    minimumWidth: 350
     visible: true
     property string version: "0.2.1"
     title: qsTr("Bourdon app "+ version)
@@ -32,6 +33,8 @@ ApplicationWindow {
     property var bourdonNotes: ["G", "A", "c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"] // make sure the notes are loaded to tables in Csound with according numbers (index+1)
     property int lastPressTime: 0
 
+
+    onWidthChanged: console.log("window width: ", width)
 
     Settings {
         property alias presetsArray: app.presetsArray
@@ -249,11 +252,10 @@ ApplicationWindow {
                 soundTypeCombobox.onCurrentIndexChanged: csound.setChannel("type", soundTypeCombobox.currentIndex)
                 //sawWaveSwitch.onCheckedChanged: csound.setChannel("sawtooth", sawWaveSwitch.checked ? 1 : 0  )
 
-                bourdonButtons.model: app.bourdonNotes
-
-                bourdonButtonGrid.columns:  Math.floor(bourdonButtonGrid.width / (bourdonButtons.itemAt(0).width + 10 ) )
-
-                bourdonArea.Layout.preferredHeight:bourdonButtonGrid.height
+                // TEMPORARY - comment out the following it to make new layout possible
+                //bourdonButtons.model: app.bourdonNotes
+                //bourdonButtonGrid.columns:  Math.floor(bourdonButtonGrid.width / (bourdonButtons.itemAt(0).width + 10 ) )
+                // bourdonArea.Layout.preferredHeight:bourdonButtonGrid.height
 
 
                 function updatePresetLabelText() {
