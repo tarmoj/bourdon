@@ -109,6 +109,10 @@ ApplicationWindow {
         return text
     }
 
+    function getBourdonButton(name) {
+        var bourdonButtons = bourdonArea.children
+    }
+
     header: ToolBar {
         width: parent.width
         height: backButton.height
@@ -344,36 +348,42 @@ ApplicationWindow {
 
                 }
 
+                //presetMouseArea.onClicked: presetArea.anchors.topMargin = -presetArea.height
+
                 // does not work properly...
-//                presetMouseArea.onPositionChanged: function(mouse) {
-//                    // Ensure the rectangle stays at the bottom and can be dragged higher
-//                    console.log("mouse.y", mouse.y)
-//                    presetArea.anchors.topMargin = mouse.y
-//                    //parent.anchors.topMargin = mouse.y
-//                }
+                presetMouseArea.onPositionChanged: function(mouse) {
+                    // Ensure the rectangle stays at the bottom and can be dragged higher
+                    var positionInGlobal = mapToGlobal(mouse.x, mouse.y)
+                    console.log("mouse.y", mouse.y, positionInGlobal.y)
+                    // jumps back and forth since mouse.x is constantly changeing in resize...
+                    //presetArea.y = positionInGlobal.y
+                    //parent.anchors.topMargin = mouse.y
+                }
 
 
 
             }
 
+            Drawer {
+                            id: presetDrawer
+                            height: parent.height * 0.8
+                            width: parent.width
+                            edge: Qt.BottomEdge
+
+                            background: Rectangle {color: "lightgrey"}
+
+
+                            Label { anchors.centerIn:  parent; text: "SISU" }
+                            PresetForm { id:presetForm3 }
+
+
+                        }
+
 
 
         }
 
-//        Drawer {
-//                        id: presetDrawer
-//                        height: parent.height * 0.8
-//                        width: parent.width
-//                        edge: Qt.BottomEdge
 
-//                        background: Rectangle {color: "lightgrey"}
-
-
-//                        Label { anchors.centerIn:  parent; text: "SISU" }
-//                        PresetForm { id:presetForm3 }
-
-
-//                    }
 
         Page {
             id: presetPage

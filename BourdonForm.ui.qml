@@ -181,17 +181,22 @@ Item {
             }
         }
 
-        Item {
+        ColumnLayout {
             id: controlArea
 
             width: parent.width-20
             anchors.top: bourdonArea.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
 
-            anchors.bottom: presetArea.top
+            Rectangle {anchors.fill: parent; color: "darkblue"}
+
+            //anchors.bottom: presetArea.top
             RowLayout {
-                width: parent.width
                 id: mainButtonRow
-                anchors.horizontalCenter: parent.horizontalCenter
+                width: parent.width
+                Layout.alignment: Qt.AlignHCenter
+
+                //anchors.horizontalCenter: parent.horizontalCenter
                 spacing: 20
 
                 Button {
@@ -215,10 +220,12 @@ Item {
 
             Row {
                 id: presetLabelRow
+                Layout.alignment: Qt.AlignHCenter
+
                 //anchors.left: mainButtonRow.left
-                anchors.top: mainButtonRow.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.topMargin: 20
+                //anchors.top: mainButtonRow.bottom
+                //anchors.horizontalCenter: parent.horizontalCenter
+                //anchors.topMargin: 20
                 spacing: 20
 
                 Label {
@@ -243,8 +250,10 @@ Item {
             width: parent.width-20
             height: presetForm2.height
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.bottom
-            anchors.topMargin: -100 // Initial margin to keep a small fraction visible
+            y: controlArea.y + controlArea.height
+            //anchors.top: controlArea.bottom
+            //anchors.topMargin: 10
+             // Initial margin to keep a small fraction visible
 
             Rectangle {id: testRect; anchors.fill: parent; color: "lightgrey"
 
