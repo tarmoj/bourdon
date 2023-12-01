@@ -11,8 +11,6 @@ Item {
     property alias addButton: addButton
     property alias stopButton: stopButton
     property alias bourdonButtonGrid: bourdonButtonGrid
-
-    property alias bourdonButtons: bourdonButtons
     property alias playButton: playButton
     property alias nextButton: nextButton
     property alias presetLabel: presetLabel
@@ -129,8 +127,6 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             //height: bourdonButtonGrid.height
             anchors.top: configArea.bottom
-            // how to get the buttons?
-            //property var bourdonButtons:
 
 
             GridLayout {
@@ -164,7 +160,6 @@ Item {
                 Item {}
 
                 Repeater {
-                    id: bourdonButtons // NB! this is not correct any more!!!
                     model: ["c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"]
 
 

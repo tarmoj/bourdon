@@ -109,9 +109,7 @@ ApplicationWindow {
         return text
     }
 
-    function getBourdonButton(name) {
-        var bourdonButtons = bourdonArea.children
-    }
+
 
     header: ToolBar {
         width: parent.width
@@ -193,11 +191,20 @@ ApplicationWindow {
                 id: bourdonForm
                 property int currentPreset: 0
 
+                property var bourdonButtons: []
+
                 signal presetZeroChanged;
 
 
-                // TEST
-                //Button { text: "Devices"; onClicked: bourdonForm.getAudioDevices()}
+                Component.onCompleted: {
+                    bourdonButtons = []; // get bourdonbuttons from the grid
+                    for (let element of bourdonButtonGrid.children) {
+                        if (element.hasOwnProperty("sound")) {
+                            bourdonButtons.push(element);
+                            console.log("Bourdon child: ", element.sound)
+                        }
+                    }
+                }
 
 
                 function getAudioDevices() {
@@ -206,8 +213,10 @@ ApplicationWindow {
                 }
 
                 function stopAll() {
-                    for (let i=0; i<bourdonButtons.count; i++) {
-                        const b = bourdonButtons.itemAt(i);
+
+                    for (let i=0; i<bourdonButtons.length; i++) {
+                        const b = bourdonButtons[i];
+                        console.log("Button: ", b);
                         if (b.checked) {
                             b.checked = false
                             console.log("Stopping ", b.text)
@@ -216,8 +225,8 @@ ApplicationWindow {
                 }
 
                 function isPlaying() {
-                    for (let i=0; i<bourdonButtons.count; i++) {
-                        const b = bourdonButtons.itemAt(i);
+                    for (let i=0; i<bourdonButtons.length; i++) {
+                        const b = bourdonButtons[i];
                         if (b.checked) {
                             return true;
                         }
@@ -228,8 +237,8 @@ ApplicationWindow {
                 function getPresetFromButtons() {
 
                     const preset = [];
-                    for (let i=0; i<bourdonButtons.count; i++) {
-                        const b = bourdonButtons.itemAt(i);
+                    for (let i=0; i<bourdonButtons.length; i++) {
+                        const b = bourdonButtons[i];
                         if (b.checked) {
                             preset.push(b.text)
                         }
@@ -244,7 +253,7 @@ ApplicationWindow {
                     for  (let note of preset) {
                         const index = app.bourdonNotes.indexOf(note);
                         if (index>=0) {
-                            const b = bourdonButtons.itemAt(index);
+                            const b = bourdonButtons[index];
                             b.checked = true;
                         }
                     }
