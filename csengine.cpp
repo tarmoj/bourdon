@@ -20,7 +20,13 @@ CsEngine::CsEngine(QObject *parent) : QObject(parent)
 	cs->setOpenSlCallbacks(); // for android audio to work
     cs->SetOption("--env:SSDIR=/sdcard/Music/Bourdon/samples/");
 
-# else
+#endif
+#ifdef Q_OS_MACOS
+    cs = new Csound();
+    QString SSDirOption =  "--env:SSDIR=" + QCoreApplication::applicationDirPath() + "/../Resources/samples";
+    qDebug() << "MacOS samples path: " << SSDirOption;
+    cs->SetOption(SSDirOption.toLocal8Bit().data());
+#else
 	cs = new Csound();
     cs->SetOption("--env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/");
 #endif
