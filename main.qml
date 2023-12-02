@@ -25,7 +25,7 @@ ApplicationWindow {
     height: 520
     minimumWidth: 350
     visible: true
-    property string version: "0.2.1"
+    property string version: "0.3.0"
     title: qsTr("Bourdon app "+ version)
 
 
@@ -56,7 +56,7 @@ ApplicationWindow {
     Shortcut {
             sequences: ["Up","PgUp"] // change preset
 
-            onActivated: {
+            onActivated: { // TODO: the same code to onClicked of playButton
                 console.log("for button 1");
                 if (Date.now() - lastPressTime < 300) {
                     console.log("Double press detected!")
@@ -126,7 +126,7 @@ ApplicationWindow {
                 text: qsTr("<")
                 visible: swipeView.currentIndex===1
                 onClicked:  {
-                    setPresetsFromText(presetForm.presetArea.text) // update if there has been change
+                    setPresetsFromText(bourdonForm.presetArea.text) // update if there has been change
                     swipeView.currentIndex=0
                 }
             }
@@ -172,7 +172,7 @@ ApplicationWindow {
         }
 
     Component.onCompleted: {
-        presetForm.presetArea.text = getPresetsText()
+        bourdonForm.presetForm.presetArea.text = getPresetsText()
         //searchButton.clicked()
     }
 
@@ -184,7 +184,7 @@ ApplicationWindow {
 
         Page {
             id: bourdonPage
-            title: qsTr("Bourdons")
+            title: qsTr("Bourdon")
 
 
             BourdonForm {
@@ -201,7 +201,6 @@ ApplicationWindow {
                     for (let element of bourdonButtonGrid.children) {
                         if (element.hasOwnProperty("sound")) {
                             bourdonButtons.push(element);
-                            console.log("Bourdon child: ", element.sound)
                         }
                     }
                 }
@@ -216,7 +215,6 @@ ApplicationWindow {
 
                     for (let i=0; i<bourdonButtons.length; i++) {
                         const b = bourdonButtons[i];
-                        console.log("Button: ", b);
                         if (b.checked) {
                             b.checked = false
                             console.log("Stopping ", b.text)
@@ -357,38 +355,12 @@ ApplicationWindow {
 
                 }
 
-                //presetMouseArea.onClicked: presetArea.anchors.topMargin = -presetArea.height
+                presetMouseArea.onDoubleClicked: {
 
-                // does not work properly...
-                presetMouseArea.onPositionChanged: function(mouse) {
-                    // Ensure the rectangle stays at the bottom and can be dragged higher
-                    var positionInGlobal = mapToGlobal(mouse.x, mouse.y)
-                    console.log("mouse.y", mouse.y, positionInGlobal.y)
-                    // jumps back and forth since mouse.x is constantly changeing in resize...
-                    //presetArea.y = positionInGlobal.y
-                    //parent.anchors.topMargin = mouse.y
+                    presetArea.y = (presetArea.y===presetArea.maxY) ? presetArea.minY : presetArea.maxY;
                 }
 
-
-
             }
-
-            Drawer {
-                            id: presetDrawer
-                            height: parent.height * 0.8
-                            width: parent.width
-                            edge: Qt.BottomEdge
-
-                            background: Rectangle {color: "lightgrey"}
-
-
-                            Label { anchors.centerIn:  parent; text: "SISU" }
-                            PresetForm { id:presetForm3 }
-
-
-                        }
-
-
 
         }
 
@@ -396,10 +368,7 @@ ApplicationWindow {
 
         Page {
             id: presetPage
-            title: qsTr("Presets")
 
-
-            PresetForm { id:presetForm }
 
         }
 

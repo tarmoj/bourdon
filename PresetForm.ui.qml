@@ -11,16 +11,34 @@ Item {
     property alias presetArea: presetArea
 
 
+    Label {
+        x: 15; y:5
+        font.pointSize: 14
+        text: qsTr("Presets")
+    }
+
+    Rectangle {
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: 15
+        height: 2
+        width: 100
+        color: Material.backgroundDimColor
+    }
+
+
     ScrollView {
         id: presetView
         anchors.fill: parent
-        anchors.margins: 10
+        anchors.topMargin: 30
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
+        anchors.bottomMargin: 10
+
 
         TextArea {
+            y:20
             id: presetArea
-            topPadding: 20
             font.pointSize: 14
-
 
             background: Rectangle {
                 gradient: Gradient {

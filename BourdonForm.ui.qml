@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import QtQuick.Controls.Material
 
 Item {
+
     width: 300
     height: 600
     anchors.fill: parent
@@ -20,6 +21,7 @@ Item {
     property alias presetNullButton: presetNullButton
     property alias presetArea: presetArea
     property alias presetMouseArea: presetMouseArea
+    property alias presetForm: presetForm
 
     property int roundedScale: Material.ExtraSmallScale
 
@@ -183,7 +185,7 @@ Item {
             anchors.top: bourdonArea.bottom
             anchors.horizontalCenter: parent.horizontalCenter
 
-            Rectangle {anchors.fill: parent; color: "darkblue"}
+            //Rectangle {anchors.fill: parent; color: "darkblue"}
 
             //anchors.bottom: presetArea.top
             RowLayout {
@@ -240,29 +242,32 @@ Item {
 
 
 
-        Item {
+        Rectangle {
             id: presetArea
             width: parent.width-20
-            height: presetForm2.height
+            height: presetForm.height
             anchors.horizontalCenter: parent.horizontalCenter
-            y: controlArea.y + controlArea.height
-            //anchors.top: controlArea.bottom
-            //anchors.topMargin: 10
-             // Initial margin to keep a small fraction visible
+            property int maxY: controlArea.y + controlArea.height + 10
+            property int minY: soundTypeCombobox.y
+            y: maxY
 
-            Rectangle {id: testRect; anchors.fill: parent; color: "lightgrey"
+            color: Material.backgroundColor;
+            radius: 8
 
                 MouseArea {
                     id: presetMouseArea
                     anchors.fill: parent
                     drag.target: parent
-                    //hoverEnabled: true
+                    drag.axis: Drag.YAxis
+                    drag.minimumY: parent.minY
+                    drag.maximumY: parent.maxY
+
                 }
-            }
 
 
 
-            PresetForm { id:presetForm2 }
+
+            PresetForm { id:presetForm }
 
 
         }
@@ -272,23 +277,5 @@ Item {
     }
 
 
-
-
-
-//    }
-
-    ColumnLayout {
-        id: column
-        anchors.fill: parent
-        spacing: 10
-
-        visible: false
-
-
-
-        Item {
-            Layout.fillHeight: true
-        } // spacer
-    }
 }
 
