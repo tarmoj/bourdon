@@ -48,6 +48,33 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    android/AndroidManifest.xml \
+    android/build.gradle \
+    android/gradle.properties \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew \
+    android/gradlew.bat \
+    android/res/mipmap-anydpi-v26/ic_launcher.xml \
+    android/res/mipmap-anydpi-v26/ic_launcher_round.xml \
+    android/res/mipmap-hdpi/ic_launcher.png \
+    android/res/mipmap-hdpi/ic_launcher_foreground.png \
+    android/res/mipmap-hdpi/ic_launcher_round.png \
+    android/res/mipmap-ldpi/ic_launcher.png \
+    android/res/mipmap-mdpi/ic_launcher.png \
+    android/res/mipmap-mdpi/ic_launcher_foreground.png \
+    android/res/mipmap-mdpi/ic_launcher_round.png \
+    android/res/mipmap-xhdpi/ic_launcher.png \
+    android/res/mipmap-xhdpi/ic_launcher_foreground.png \
+    android/res/mipmap-xhdpi/ic_launcher_round.png \
+    android/res/mipmap-xxhdpi/ic_launcher.png \
+    android/res/mipmap-xxhdpi/ic_launcher_foreground.png \
+    android/res/mipmap-xxhdpi/ic_launcher_round.png \
+    android/res/mipmap-xxxhdpi/ic_launcher.png \
+    android/res/mipmap-xxxhdpi/ic_launcher_foreground.png \
+    android/res/mipmap-xxxhdpi/ic_launcher_round.png \
+    android/res/values/ic_launcher_background.xml \
+    android/res/values/libs.xml \
     images/stop-button.png
 
 contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
