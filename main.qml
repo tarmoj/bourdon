@@ -114,41 +114,22 @@ ApplicationWindow {
 
     header: ToolBar {
         width: parent.width
-        height: backButton.height
+        height: titleLabel.height + 10
 
         background: Rectangle {color: "transparent" }
 
         Item {
             anchors.fill: parent
-            ToolButton {
-                id: backButton
-                anchors.left: parent.left
-                anchors.leftMargin: 5
-                text: qsTr("<")
-                visible: false
-                onClicked:  {
-                    setPresetsFromText(bourdonForm.presetText.text) // update if there has been change
-                    swipeView.currentIndex=0
-                }
-            }
 
             Label {
+                id: titleLabel
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: backButton.verticalCenter
+                anchors.verticalCenter: parent.verticalCenter
                 text: "Bourdon  v" + app.version
                 font.pointSize: 16
                 font.bold: true
                 horizontalAlignment: Qt.AlignHCenter
 
-            }
-            ToolButton {
-                anchors.right: parent.right
-                anchors.rightMargin: 5
-                text: qsTr(">")
-                visible: false
-                onClicked: {
-                    swipeView.currentIndex=1
-                }
             }
         }
     }
@@ -303,8 +284,7 @@ ApplicationWindow {
             const preset = getPresetFromButtons()
             if (preset.length>0) {
                 presetsArray.push(preset)
-                presetForm.presetArea.text = getPresetsText()
-                swipeView.currentIndex = 1
+                presetForm.presetText.text = getPresetsText()
             } else {
                 console.log("No playing buttons")
             }
