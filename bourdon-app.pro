@@ -85,7 +85,7 @@ macx {
 	#final.commands = $$[QT_INSTALL_PREFIX]/bin/macdeployqt $$OUT_PWD/$$DESTDIR/$${TARGET}.app -qmldir=$$PWD -dmg# deployment BETTER: use hdi-util
 	final.commands = hdiutil create -fs HFS+ -srcfolder $$OUT_PWD/$$DESTDIR/$${TARGET}.app -volname \"Bourdon\" $$OUT_PWD/$$DESTDIR/$${TARGET}.dmg
 
-    INSTALLS += first second third  final #final don't forget second on first compile!!! (later makes sense to remove extra folders from Csound.Frameworks)
+    INSTALLS += first third  final #final don't forget second on first compile!!! (later makes sense to remove extra folders from Csound.Frameworks)
 
 }
 

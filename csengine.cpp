@@ -26,6 +26,7 @@ CsEngine::CsEngine(QObject *parent) : QObject(parent)
     QString SSDirOption =  "--env:SSDIR=" + QCoreApplication::applicationDirPath() + "/../Resources/samples";
     qDebug() << "MacOS samples path: " << SSDirOption;
     cs->SetOption(SSDirOption.toLocal8Bit().data());
+    cs->SetOption("-+rtaudio=auhal");
 #else
 	cs = new Csound();
     cs->SetOption("--env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/");
