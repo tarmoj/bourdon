@@ -8,13 +8,14 @@ import QtCore
 
   TODO:
 
+animatsioon preset kasti muutumisel topeltklõpsuga
 
-ikoonid > ja < asemele
-Landscape layout -  vaja alt ruumi (Current preset võibolla  pedaalinuppud kõrvale? State change?
+Akna alumine serv?
 
+NEXT Kõrvale ka Back?
 
+min akna kõrgus?
 
-bourdonform background -  otsi õige tooni
 
 
 */
@@ -25,7 +26,7 @@ ApplicationWindow {
     height: 520
     minimumWidth: 350
     visible: true
-    property string version: "0.2.1"
+    property string version: "0.3.0"
     title: qsTr("Bourdon app "+ version)
 
 
@@ -34,7 +35,7 @@ ApplicationWindow {
     property int lastPressTime: 0
 
 
-    onWidthChanged: console.log("window width: ", width)
+    //onWidthChanged: console.log("window width: ", width)
 
     Settings {
         property alias presetsArray: app.presetsArray
@@ -54,29 +55,29 @@ ApplicationWindow {
 
     // These are bluetooth shortcuts, Airturn Duo, mode 2 (keyboard mode)
     Shortcut {
-            sequences: ["Up","PgUp"] // change preset
+        sequences: ["Up","PgUp"] // change preset
 
-            onActivated: {
-                console.log("for button 1");
-                if (Date.now() - lastPressTime < 300) {
-                    console.log("Double press detected!")
-                    bourdonForm.advancePreset(-1);
-                    singlePressTimer.stop()
-                } else {
-                    singlePressTimer.start()
-                }
-
-                lastPressTime = Date.now()
+        onActivated: { // TODO: the same code to onClicked of playButton
+            console.log("for button 1");
+            if (Date.now() - lastPressTime < 300) {
+                console.log("Double press detected!")
+                bourdonForm.advancePreset(-1);
+                singlePressTimer.stop()
+            } else {
+                singlePressTimer.start()
             }
+
+            lastPressTime = Date.now()
         }
+    }
 
     Shortcut {
-            sequences: ["PgDown", "Down" ]
-            onActivated: {
-                console.log("for button 2");
-                bourdonForm.playButton.checked = !bourdonForm.playButton.checked
-            }
+        sequences: ["PgDown", "Down" ]
+        onActivated: {
+            console.log("for button 2");
+            bourdonForm.playButton.checked = !bourdonForm.playButton.checked
         }
+    }
 
 
     function  setPresetsFromText(text) {
@@ -109,52 +110,30 @@ ApplicationWindow {
         return text
     }
 
+
+
     header: ToolBar {
         width: parent.width
-        height: backButton.height
+        height: titleLabel.height + 10
 
         background: Rectangle {color: "transparent" }
 
         Item {
             anchors.fill: parent
-            ToolButton {
-                id: backButton
-                anchors.left: parent.left
-                anchors.leftMargin: 5
-                text: qsTr("<")
-                visible: swipeView.currentIndex===1
-                onClicked:  {
-                    setPresetsFromText(presetForm.presetArea.text) // update if there has been change
-                    swipeView.currentIndex=0
-                }
-            }
 
             Label {
+                id: titleLabel
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: backButton.verticalCenter
-                text: swipeView.currentItem.title + "  v" + app.version
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Bourdon  v" + app.version
                 font.pointSize: 16
                 font.bold: true
                 horizontalAlignment: Qt.AlignHCenter
 
             }
-            ToolButton {
-                anchors.right: parent.right
-                anchors.rightMargin: 5
-                text: qsTr(">")
-                visible: swipeView.currentIndex===0
-                onClicked: {
-                    swipeView.currentIndex=1
-                }
-            }
         }
     }
 
-        Label {
-            font.pointSize: 16
-            text: swipeView.currentItem.title
-            horizontalAlignment: Text.AlignHCenter
-        }
 
 
     signal setChannel(channel: string, value: double)
@@ -162,227 +141,194 @@ ApplicationWindow {
 
 
     Connections {
-            target: Application
-            function onAboutToQuit() {
-                console.log("Bye!")
-                csound.stop();
-            }
+        target: Application
+        function onAboutToQuit() {
+            console.log("Bye!")
+            csound.stop();
         }
+    }
 
     Component.onCompleted: {
-        presetForm.presetArea.text = getPresetsText()
+        bourdonForm.presetForm.presetText.text = getPresetsText()
         //searchButton.clicked()
     }
 
-    SwipeView {
-        id: swipeView
+
+    BourdonForm {
+        id: bourdonForm
         anchors.fill: parent
-        //currentIndex: 1
+        property int currentPreset: 0
+
+        property var bourdonButtons: []
+
+        signal presetZeroChanged;
 
 
-        Page {
-            id: bourdonPage
-            title: qsTr("Bourdons")
-
-
-            BourdonForm {
-                id: bourdonForm
-                property int currentPreset: 0
-
-                signal presetZeroChanged;
-
-
-                // TEST
-                //Button { text: "Devices"; onClicked: bourdonForm.getAudioDevices()}
-
-
-                function getAudioDevices() {
-                    var deviceList = csound.getAudioDevices();
-                    console.log("Device list: ", deviceList);
+        Component.onCompleted: {
+            bourdonButtons = []; // get bourdonbuttons from the grid
+            for (let element of bourdonButtonGrid.children) {
+                if (element.hasOwnProperty("sound")) {
+                    bourdonButtons.push(element);
                 }
+            }
+        }
 
-                function stopAll() {
-                    for (let i=0; i<bourdonButtons.count; i++) {
-                        const b = bourdonButtons.itemAt(i);
-                        if (b.checked) {
-                            b.checked = false
-                            console.log("Stopping ", b.text)
-                        }
-                    }
+
+        function getAudioDevices() {
+            var deviceList = csound.getAudioDevices();
+            console.log("Device list: ", deviceList);
+        }
+
+        function stopAll() {
+
+            for (let i=0; i<bourdonButtons.length; i++) {
+                const b = bourdonButtons[i];
+                if (b.checked) {
+                    b.checked = false
+                    console.log("Stopping ", b.text)
                 }
+            }
+        }
 
-                function isPlaying() {
-                    for (let i=0; i<bourdonButtons.count; i++) {
-                        const b = bourdonButtons.itemAt(i);
-                        if (b.checked) {
-                            return true;
-                        }
-                    }
-                    return false;
+        function isPlaying() {
+            for (let i=0; i<bourdonButtons.length; i++) {
+                const b = bourdonButtons[i];
+                if (b.checked) {
+                    return true;
                 }
+            }
+            return false;
+        }
 
-                function getPresetFromButtons() {
+        function getPresetFromButtons() {
 
-                    const preset = [];
-                    for (let i=0; i<bourdonButtons.count; i++) {
-                        const b = bourdonButtons.itemAt(i);
-                        if (b.checked) {
-                            preset.push(b.text)
-                        }
-                    }
-                    console.log("Preset: ", preset)
-
-                    return preset;
+            const preset = [];
+            for (let i=0; i<bourdonButtons.length; i++) {
+                const b = bourdonButtons[i];
+                if (b.checked) {
+                    preset.push(b.text)
                 }
+            }
+            console.log("Preset: ", preset)
+
+            return preset;
+        }
 
 
-                function playFromPreset(preset) { // preset is an array of the notest to be played like [G,d,e]
-                    for  (let note of preset) {
-                        const index = app.bourdonNotes.indexOf(note);
-                        if (index>=0) {
-                            const b = bourdonButtons.itemAt(index);
-                            b.checked = true;
-                        }
-                    }
+        function playFromPreset(preset) { // preset is an array of the notest to be played like [G,d,e]
+            for  (let note of preset) {
+                const index = app.bourdonNotes.indexOf(note);
+                if (index>=0) {
+                    const b = bourdonButtons[index];
+                    b.checked = true;
                 }
+            }
+        }
 
 
+        soundTypeCombobox.onCurrentIndexChanged: csound.setChannel("type", soundTypeCombobox.currentIndex)
 
 
-                soundTypeCombobox.onCurrentIndexChanged: csound.setChannel("type", soundTypeCombobox.currentIndex)
-                //sawWaveSwitch.onCheckedChanged: csound.setChannel("sawtooth", sawWaveSwitch.checked ? 1 : 0  )
+        function updatePresetLabelText() {
+            presetLabel.text = currentPreset.toString() + " " + presetsArray[currentPreset].join(",");
 
-                // TEMPORARY - comment out the following it to make new layout possible
-                //bourdonButtons.model: app.bourdonNotes
-                //bourdonButtonGrid.columns:  Math.floor(bourdonButtonGrid.width / (bourdonButtons.itemAt(0).width + 10 ) )
-                // bourdonArea.Layout.preferredHeight:bourdonButtonGrid.height
+        }
 
+        onPresetZeroChanged: updatePresetLabelText()
 
-                function updatePresetLabelText() {
-                    presetLabel.text = currentPreset.toString() + " " + presetsArray[currentPreset].join(",");
+        presetNullButton.onClicked:  {
+            currentPreset = 0
+            if (isPlaying() || playButton.checked) {
+                stopAll()
+                playButton.checked = false
+            }
+        }
 
-                }
+        onCurrentPresetChanged: {
+            updatePresetLabelText()
+            if (isPlaying()) {
+                stopAll();
+                playFromPreset(app.presetsArray[currentPreset])
+            }
+        }
 
-                onPresetZeroChanged: updatePresetLabelText()
+        a4SpinBox.onValueChanged: {
+            console.log("A4: ", a4SpinBox.value )
+            //app.setChannel("a4", a4SpinBox.value)
+            csound.setChannel("a4", a4SpinBox.value);
+        }
 
-                presetNullButton.onClicked:  {
-                    currentPreset = 0
-                    if (isPlaying() || playButton.checked) {
-                        stopAll()
-                        playButton.checked = false
-                    }
-                }
-
-                onCurrentPresetChanged: {
-                    updatePresetLabelText()
-                    if (isPlaying()) {
-                        stopAll();
-                        playFromPreset(app.presetsArray[currentPreset])
-                    }
-                }
-
-                a4SpinBox.onValueChanged: {
-                    console.log("A4: ", a4SpinBox.value )
-                    //app.setChannel("a4", a4SpinBox.value)
-                    csound.setChannel("a4", a4SpinBox.value);
-                }
-
-                function advancePreset(advance=1) { // either +1 or -1
-                    let newPreset = currentPreset + advance
-                    if (newPreset >= app.presetsArray.length ) {
-                        currentPreset = 1 ; // should it go preset 0 that is for temporary, non saved experiments
-                    } else if (newPreset<0) { // or <1?
-                        currentPreset = app.presetsArray.length-1;
-                    } else {
-                        currentPreset = newPreset
-                    }
-
-                    console.log("New preset: ", currentPreset)
-                }
-
-                nextButton.onClicked: {
-                    advancePreset(1);
-                }
-
-                // TODO: implement double click also on double click
-                //nextButton.onDoubleClicked: advancePreset(-1)
-
-                stopButton.onClicked: stopAll()
-
-                addButton.onClicked: {
-                    const preset = getPresetFromButtons()
-                    if (preset.length>0) {
-                        presetsArray.push(preset)
-                        presetForm.presetArea.text = getPresetsText()
-                        swipeView.currentIndex = 1
-                    } else {
-                        console.log("No playing buttons")
-                    }
-
-                }
-
-                playButton.onCheckedChanged:  {
-
-                    console.log("Playbutton checked: ", playButton.checked, bourdonForm.isPlaying() )
-
-                    if ( bourdonForm.isPlaying() ) {
-                        playButton.checked = false; // stop will happen below
-                    }
-
-                    if (playButton.checked) {
-                        if (app.presetsArray[currentPreset].length>0) {
-                            console.log("Starting: ", currentPreset, app.presetsArray[currentPreset])
-                            stopAll();
-                        } else {
-                            playButton.checked = false;
-                        }
-
-                        playFromPreset(app.presetsArray[currentPreset] );
-                    } else {
-                        stopAll();
-                    }
-
-                }
-
-                // does not work properly...
-//                presetMouseArea.onPositionChanged: function(mouse) {
-//                    // Ensure the rectangle stays at the bottom and can be dragged higher
-//                    console.log("mouse.y", mouse.y)
-//                    presetArea.anchors.topMargin = mouse.y
-//                    //parent.anchors.topMargin = mouse.y
-//                }
-
-
-
+        function advancePreset(advance=1) { // either +1 or -1
+            let newPreset = currentPreset + advance
+            if (newPreset >= app.presetsArray.length ) {
+                currentPreset = 1 ; // should it go preset 0 that is for temporary, non saved experiments
+            } else if (newPreset<0) { // or <1?
+                currentPreset = app.presetsArray.length-1;
+            } else {
+                currentPreset = newPreset
             }
 
+            console.log("New preset: ", currentPreset)
+        }
 
+        nextButton.onClicked: {
+            advancePreset(1);
+        }
+
+        // TODO: implement double click also on double click
+        //nextButton.onDoubleClicked: advancePreset(-1)
+
+        stopButton.onClicked: stopAll()
+
+        addButton.onClicked: {
+            const preset = getPresetFromButtons()
+            if (preset.length>0) {
+                presetsArray.push(preset)
+                presetForm.presetText.text = getPresetsText()
+            } else {
+                console.log("No playing buttons")
+            }
 
         }
 
-//        Drawer {
-//                        id: presetDrawer
-//                        height: parent.height * 0.8
-//                        width: parent.width
-//                        edge: Qt.BottomEdge
+        playButton.onCheckedChanged:  {
 
-//                        background: Rectangle {color: "lightgrey"}
+            console.log("Playbutton checked: ", playButton.checked, bourdonForm.isPlaying() )
 
+            if ( bourdonForm.isPlaying() ) {
+                playButton.checked = false; // stop will happen below
+            }
 
-//                        Label { anchors.centerIn:  parent; text: "SISU" }
-//                        PresetForm { id:presetForm3 }
+            if (playButton.checked) {
+                if (app.presetsArray[currentPreset].length>0) {
+                    console.log("Starting: ", currentPreset, app.presetsArray[currentPreset])
+                    stopAll();
+                } else {
+                    playButton.checked = false;
+                }
 
-
-//                    }
-
-        Page {
-            id: presetPage
-            title: qsTr("Presets")
-
-
-            PresetForm { id:presetForm }
+                playFromPreset(app.presetsArray[currentPreset] );
+            } else {
+                stopAll();
+            }
 
         }
+
+        presetForm.updateButton.onClicked: setPresetsFromText(presetForm.presetText.text)
+
+
+//        Behavior on presetArea.y {
+//            NumberAnimation {
+//                duration: 200
+//            }
+//        }
+
+        presetMouseArea.onDoubleClicked: {
+
+            presetArea.y = (presetArea.y===presetArea.maxY) ? presetArea.minY : presetArea.maxY;
+
+        }
+
 
     }
 

@@ -8,19 +8,46 @@ Item {
 
     //color: "darkgreen" //Material.backgroundColor
     anchors.fill: parent
-    property alias presetArea: presetArea
+    property alias presetText: presetText
+    property alias updateButton: updateButton
+    //signal textChanged(): presetText.textChanged()
+
+
+    Label {
+        x: 15; y:10
+        font.pointSize: 14
+        text: qsTr("Presets")
+    }
+
+    Rectangle {
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: 15
+        height: 2
+        width: 100
+        color: Material.backgroundDimColor
+    }
+
+    ToolButton {
+        id: updateButton
+        anchors.right: parent.right
+        anchors.rightMargin: 10
+        text: qsTr("Update")
+    }
 
 
     ScrollView {
         id: presetView
         anchors.fill: parent
-        anchors.margins: 10
+        anchors.topMargin: 30
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
+        anchors.bottomMargin: 10
+
 
         TextArea {
-            id: presetArea
-            topPadding: 20
+            y:20
+            id: presetText
             font.pointSize: 14
-
 
             background: Rectangle {
                 gradient: Gradient {

@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import QtQuick.Controls.Material
 
 Item {
+
     width: 300
     height: 600
     anchors.fill: parent
@@ -11,8 +12,6 @@ Item {
     property alias addButton: addButton
     property alias stopButton: stopButton
     property alias bourdonButtonGrid: bourdonButtonGrid
-
-    property alias bourdonButtons: bourdonButtons
     property alias playButton: playButton
     property alias nextButton: nextButton
     property alias presetLabel: presetLabel
@@ -22,6 +21,7 @@ Item {
     property alias presetNullButton: presetNullButton
     property alias presetArea: presetArea
     property alias presetMouseArea: presetMouseArea
+    property alias presetForm: presetForm
 
     property int roundedScale: Material.ExtraSmallScale
 
@@ -129,8 +129,6 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             //height: bourdonButtonGrid.height
             anchors.top: configArea.bottom
-            // how to get the buttons?
-            //property var bourdonButtons:
 
 
             GridLayout {
@@ -164,7 +162,6 @@ Item {
                 Item {}
 
                 Repeater {
-                    id: bourdonButtons // NB! this is not correct any more!!!
                     model: ["c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"]
 
 
@@ -181,18 +178,23 @@ Item {
             }
         }
 
-        Item {
+        ColumnLayout {
             id: controlArea
 
             width: parent.width-20
             anchors.top: bourdonArea.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
 
-            anchors.bottom: presetArea.top
+            //Rectangle {anchors.fill: parent; color: "darkblue"}
+
+            //anchors.bottom: presetArea.top
             RowLayout {
-                width: parent.width
                 id: mainButtonRow
-                anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 20
+                width: parent.width
+                Layout.alignment: Qt.AlignHCenter
+
+                //anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 30
 
                 Button {
                     id: nextButton
@@ -215,15 +217,14 @@ Item {
 
             Row {
                 id: presetLabelRow
-                //anchors.left: mainButtonRow.left
-                anchors.top: mainButtonRow.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.topMargin: 20
+                Layout.alignment: Qt.AlignHCenter
+
                 spacing: 20
 
                 Label {
                     font.pointSize: 18
                     text: qsTr("Current preset: ")
+                    fontSizeMode: Text.Fit
                     anchors.verticalCenter: parent.verticalCenter
                 }
 
@@ -231,6 +232,7 @@ Item {
                     id: presetLabel
                     font.pointSize: 22
                     font.bold: true
+                    fontSizeMode: Text.Fit
                     text: "0"
                 }
             }
@@ -238,27 +240,30 @@ Item {
 
 
 
-        Item {
+        Rectangle {
             id: presetArea
             width: parent.width-20
-            height: presetForm2.height
+            height: parent.height - y//presetForm.height // work on this. anchors. top?
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.bottom
-            anchors.topMargin: -100 // Initial margin to keep a small fraction visible
+            property int maxY: Math.max(parent.height*0.75, (controlArea.y + controlArea.height + 10) )
+            property int minY: soundTypeCombobox.y
+            y: maxY
 
-            Rectangle {id: testRect; anchors.fill: parent; color: "lightgrey"
+            color: Material.backgroundColor;
+            radius: 8
 
                 MouseArea {
                     id: presetMouseArea
                     anchors.fill: parent
                     drag.target: parent
-                    //hoverEnabled: true
+                    drag.axis: Drag.YAxis
+                    drag.minimumY: parent.minY
+                    drag.maximumY: parent.maxY
+
                 }
-            }
 
 
-
-            PresetForm { id:presetForm2 }
+            PresetForm { id:presetForm }
 
 
         }
@@ -268,23 +273,5 @@ Item {
     }
 
 
-
-
-
-//    }
-
-    ColumnLayout {
-        id: column
-        anchors.fill: parent
-        spacing: 10
-
-        visible: false
-
-
-
-        Item {
-            Layout.fillHeight: true
-        } // spacer
-    }
 }
 
