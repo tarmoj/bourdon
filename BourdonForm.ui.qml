@@ -245,7 +245,7 @@ Item {
         Rectangle {
             id: presetArea
             width: parent.width-20
-            height: presetForm.height
+            height: parent.height - y//presetForm.height // work on this. anchors. top?
             anchors.horizontalCenter: parent.horizontalCenter
             property int maxY: controlArea.y + controlArea.height + 10
             property int minY: soundTypeCombobox.y
