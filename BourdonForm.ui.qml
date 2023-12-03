@@ -194,7 +194,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
 
                 //anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 20
+                spacing: 30
 
                 Button {
                     id: nextButton
@@ -219,15 +219,12 @@ Item {
                 id: presetLabelRow
                 Layout.alignment: Qt.AlignHCenter
 
-                //anchors.left: mainButtonRow.left
-                //anchors.top: mainButtonRow.bottom
-                //anchors.horizontalCenter: parent.horizontalCenter
-                //anchors.topMargin: 20
                 spacing: 20
 
                 Label {
                     font.pointSize: 18
                     text: qsTr("Current preset: ")
+                    fontSizeMode: Text.Fit
                     anchors.verticalCenter: parent.verticalCenter
                 }
 
@@ -235,6 +232,7 @@ Item {
                     id: presetLabel
                     font.pointSize: 22
                     font.bold: true
+                    fontSizeMode: Text.Fit
                     text: "0"
                 }
             }
@@ -247,7 +245,7 @@ Item {
             width: parent.width-20
             height: parent.height - y//presetForm.height // work on this. anchors. top?
             anchors.horizontalCenter: parent.horizontalCenter
-            property int maxY: controlArea.y + controlArea.height + 10
+            property int maxY: Math.max(parent.height*0.75, (controlArea.y + controlArea.height + 10) )
             property int minY: soundTypeCombobox.y
             y: maxY
 

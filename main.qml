@@ -8,7 +8,6 @@ import QtCore
 
   TODO:
 
-Uuri, kuidas presettide muutmine tekstis kanduks üle arraysse (varem tagasi nupu vajutusel...)
 animatsioon preset kasti muutumisel topeltklõpsuga
 
 Akna alumine serv?
@@ -17,9 +16,6 @@ NEXT Kõrvale ka Back?
 
 min akna kõrgus?
 
-Preset.form ülaosasse /?Header?/ Nupp Üles|Alla
-
-presetForm alaosa kinnita akna alaossa, et saaks seal teksti kerida, kui vaja
 
 
 */
@@ -39,7 +35,7 @@ ApplicationWindow {
     property int lastPressTime: 0
 
 
-    onWidthChanged: console.log("window width: ", width)
+    //onWidthChanged: console.log("window width: ", width)
 
     Settings {
         property alias presetsArray: app.presetsArray
@@ -131,7 +127,7 @@ ApplicationWindow {
                 text: qsTr("<")
                 visible: false
                 onClicked:  {
-                    setPresetsFromText(bourdonForm.presetArea.text) // update if there has been change
+                    setPresetsFromText(bourdonForm.presetText.text) // update if there has been change
                     swipeView.currentIndex=0
                 }
             }
@@ -172,7 +168,7 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        bourdonForm.presetForm.presetArea.text = getPresetsText()
+        bourdonForm.presetForm.presetText.text = getPresetsText()
         //searchButton.clicked()
     }
 
@@ -337,6 +333,15 @@ ApplicationWindow {
             }
 
         }
+
+        presetForm.updateButton.onClicked: setPresetsFromText(presetForm.presetText.text)
+
+
+//        Behavior on presetArea.y {
+//            NumberAnimation {
+//                duration: 200
+//            }
+//        }
 
         presetMouseArea.onDoubleClicked: {
 
