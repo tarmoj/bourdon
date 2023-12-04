@@ -30,6 +30,9 @@ android {
         $$PWD/../../../../src/csound-android-6.18.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/$$ANDROID_TARGET_ARCH/libsndfile.so \
         $$PWD/../../../../src/csound-android-6.18.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/$$ANDROID_TARGET_ARCH/libcsoundandroid.so \
         $$PWD/../../../../src/csound-android-6.18.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/$$ANDROID_TARGET_ARCH/libc++_shared.so
+
+    ANDROID_PACKAGE_SOURCE_DIR = \
+        $$PWD/android
 }
 
 linux:!android {
@@ -77,9 +80,6 @@ DISTFILES += \
     android/res/values/libs.xml \
     images/stop-button.png
 
-contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
-    ANDROID_PACKAGE_SOURCE_DIR = \
-        $$PWD/android
-}
+
 
 
