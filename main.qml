@@ -32,7 +32,7 @@ ApplicationWindow {
 
     property var presetsArray: [ [], ["G","d"], ["c","g"] ]
     property var bourdonNotes: ["G", "A", "c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"] // make sure the notes are loaded to tables in Csound with according numbers (index+1)
-    property int lastPressTime: 0
+    property double lastPressTime: 0
 
 
     //onWidthChanged: console.log("window width: ", width)
@@ -58,7 +58,7 @@ ApplicationWindow {
         sequences: ["Up","PgUp"] // change preset
 
         onActivated: { // TODO: the same code to onClicked of playButton
-            console.log("for button 1");
+            console.log("for button 1", Date.now(), lastPressTime);
             if (Date.now() - lastPressTime < 300) {
                 console.log("Double press detected!")
                 bourdonForm.advancePreset(-1);
@@ -262,7 +262,7 @@ ApplicationWindow {
             let newPreset = currentPreset + advance
             if (newPreset >= app.presetsArray.length ) {
                 currentPreset = 1 ; // should it go preset 0 that is for temporary, non saved experiments
-            } else if (newPreset<0) { // or <1?
+            } else if (newPreset<1) { // or <1?
                 currentPreset = app.presetsArray.length-1;
             } else {
                 currentPreset = newPreset
