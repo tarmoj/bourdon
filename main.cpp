@@ -57,6 +57,11 @@ int main(int argc, char *argv[])
     }
 #endif
 
+#ifdef Q_OS_MACOS
+    QString pluginsPath = QGuiApplication::applicationDirPath() + "/../Frameworks/CsoundLib64.framework/Versions/6.0/Resources/Opcodes64";
+    qDebug()<<" Csound plugins in: " << pluginsPath;
+    setenv("OPCODE6DIR64", pluginsPath.toLocal8Bit() ,1);
+#endif
 
     // move csound into another thread
     QThread  * csoundThread = new QThread();
