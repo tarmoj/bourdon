@@ -26,7 +26,7 @@ ApplicationWindow {
     height: 520
     minimumWidth: 350
     visible: true
-    property string version: "0.3.0"
+    property string version: "0.3.1"
     title: qsTr("Bourdon app "+ version)
 
 
@@ -47,9 +47,24 @@ ApplicationWindow {
         interval: 350 // Set the interval in milliseconds (adjust as needed)
         onTriggered: {
             console.log("Single press detected!")
-            bourdonForm.nextButton.clicked();
+            //bourdonForm.nextButton.clicked();
+            bourdonForm.advancePreset(1)
         }
         repeat: false
+    }
+
+    function checkDoublePress() {
+        //console.log("for button 1", Date.now(), lastPressTime);
+        if (Date.now() - lastPressTime < 300) {
+            console.log("Double press detected!")
+            bourdonForm.advancePreset(-1);
+            singlePressTimer.stop()
+        } else {
+            singlePressTimer.start()
+        }
+
+        lastPressTime = Date.now()
+
     }
 
 
@@ -57,18 +72,7 @@ ApplicationWindow {
     Shortcut {
         sequences: ["Up","PgUp"] // change preset
 
-        onActivated: { // TODO: the same code to onClicked of playButton
-            console.log("for button 1", Date.now(), lastPressTime);
-            if (Date.now() - lastPressTime < 300) {
-                console.log("Double press detected!")
-                bourdonForm.advancePreset(-1);
-                singlePressTimer.stop()
-            } else {
-                singlePressTimer.start()
-            }
-
-            lastPressTime = Date.now()
-        }
+        onActivated: checkDoublePress()
     }
 
     Shortcut {
@@ -272,7 +276,8 @@ ApplicationWindow {
         }
 
         nextButton.onClicked: {
-            advancePreset(1);
+            //advancePreset(1);
+            checkDoublePress()
         }
 
         // TODO: implement double click also on double click
