@@ -3,12 +3,14 @@
 #include <QObject>
 #include <QVariant>
 
+
 #ifdef Q_OS_ANDROID
     #include "AndroidCsound.hpp"
 #else
     #include <csound.hpp>
 #endif
 
+#include <csPerfThread.hpp>
 
 class CsEngine : public QObject
 {
@@ -39,6 +41,7 @@ private:
 	AndroidCsound * cs;
 #else
 	Csound * cs;
+    CsoundPerformanceThread * perfThread;
 #endif
 
 

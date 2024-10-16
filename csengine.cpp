@@ -3,6 +3,7 @@
 #include <QTemporaryFile>
 #include <QCoreApplication>
 
+
 //#include <QDateTime>
 
 
@@ -28,27 +29,41 @@ CsEngine::CsEngine(QObject *parent) : QObject(parent)
     cs->SetOption(SSDirOption.toLocal8Bit().data());
     cs->SetOption("-+rtaudio=auhal");
 #else
+    perfThread = nullptr;
 	cs = new Csound();
     cs->SetOption("--env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/");
 #endif
     mStop=false;
 	cs->SetOption("-odac");
-	cs->SetOption("-d");
+    cs->SetOption("-d");
+    // maybe here start the engine?
+    if (!open(":/bourdon.csd")) {
+        //cs->Start();
+        perfThread = new CsoundPerformanceThread(cs);
+
+    }
 }
 
 CsEngine::~CsEngine()
 {
-	stop(); // this is mess
+    delete perfThread;
+    delete cs;
+    //stop(); // this is mess
 }
 
 void CsEngine::play() {
 
+    if (!perfThread) {
+        perfThread = new CsoundPerformanceThread(cs);
+    }
+    perfThread->Play();
+    /*
     if (!open(":/bourdon.csd")) {
 		cs->Start();
         //cs->Perform();
-		while(cs->PerformKsmps()==0 && mStop==false ) {
-            QCoreApplication::processEvents(); // probably bad solution but works. Not exactyl necessary, but makes csound/app more responsive
-		}
+        // while(cs->PerformKsmps()==0 && mStop==false ) {
+  //           QCoreApplication::processEvents(); // probably bad solution but works. Not exactyl necessary, but makes csound/app more responsive
+        // }
 
         cs->Stop();
         delete cs;
@@ -56,6 +71,7 @@ void CsEngine::play() {
 		qDebug()<<"END PERFORMANCE";
 		mStop=false; // luba uuesti käivitamine
 	}
+    */
 }
 
 int CsEngine::open(QString csd)
@@ -75,7 +91,10 @@ int CsEngine::open(QString csd)
 
 void CsEngine::stop()
 {
-	mStop = true;
+    //mStop = true;
+    if (perfThread) {
+        perfThread->Stop();
+    }
 }
 
 

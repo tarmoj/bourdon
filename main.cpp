@@ -63,6 +63,9 @@ int main(int argc, char *argv[])
     setenv("OPCODE6DIR64", pluginsPath.toLocal8Bit() ,1);
 #endif
 
+    CsEngine * cs = new CsEngine();
+    cs->play();
+    /*
     // move csound into another thread
     QThread  * csoundThread = new QThread();
     CsEngine * cs = new CsEngine();
@@ -73,7 +76,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(csoundThread, &QThread::started, cs, &CsEngine::play);
     csoundThread->start();
-
+    */
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("csound", cs); // forward c++ object that can be reached form qml by object name "csound" NB! include <QQmlContext>
