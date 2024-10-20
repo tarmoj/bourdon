@@ -26,7 +26,7 @@ ApplicationWindow {
     height: 520
     minimumWidth: 350
     visible: true
-    property string version: "0.3.1"
+    property string version: "0.3.2"
     title: qsTr("Bourdon app "+ version)
 
 
