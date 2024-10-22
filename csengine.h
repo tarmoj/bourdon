@@ -38,12 +38,12 @@ public slots:
 private:
     bool mStop;
 #ifdef Q_OS_ANDROID
-	AndroidCsound * cs;
+	AndroidCsound * cs;    
 #else
 	Csound * cs;
-    CsoundPerformanceThread * perfThread;
 #endif
 
+    CsoundPerformanceThread * perfThread;
 
 };
 

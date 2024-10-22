@@ -20,19 +20,17 @@ CsEngine::CsEngine(QObject *parent) : QObject(parent)
 	cs = new AndroidCsound();
 	cs->setOpenSlCallbacks(); // for android audio to work
     cs->SetOption("--env:SSDIR=/sdcard/Music/Bourdon/samples/");
-
-#endif
-#ifdef Q_OS_MACOS
+#elif defined(Q_OS_MACOS)
     cs = new Csound();
     QString SSDirOption =  "--env:SSDIR=" + QCoreApplication::applicationDirPath() + "/../Resources/samples";
     qDebug() << "MacOS samples path: " << SSDirOption;
     cs->SetOption(SSDirOption.toLocal8Bit().data());
     cs->SetOption("-+rtaudio=auhal");
 #else
-    perfThread = nullptr;
 	cs = new Csound();
     cs->SetOption("--env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/");
 #endif
+    perfThread = nullptr;
     mStop=false;
 	cs->SetOption("-odac");
     cs->SetOption("-d");
@@ -46,32 +44,19 @@ CsEngine::CsEngine(QObject *parent) : QObject(parent)
 
 CsEngine::~CsEngine()
 {
+    stop();
     delete perfThread;
-    delete cs;
-    //stop(); // this is mess
+    delete cs;  
 }
 
 void CsEngine::play() {
 
     if (!perfThread) {
         perfThread = new CsoundPerformanceThread(cs);
+
     }
     perfThread->Play();
-    /*
-    if (!open(":/bourdon.csd")) {
-		cs->Start();
-        //cs->Perform();
-        // while(cs->PerformKsmps()==0 && mStop==false ) {
-  //           QCoreApplication::processEvents(); // probably bad solution but works. Not exactyl necessary, but makes csound/app more responsive
-        // }
-
-        cs->Stop();
-        delete cs;
-
-		qDebug()<<"END PERFORMANCE";
-		mStop=false; // luba uuesti käivitamine
-	}
-    */
+    qDebug() << "Performance thread started";
 }
 
 int CsEngine::open(QString csd)
@@ -94,6 +79,8 @@ void CsEngine::stop()
     //mStop = true;
     if (perfThread) {
         perfThread->Stop();
+        perfThread->Join();
+        qDebug() << "Performance thread stopped and joined";
     }
 }
 
@@ -110,7 +97,10 @@ void CsEngine::readScore(const QString &scoreLine)
 //    int time =  QDateTime::currentMSecsSinceEpoch()%1000000;
 
     qDebug()<<"csEvent" << scoreLine ; // << time;
-    cs->ReadScore(scoreLine.toLocal8Bit());
+    // cs->ReadScore(scoreLine.toLocal8Bit());
+    if (perfThread) {
+        perfThread->InputMessage(scoreLine.toLocal8Bit());
+    }
 }
 
 void CsEngine::compileOrc(const QString &code)
