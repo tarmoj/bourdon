@@ -2,8 +2,7 @@
 <CsOptions>
 -odac 
 ; -d
-; -b 256 -B 1024 ; et äkki see mõjutab Androidi, aga vist mitte....
-; --env:SSDIR=/home/tarmo/tarmo/programm/qt-projects/bourdon/samples/
+; -b 256 -B 1024 ; et äkki see mõjutab Androidi, aga vist mitte....; --env:SSDIR=/home/tarmo/tarmo/programm/qt-projects/bourdon/samples/
 </CsOptions>
 <CsInstruments>
 
@@ -21,8 +20,8 @@ chnset 440, "a4"
 chnset 2, "type"
 
 giFrequencies[] array 100, cpspch(6.07), cpspch(6.09),
- cpspch(7.00), cpspch(7.02), cpspch(7.04), cpspch(7.07), cpspch(7.09),cpspch(7.11),
- cpspch(8.00), cpspch(8.02), cpspch(8.04), cpspch(8.07), cpspch(8.09), cpspch(8.11)
+ cpspch(7.00), cpspch(7.02), cpspch(7.04), cpspch(7.05), cpspch(7.06), cpspch(7.07), cpspch(7.09),cpspch(7.11),
+ cpspch(8.00), cpspch(8.02), cpspch(8.04), cpspch(8.05), cpspch(8.06), cpspch(8.07), cpspch(8.09), cpspch(8.11)
 
 
 giPartials1 ftgen 101, 0, 64, -2, 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60
@@ -89,8 +88,10 @@ instr Bourdon
 	kA4 = chnget:k("a4")
 	;printk2 kA4
 	kScale = kA4/440
-	kType init 2
+
 	kType chnget "type"
+	; võibolla vaja iType 
+	print 
 	
 	if (kType==1) then
 		iamp = 0.4
@@ -99,7 +100,6 @@ instr Bourdon
 		aSaw butterlp aSaw, 6000
 	  
 	  aOut = aSaw
-	  outall aSaw
 
 	elseif (kType==2) then ; synthesized sound
 		iamp = 0.3
@@ -110,9 +110,13 @@ instr Bourdon
 		aOut = aWave+aBuzz
 		aOut butterlp aOut, 8000
 	
-	else
-		aSound loscil3 1, 1, iTable, 1 ; kõrguse muutmine Androidi peal ei toimi sel moel...
-	
+	elseif (kType==0) then
+		if ftexists:i(iTable)>0 then
+			aSound loscil3 1, 1, iTable, 1 ; kõrguse muutmine Androidi peal ei toimi sel moel...
+		else
+			aSound = 0
+		endif
+		
 		iSize = 2048
 	
 		if (kA4==440) then
@@ -123,15 +127,14 @@ instr Bourdon
 			f2 pvscale f1, kScale
 			aF pvsynth f2
 			aOut = aF
-		endif
+		endif	
 	endif 
 	
-	dispfft aOut, 0.1, 2048
+	;dispfft aOut, 0.1, 2048
 		
-	;aSine poscil 0.1, kA4
 	
 	
-        aEnv linenr 1, 0.1, 0.25, 0.01
+  aEnv linenr 1, 0.1, 0.25, 0.001; midagi on siin valesti...
 	kVolume = 0.3 ; chnget   
 	aOut *= aEnv * kVolume
 	outall aOut 	
@@ -142,20 +145,31 @@ endin
 schedule "LoadSamples", 0, 0
 instr LoadSamples
 
-giSound1 ftgen 1, 0, 0, 1, "G0.wav", 0, 0, 1
-giSound2 ftgen 2, 0, 0, 1, "A0.wav", 0, 0, 1
-giSound3 ftgen 3, 0, 0, 1, "c.wav", 0, 0, 1
-giSound4 ftgen 4, 0, 0, 1, "d.wav", 0, 0, 1
-giSound5 ftgen 5, 0, 0, 1, "e.wav", 0, 0, 1
-giSound6 ftgen 6, 0, 0, 1, "g.wav", 0, 0, 1
-giSound7 ftgen 7, 0, 0, 1, "a.wav", 0, 0, 1
-giSound8 ftgen 8, 0, 0, 1, "h.wav", 0, 0, 1
-giSound9 ftgen 9, 0, 0, 1, "c1.wav", 0, 0, 1
-giSound10 ftgen 10, 0, 0, 1, "d1.wav", 0, 0, 1
-giSound11 ftgen 11, 0, 0, 1, "e1.wav", 0, 0, 1
-giSound12 ftgen 12, 0, 0, 1, "g1.wav", 0, 0, 1
-giSound13 ftgen 13, 0, 0, 1, "a1.wav", 0, 0, 1
-giSound14 ftgen 14, 0, 0, 1, "h1.wav", 0, 0, 1
+;if fileexists("G0.wav")== 1 then
+	giSound1 ftgen 1, 0, 0, 1, "G0.wav", 0, 0, 1
+	giSound2 ftgen 2, 0, 0, 1, "A0.wav", 0, 0, 1
+	giSound3 ftgen 3, 0, 0, 1, "c.wav", 0, 0, 1
+	giSound4 ftgen 4, 0, 0, 1, "d.wav", 0, 0, 1
+	giSound5 ftgen 5, 0, 0, 1, "e.wav", 0, 0, 1
+	giSound6 ftgen 6, 0, 0, 1, "e.wav", 0, 0, 1 ; f
+	giSound7 ftgen 7, 0, 0, 1, "e.wav", 0, 0, 1 ; fis
+	
+	giSound8 ftgen 8, 0, 0, 1, "g.wav", 0, 0, 1
+	giSound9 ftgen 9, 0, 0, 1, "a.wav", 0, 0, 1
+	giSound10 ftgen 10, 0, 0, 1, "h.wav", 0, 0, 1
+	
+	giSound11 ftgen 11, 0, 0, 1, "c1.wav", 0, 0, 1
+	giSound12 ftgen 12, 0, 0, 1, "d1.wav", 0, 0, 1
+	giSound13 ftgen 13, 0, 0, 1, "e1.wav", 0, 0, 1
+	giSound14 ftgen 14, 0, 0, 1, "e1.wav", 0, 0, 1 ; f
+	giSound15 ftgen 15, 0, 0, 1, "e1.wav", 0, 0, 1 ; fis
+	
+	giSound16 ftgen 16, 0, 0, 1, "g1.wav", 0, 0, 1
+	giSound17 ftgen 17, 0, 0, 1, "a1.wav", 0, 0, 1
+	giSound18 ftgen 18, 0, 0, 1, "h1.wav", 0, 0, 1
+;else
+;	prints "File G0.wav not found\n";	
+;endif
 
 endin
 
@@ -164,6 +178,8 @@ endin
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 
@@ -219,7 +235,7 @@ endin
   <eventLine>i1.1 0 -1 1</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
@@ -522,7 +538,7 @@ endin
   <eventLine>i1.12 0 -1 12</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
@@ -627,7 +643,7 @@ endin
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <value>0</value>
+  <value>11</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -671,7 +687,7 @@ endin
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>2</selectedIndex>
+  <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
 </bsbPanel>

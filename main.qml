@@ -26,12 +26,12 @@ ApplicationWindow {
     height: 520
     minimumWidth: 350
     visible: true
-    property string version: "0.3.2"
+    property string version: "0.4.0"
     title: qsTr("Bourdon app "+ version)
 
 
     property var presetsArray: [ [], ["G","d"], ["c","g"] ]
-    property var bourdonNotes: ["G", "A", "c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"] // make sure the notes are loaded to tables in Csound with according numbers (index+1)
+    property var bourdonNotes: ["G", "A", "c", "d", "e", "f", "fis", "g", "a", "h", "c1", "d1", "e1", "f1", "fis1", "g1", "a1", "h1"] // make sure the notes are loaded to tables in Csound with according numbers (index+1)
     property double lastPressTime: 0
 
 

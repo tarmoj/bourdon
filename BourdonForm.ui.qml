@@ -135,14 +135,14 @@ Item {
                 id: bourdonButtonGrid
                 visible: true
                 width: parent.width * 0.95
-                columns: 6 //width / bourdonButtons.itemAt(0).width
+                columns: 8 //width / bourdonButtons.itemAt(0).width
                 //
 
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 BourdonButton {
                     Layout.row: 0
-                    Layout.column: 3
+                    Layout.column: 5
                     Layout.fillWidth: true
                     sound: 1
                     text: "G"
@@ -151,7 +151,7 @@ Item {
 
                 BourdonButton {
                     Layout.row: 0
-                    Layout.column: 4
+                    Layout.column: 6
                     Layout.fillWidth: true
 
                     sound: 2
@@ -162,7 +162,8 @@ Item {
                 Item {}
 
                 Repeater {
-                    model: ["c", "d", "e", "g", "a", "h", "c1", "d1", "e1", "g1", "a1", "h1"]
+                    model: ["c", "d", "e", "f", "fis", "g", "a", "h",
+                            "c1", "d1", "e1", "f1", "fis1", "g1", "a1", "h1"]
 
 
                     BourdonButton {
