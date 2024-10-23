@@ -151,8 +151,8 @@ instr LoadSamples
 	giSound3 ftgen 3, 0, 0, 1, "c.wav", 0, 0, 1
 	giSound4 ftgen 4, 0, 0, 1, "d.wav", 0, 0, 1
 	giSound5 ftgen 5, 0, 0, 1, "e.wav", 0, 0, 1
-	giSound6 ftgen 6, 0, 0, 1, "e.wav", 0, 0, 1 ; f
-	giSound7 ftgen 7, 0, 0, 1, "e.wav", 0, 0, 1 ; fis
+	giSound6 ftgen 6, 0, 0, 1, "f.wav", 0, 0, 1 ; f
+	giSound7 ftgen 7, 0, 0, 1, "fis.wav", 0, 0, 1 ; fis
 	
 	giSound8 ftgen 8, 0, 0, 1, "g.wav", 0, 0, 1
 	giSound9 ftgen 9, 0, 0, 1, "a.wav", 0, 0, 1
@@ -161,8 +161,8 @@ instr LoadSamples
 	giSound11 ftgen 11, 0, 0, 1, "c1.wav", 0, 0, 1
 	giSound12 ftgen 12, 0, 0, 1, "d1.wav", 0, 0, 1
 	giSound13 ftgen 13, 0, 0, 1, "e1.wav", 0, 0, 1
-	giSound14 ftgen 14, 0, 0, 1, "e1.wav", 0, 0, 1 ; f
-	giSound15 ftgen 15, 0, 0, 1, "e1.wav", 0, 0, 1 ; fis
+	giSound14 ftgen 14, 0, 0, 1, "f1.wav", 0, 0, 1 ; f
+	giSound15 ftgen 15, 0, 0, 1, "fis1.wav", 0, 0, 1 ; fis
 	
 	giSound16 ftgen 16, 0, 0, 1, "g1.wav", 0, 0, 1
 	giSound17 ftgen 17, 0, 0, 1, "a1.wav", 0, 0, 1
@@ -178,6 +178,8 @@ endin
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 
@@ -596,7 +598,7 @@ endin
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <value>20</value>
+  <value>0</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
