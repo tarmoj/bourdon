@@ -36,7 +36,7 @@ android {
 }
 
 linux:!android {
-  LIBS += -lcsound64 -lsndfile
+  LIBS += -lcsound64 -lsndfile -lcsnd6
 }
 
 mac: {

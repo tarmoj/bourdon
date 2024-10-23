@@ -3,12 +3,14 @@
 #include <QObject>
 #include <QVariant>
 
+
 #ifdef Q_OS_ANDROID
     #include "AndroidCsound.hpp"
 #else
     #include <csound.hpp>
 #endif
 
+#include <csPerfThread.hpp>
 
 class CsEngine : public QObject
 {
@@ -36,11 +38,12 @@ public slots:
 private:
     bool mStop;
 #ifdef Q_OS_ANDROID
-	AndroidCsound * cs;
+	AndroidCsound * cs;    
 #else
 	Csound * cs;
 #endif
 
+    CsoundPerformanceThread * perfThread;
 
 };
 

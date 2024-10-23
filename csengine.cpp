@@ -3,6 +3,7 @@
 #include <QTemporaryFile>
 #include <QCoreApplication>
 
+
 //#include <QDateTime>
 
 
@@ -29,31 +30,33 @@ CsEngine::CsEngine(QObject *parent) : QObject(parent)
 	cs = new Csound();
     cs->SetOption("--env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/");
 #endif
+    perfThread = nullptr;
     mStop=false;
 	cs->SetOption("-odac");
-	cs->SetOption("-d");
+    cs->SetOption("-d");
+    // maybe here start the engine?
+    if (!open(":/bourdon.csd")) {
+        //cs->Start();
+        perfThread = new CsoundPerformanceThread(cs);
+
+    }
 }
 
 CsEngine::~CsEngine()
 {
-	stop(); // this is mess
+    stop();
+    delete perfThread;
+    delete cs;  
 }
 
 void CsEngine::play() {
 
-    if (!open(":/bourdon.csd")) {
-		cs->Start();
-        //cs->Perform();
-		while(cs->PerformKsmps()==0 && mStop==false ) {
-            QCoreApplication::processEvents(); // probably bad solution but works. Not exactyl necessary, but makes csound/app more responsive
-		}
+    if (!perfThread) {
+        perfThread = new CsoundPerformanceThread(cs);
 
-        cs->Stop();
-        delete cs;
-
-		qDebug()<<"END PERFORMANCE";
-		mStop=false; // luba uuesti käivitamine
-	}
+    }
+    perfThread->Play();
+    qDebug() << "Performance thread started";
 }
 
 int CsEngine::open(QString csd)
@@ -73,7 +76,12 @@ int CsEngine::open(QString csd)
 
 void CsEngine::stop()
 {
-	mStop = true;
+    //mStop = true;
+    if (perfThread) {
+        perfThread->Stop();
+        perfThread->Join();
+        qDebug() << "Performance thread stopped and joined";
+    }
 }
 
 
@@ -89,7 +97,10 @@ void CsEngine::readScore(const QString &scoreLine)
 //    int time =  QDateTime::currentMSecsSinceEpoch()%1000000;
 
     qDebug()<<"csEvent" << scoreLine ; // << time;
-    cs->ReadScore(scoreLine.toLocal8Bit());
+    // cs->ReadScore(scoreLine.toLocal8Bit());
+    if (perfThread) {
+        perfThread->InputMessage(scoreLine.toLocal8Bit());
+    }
 }
 
 void CsEngine::compileOrc(const QString &code)

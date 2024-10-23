@@ -131,7 +131,7 @@ instr Bourdon
 	;aSine poscil 0.1, kA4
 	
 	
-	aEnv linenr 1, 0.1, 0.5, 0.01
+        aEnv linenr 1, 0.1, 0.25, 0.01
 	kVolume = 0.3 ; chnget   
 	aOut *= aEnv * kVolume
 	outall aOut 	
