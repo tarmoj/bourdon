@@ -22,6 +22,7 @@ Item {
     property alias presetArea: presetArea
     property alias presetMouseArea: presetMouseArea
     property alias presetForm: presetForm
+    property alias tuningCombobox: tuningCombobox
 
     property int roundedScale: Material.ExtraSmallScale
 
@@ -102,10 +103,14 @@ Item {
                     //text: qsTr("Stop all")
                 }
 
-                ToolButton {
-                    id: presetNullButton
-                    text: qsTr("Preset 0")
+                ComboBox {
+                    id: tuningCombobox
+                    enabled: soundTypeCombobox.currentIndex>0 // only when not samples
+                    currentIndex: 0
+                    Layout.preferredWidth: 150
+                    model: [qsTr("Equal"), qsTr("Nat G")]
                 }
+
 
                 Item {
                     Layout.fillWidth: true
@@ -119,7 +124,18 @@ Item {
                     //Material.roundedScale: roundedScale
                 }
             }
+
+            RowLayout { // later place null button somewhere else
+                width: parent.width
+                spacing: 10
+
+                ToolButton {
+                    id: presetNullButton
+                    text: qsTr("Preset 0")
+                }
+            }
         }
+
 
         Column {
             id: bourdonArea // name to: bourdonButtonArea

@@ -137,7 +137,7 @@ instr Bourdon
 	kFreq getFrequency iTable-1
 	
 	if (kType==1) then
-		iamp = 0.3
+                iamp = 0.4
 		aSaw vco2 iamp, kFreq ;, 10
 		aSaw butterlp aSaw, 6000
 	  

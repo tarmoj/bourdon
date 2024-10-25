@@ -230,8 +230,12 @@ ApplicationWindow {
         }
 
 
-        soundTypeCombobox.onCurrentIndexChanged: csound.setChannel("type", soundTypeCombobox.currentIndex)
+        soundTypeCombobox.onCurrentIndexChanged:
+            csound.setChannel("type", soundTypeCombobox.currentIndex)
 
+
+        tuningCombobox.onCurrentIndexChanged:
+            csound.setChannel("tuning", tuningCombobox.currentIndex)
 
         function updatePresetLabelText() {
             presetLabel.text = currentPreset.toString() + " " + presetsArray[currentPreset].join(",");
