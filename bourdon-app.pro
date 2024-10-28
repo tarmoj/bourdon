@@ -41,9 +41,9 @@ linux:!android {
 
 mac: {
     ICON = images/bourdon.icns
-	QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
-	LIBS += -F/Library/Frameworks/ -framework CsoundLib64
-	INCLUDEPATH += /Library/Frameworks/CsoundLib64.framework/Versions/6.0/Headers
+    QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
+    LIBS += -F/Library/Frameworks/ -framework CsoundLib64  -L/usr/local/lib/ -lcsnd6.6.0
+    INCLUDEPATH += /Library/Frameworks/CsoundLib64.framework/Versions/6.0/Headers
 }
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
@@ -105,14 +105,16 @@ macx {
 	# remove lbCsoundAc, võibolla libcsnd6
 
     third.path = $$PWD
-	third.commands = install_name_tool -change /Library/Frameworks/CsoundLib64.framework/CsoundLib64 @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/bourdon-app ;
-	third.commands += install_name_tool -change /Library/Frameworks/CsoundLib64.framework/libs/libsndfile.1.dylib @rpath/CsoundLib64.framework/libs/libsndfile.1.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/CsoundLib64.framework/Versions/6.0/CsoundLib64
+        third.commands = install_name_tool -change /Library/Frameworks/CsoundLib64.framework/CsoundLib64 @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/bourdon-app ;
+        third.commands += install_name_tool -change /Library/Frameworks/CsoundLib64.framework/Versions/6.0/CsoundLib64 @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/CsoundLib64.framework/Versions/6.0/libcsnd6.6.0.dylib ;
+        third.commands += install_name_tool -change /Library/Frameworks/CsoundLib64.framework/libs/libsndfile.1.dylib @rpath/CsoundLib64.framework/libs/libsndfile.1.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/CsoundLib64.framework/Versions/6.0/CsoundLib64 ;
+        third.commands += install_name_tool -change libcsnd6.6.0.dylib @rpath/CsoundLib64.framework/Versions/6.0/libcsnd6.6.0.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/bourdon-app
 
     final.path = $$PWD
 	#final.commands = $$[QT_INSTALL_PREFIX]/bin/macdeployqt $$OUT_PWD/$$DESTDIR/$${TARGET}.app -qmldir=$$PWD -dmg# deployment BETTER: use hdi-util
 	final.commands = hdiutil create -fs HFS+ -srcfolder $$OUT_PWD/$$DESTDIR/$${TARGET}.app -volname \"Bourdon\" $$OUT_PWD/$$DESTDIR/$${TARGET}.dmg
 
-    INSTALLS += first third  final #final don't forget second on first compile!!! (later makes sense to remove extra folders from Csound.Frameworks)
+    INSTALLS += first  third  final #final don't forget second on first compile!!! (later makes sense to remove extra folders from Csound.Frameworks)
 
 }
 
