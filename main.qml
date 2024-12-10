@@ -8,7 +8,6 @@ import QtCore
 
   TODO:
 
-animatsioon preset kasti muutumisel topeltklõpsuga
 
 Akna alumine serv?
 
@@ -16,6 +15,10 @@ NEXT Kõrvale ka Back?
 
 min akna kõrgus?
 
+Preset objeckiks {temperament: EQ|G|A|C|D, sound:sample|saw|additive, notes:[] }
+
+ListView Presetide muutmiseks ? Darg&Drop nootide lisamiseks, longPress eemaldamiseks?
+LongPress on temperament/sound -  context menu with dropDpwn? või lihtsalt väike DropDown
 
 
 */

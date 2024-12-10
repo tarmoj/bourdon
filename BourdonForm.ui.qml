@@ -108,7 +108,7 @@ Item {
                     enabled: soundTypeCombobox.currentIndex>0 // only when not samples
                     currentIndex: 0
                     Layout.preferredWidth: 150
-                    model: [qsTr("Equal"), qsTr("Nat G")]
+                    model: [qsTr("Equal"), qsTr("Nat G"), qsTr("Nat D"), qsTr("Nat A"), qsTr("Nat C")]
                 }
 
 
