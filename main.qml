@@ -42,18 +42,21 @@ ApplicationWindow {
 
     property var presetsArray: [ {tuning: "EQ", sound: "additive", notes:[]},
          {tuning: "G", sound: "additive", notes:["G","d"]},
-         {tuning: "C", sound: "additive", notes:["c","g"]},
+         {tuning: "C", sound: "saw", notes:["c","g"]},
     ]
     property var bourdonNotes: ["G", "A", "c", "d", "e", "f", "fis", "g", "a", "h", "c1", "d1", "e1", "f1", "fis1", "g1", "a1", "h1"] // make sure the notes are loaded to tables in Csound with according numbers (index+1)
     property double lastPressTime: 0
-    property var tunings: ["G", "D", "A", "C"] // make sure that this is aligned with the widget and the logic in Csound
+    property var tunings: ["EQ","G", "D", "A", "C"] // make sure that this is aligned with the widget and the logic in Csound
     property var soundTypes: ["sample", "saw", "additive"] // same - check the widget and Csound, when changed
 
     //onWidthChanged: console.log("window width: ", width)
 
     // TODO: vaja mingit funktsiooni, mis käiks vana preseti üle ja kui seal ei ole tuning, sound && notes, siis paneb selle.
     Settings {
+        id: appSettings
         //property alias presetsArray: app.presetsArray
+        property string presetsArray: ""
+
     }
 
 
@@ -111,14 +114,10 @@ ApplicationWindow {
             console.log("Elemets in setPresetsFromText", elements)
             if (elements.length>=3) {
                 const preset = { tuning:elements[0], sound:elements[1], notes:elements[2].split(",") }
-                console.log("Preset as pbject: ", preset)
+                console.log("Preset as pbject: ", preset.tuning, preset.sound, preset.notes)
                 if (preset.notes.length>0 && preset.notes[0] ) { // check if not empty
                     arr.push(preset)
                 }
-            } else {
-                console.log("Not enough elements in row", row)
-                return
-
             }
             // is it necessary to check if elements are valid? Later maybe not when presetForm will not be text based. Now let's go for risk
 
@@ -126,6 +125,7 @@ ApplicationWindow {
 
         //console.log("New array: ", arr);
         app.presetsArray = arr;
+        appSettings.presetsArray = JSON.stringify(arr);
 
     }
 
@@ -186,6 +186,7 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
+        presetsArray = JSON.parse(appSettings.presetsArray)
         bourdonForm.presetForm.presetText.text = getPresetsText()
         //searchButton.clicked()
     }
@@ -259,9 +260,7 @@ ApplicationWindow {
         function playFromPreset(preset) { // preset is an array of the notest to be played like [G,d,e]
             var tuning = preset.tuning
             var sound = preset.sound
-            console.log(tuning, sound, preset.notes)
-            tuningCombobox.currentIndex = tunings.indexOf(preset.tuning)
-            soundTypeCombobox.currentIndex = soundTypes.indexOf(preset.sound)
+            console.log("Play from preset:", tuning, sound, preset.notes)
 
             if (!preset.notes || preset.notes.length===0) {
                 console.log("No notes in preset", preset)
@@ -290,6 +289,11 @@ ApplicationWindow {
 
         }
 
+        function updateComboBoxes() {
+            tuningCombobox.currentIndex = tunings.indexOf(presetsArray[currentPreset].tuning)
+            soundTypeCombobox.currentIndex = soundTypes.indexOf(presetsArray[currentPreset].sound)
+        }
+
         onPresetZeroChanged: updatePresetLabelText()
 
         presetNullButton.onClicked:  {
@@ -302,6 +306,7 @@ ApplicationWindow {
 
         onCurrentPresetChanged: {
             updatePresetLabelText()
+            updateComboBoxes()
             if (isPlaying()) {
                 stopAll();
                 playFromPreset(app.presetsArray[currentPreset])
@@ -341,6 +346,7 @@ ApplicationWindow {
             const preset = getPresetFromButtons()
             if (preset.notes.length>0) {
                 presetsArray.push(preset)
+                appSettings.presetsArray = JSON.stringify(presetsArray);
                 presetForm.presetText.text = getPresetsText()
             } else {
                 console.log("No playing buttons")
