@@ -15,8 +15,6 @@ NEXT Kõrvale ka Back?
 
 min akna kõrgus?
 
-Preset objeckiks {temperament: EQ|G|A|C|D, sound:sample|saw|additive, notes:[] }
-
 ListView Presetide muutmiseks ? Darg&Drop nootide lisamiseks, longPress eemaldamiseks?
 LongPress on temperament/sound -  context menu with dropDpwn? või lihtsalt väike DropDown
 
@@ -25,23 +23,37 @@ LongPress on temperament/sound -  context menu with dropDpwn? või lihtsalt väi
 
 ApplicationWindow {
     id: app
-    width: 720
-    height: 520
+    width: 520
+    height: 720
     minimumWidth: 350
     visible: true
-    property string version: "0.4.0"
+    property string version: "0.5.0"
     title: qsTr("Bourdon app "+ version)
 
+    /*** new preset system: array of objects:
+    {
+         {temperament: EQ|G|A|C|D, sound:sample|saw|additive, notes:[] }
 
-    property var presetsArray: [ [], ["G","d"], ["c","g"] ]
+         when expressed as text, separated with semicolons like:
+         EQ;saw;c,g,c1
+    }
+    ***/
+
+
+    property var presetsArray: [ {tuning: "EQ", sound: "additive", notes:[]},
+         {tuning: "G", sound: "additive", notes:["G","d"]},
+         {tuning: "C", sound: "additive", notes:["c","g"]},
+    ]
     property var bourdonNotes: ["G", "A", "c", "d", "e", "f", "fis", "g", "a", "h", "c1", "d1", "e1", "f1", "fis1", "g1", "a1", "h1"] // make sure the notes are loaded to tables in Csound with according numbers (index+1)
     property double lastPressTime: 0
-
+    property var tunings: ["G", "D", "A", "C"] // make sure that this is aligned with the widget and the logic in Csound
+    property var soundTypes: ["sample", "saw", "additive"] // same - check the widget and Csound, when changed
 
     //onWidthChanged: console.log("window width: ", width)
 
+    // TODO: vaja mingit funktsiooni, mis käiks vana preseti üle ja kui seal ei ole tuning, sound && notes, siis paneb selle.
     Settings {
-        property alias presetsArray: app.presetsArray
+        //property alias presetsArray: app.presetsArray
     }
 
 
@@ -88,18 +100,28 @@ ApplicationWindow {
 
 
     function  setPresetsFromText(text) {
-        const arr = [ [] ]; // define with one empty array for 0-preset
+        const arr = [ { tuning: "EQ", sound: "additive", notes: [] } ]; // define with one empty array for 0-preset
+        //TODO: rewrite to object based version
 
         const rows = text.split("\n");
-        console.log("Rows found: ", rows.length)
+        console.log("Rows found: ", rows.length, rows)
         for (let row of rows) {
             row = row.replace(/\s/g, ""); // remove white spaces
-            const preset = row.split(",")
-            //console.log("Preset as array: ", preset)
-            //TODO: check if only allowed elements in array
-            if (preset.length>0 && preset[0] ) { // check if not empty
-                arr.push(preset)
+            const elements = row.split(";")
+            console.log("Elemets in setPresetsFromText", elements)
+            if (elements.length>=3) {
+                const preset = { tuning:elements[0], sound:elements[1], notes:elements[2].split(",") }
+                console.log("Preset as pbject: ", preset)
+                if (preset.notes.length>0 && preset.notes[0] ) { // check if not empty
+                    arr.push(preset)
+                }
+            } else {
+                console.log("Not enough elements in row", row)
+                return
+
             }
+            // is it necessary to check if elements are valid? Later maybe not when presetForm will not be text based. Now let's go for risk
+
         }
 
         //console.log("New array: ", arr);
@@ -107,11 +129,19 @@ ApplicationWindow {
 
     }
 
-    function getPresetsText() { // turns presets array
+    function getPresetsText() { // turns presets array to text
         let text = "";
-
         for (let i=1;i<presetsArray.length;i++ ) { // NB! start from 1, 0 is for non-saved temporary array
-            text += presetsArray[i] .join(",") + "\n"
+            const tuning =  "tuning" in presetsArray[i] ? presetsArray[i].tuning : "EQ";
+            const sound =  "sound" in presetsArray[i] ? presetsArray[i].sound : "additive";
+            const notes =  "notes" in presetsArray[i] ? presetsArray[i].notes : presetsArray[i]; // quite likely that it was just the old notes there from v 0.4.0
+
+            if (! "tuning" in presetsArray[i]) { // probably in old format, replace with new one
+               presetsArray[i] = {tuning:tuning, sound:sound, notes:notes}
+            }
+
+            console.log("getPresetsText: ", tuning, sound, notes);
+            text  += tuning + ";" + sound + ";" + notes.join(",") + "\n"
         }
         console.log("presets as text: ", text)
         return text
@@ -209,21 +239,36 @@ ApplicationWindow {
 
         function getPresetFromButtons() {
 
-            const preset = [];
+            const preset = {
+                tuning: tunings[tuningCombobox.currentIndex],
+                sound: soundTypes[soundTypeCombobox.currentIndex],
+                notes: []
+            };
             for (let i=0; i<bourdonButtons.length; i++) {
                 const b = bourdonButtons[i];
                 if (b.checked) {
-                    preset.push(b.text)
+                    preset.notes.push(b.text)
                 }
             }
-            console.log("Preset: ", preset)
+            console.log("Preset from buttons: ", preset)
 
             return preset;
         }
 
 
         function playFromPreset(preset) { // preset is an array of the notest to be played like [G,d,e]
-            for  (let note of preset) {
+            var tuning = preset.tuning
+            var sound = preset.sound
+            console.log(tuning, sound, preset.notes)
+            tuningCombobox.currentIndex = tunings.indexOf(preset.tuning)
+            soundTypeCombobox.currentIndex = soundTypes.indexOf(preset.sound)
+
+            if (!preset.notes || preset.notes.length===0) {
+                console.log("No notes in preset", preset)
+                return
+            }
+
+            for  (let note of preset.notes) {
                 const index = app.bourdonNotes.indexOf(note);
                 if (index>=0) {
                     const b = bourdonButtons[index];
@@ -241,7 +286,7 @@ ApplicationWindow {
             csound.setChannel("tuning", tuningCombobox.currentIndex)
 
         function updatePresetLabelText() {
-            presetLabel.text = currentPreset.toString() + " " + presetsArray[currentPreset].join(",");
+            presetLabel.text = currentPreset.toString() + " " + presetsArray[currentPreset].notes.join(",");
 
         }
 
@@ -294,7 +339,7 @@ ApplicationWindow {
 
         addButton.onClicked: {
             const preset = getPresetFromButtons()
-            if (preset.length>0) {
+            if (preset.notes.length>0) {
                 presetsArray.push(preset)
                 presetForm.presetText.text = getPresetsText()
             } else {
