@@ -30,6 +30,8 @@ ApplicationWindow {
     property string version: "0.5.0"
     title: qsTr("Bourdon app "+ version)
 
+    property color backgroundColor: Material.background // expose to C++
+
     /*** new preset system: array of objects:
     {
          {temperament: EQ|G|A|C|D, sound:sample|saw|additive, notes:[] }
