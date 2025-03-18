@@ -155,14 +155,14 @@ instr Bourdon
 	kFreq getFrequency iTable-1
 	
 	if (kType==1) then
-    iamp = 0.4
+                iamp = 0.8
 		aSaw vco2 iamp, kFreq ;, 10
 		aSaw butterlp aSaw, 6000
 	  
 	  aOut = aSaw	
 
 	elseif (kType==2) then ; synthesized sound
-		iamp = 0.2
+                iamp = 0.1
 		
 		aWave adsynt iamp, kFreq, -1, giPartials1 , giAmps1 , 64
 		aBuzz buzz 0.1*(1+jspline(0.1, 1/4, 1/2)), kFreq, 256, -1
@@ -196,7 +196,7 @@ instr Bourdon
 		
 	
 	
-  aEnv linenr 1, 0.1, 0.5, 0.001
+        aEnv linenr 1, 0.1, 0.5, 0.001
 	kVolume = 0.2 ; chnget   
 	aOut *= aEnv * kVolume
 	outall aOut 	
@@ -207,7 +207,7 @@ endin
 schedule "LoadSamples", 0, 0
 instr LoadSamples
 
-;if fileexists("G0.wav")== 1 then
+if fileexists("G0.wav")== 1 then
 	giSound1 ftgen 1, 0, 0, 1, "G0.wav", 0, 0, 1
 	giSound2 ftgen 2, 0, 0, 1, "A0.wav", 0, 0, 1
 	giSound3 ftgen 3, 0, 0, 1, "c.wav", 0, 0, 1
@@ -229,9 +229,9 @@ instr LoadSamples
 	giSound16 ftgen 16, 0, 0, 1, "g1.wav", 0, 0, 1
 	giSound17 ftgen 17, 0, 0, 1, "a1.wav", 0, 0, 1
 	giSound18 ftgen 18, 0, 0, 1, "h1.wav", 0, 0, 1
-;else
-;	prints "File G0.wav not found\n";	
-;endif
+else
+	prints "File G0.wav not found\n";	
+endif
 
 endin
 
@@ -240,6 +240,8 @@ endin
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 
@@ -288,7 +290,7 @@ endin
   <g>237</g>
   <b>240</b>
  </bgcolor>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>button0</objectName>
   <x>360</x>
   <y>97</y>
@@ -310,7 +312,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>a4</objectName>
   <x>101</x>
   <y>46</y>
@@ -340,7 +342,7 @@ endin
   <randomizable group="0">false</randomizable>
   <value>440</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>16</x>
   <y>46</y>
@@ -371,7 +373,7 @@ endin
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonA</objectName>
   <x>425</x>
   <y>97</y>
@@ -393,7 +395,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonc</objectName>
   <x>25</x>
   <y>143</y>
@@ -415,7 +417,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttond</objectName>
   <x>92</x>
   <y>143</y>
@@ -437,7 +439,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttone</objectName>
   <x>159</x>
   <y>143</y>
@@ -459,7 +461,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttong</objectName>
   <x>359</x>
   <y>142</y>
@@ -481,7 +483,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttona</objectName>
   <x>427</x>
   <y>142</y>
@@ -503,7 +505,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonh</objectName>
   <x>495</x>
   <y>142</y>
@@ -525,7 +527,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonc1</objectName>
   <x>26</x>
   <y>189</y>
@@ -547,7 +549,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttond1</objectName>
   <x>93</x>
   <y>189</y>
@@ -569,7 +571,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttone1</objectName>
   <x>160</x>
   <y>189</y>
@@ -591,7 +593,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttong1</objectName>
   <x>360</x>
   <y>188</y>
@@ -613,7 +615,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttona1</objectName>
   <x>428</x>
   <y>188</y>
@@ -635,7 +637,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonh1</objectName>
   <x>496</x>
   <y>188</y>
@@ -657,7 +659,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject type="BSBGraph" version="2">
   <objectName/>
   <x>23</x>
   <y>314</y>
@@ -668,7 +670,7 @@ endin
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <value>0</value>
+  <value>1</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -684,7 +686,7 @@ endin
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>type</objectName>
   <x>181</x>
   <y>269</y>
@@ -715,7 +717,7 @@ endin
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonf</objectName>
   <x>225</x>
   <y>142</y>
@@ -737,7 +739,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonf1</objectName>
   <x>226</x>
   <y>188</y>
@@ -759,7 +761,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonfis</objectName>
   <x>292</x>
   <y>142</y>
@@ -781,7 +783,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonfis1</objectName>
   <x>293</x>
   <y>188</y>
@@ -803,7 +805,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>tuning</objectName>
   <x>32</x>
   <y>268</y>
@@ -841,7 +843,7 @@ endin
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>2</selectedIndex>
+  <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
 </bsbPanel>
