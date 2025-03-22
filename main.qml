@@ -252,7 +252,8 @@ ApplicationWindow {
                         bourdonButtons.push(element);
                     }
                 }
-
+                //test:
+                //getAudioDevices()
             }
 
 

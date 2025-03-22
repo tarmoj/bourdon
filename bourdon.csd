@@ -207,7 +207,7 @@ endin
 schedule "LoadSamples", 0, 0
 instr LoadSamples
 
-if fileexists("G0.wav")== 1 then
+;if fileexists("G0.wav")== 1 then ; fileexist does not seem to exist on Android
 	giSound1 ftgen 1, 0, 0, 1, "G0.wav", 0, 0, 1
 	giSound2 ftgen 2, 0, 0, 1, "A0.wav", 0, 0, 1
 	giSound3 ftgen 3, 0, 0, 1, "c.wav", 0, 0, 1
@@ -229,9 +229,9 @@ if fileexists("G0.wav")== 1 then
 	giSound16 ftgen 16, 0, 0, 1, "g1.wav", 0, 0, 1
 	giSound17 ftgen 17, 0, 0, 1, "a1.wav", 0, 0, 1
 	giSound18 ftgen 18, 0, 0, 1, "h1.wav", 0, 0, 1
-else
-	prints "File G0.wav not found\n";	
-endif
+;else
+;	prints "File G0.wav not found\n";
+;endif
 
 endin
 

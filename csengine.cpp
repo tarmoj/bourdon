@@ -64,7 +64,7 @@ int CsEngine::open(QString csd)
 
     QTemporaryFile *tempFile = QTemporaryFile::createNativeFile(csd); //TODO: checi if not 0
 
-    //qDebug()<<tempFile->fileName() <<  tempFile->readAll();
+    //qDebug()<< "Csound file contents: " <<  tempFile->fileName() <<  tempFile->readAll();
 
 	if (!cs->Compile( tempFile->fileName().toLocal8Bit().data()) ){
         return 0;
