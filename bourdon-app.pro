@@ -1,16 +1,24 @@
 lessThan(QT_MAJOR_VERSION,6): error("Qt6 is required for this build.")
 
-QT += quick core multimedia
+QT += quick core multimedia bluetooth
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += main.cpp \
-        csengine.cpp
+        csengine.cpp \
+        bluetooth/characteristicinfo.cpp \
+        bluetooth/device.cpp \
+        bluetooth/deviceinfo.cpp \
+        bluetooth/serviceinfo.cpp
 
 HEADERS += \
-    csengine.h
+    csengine.h \
+    bluetooth/characteristicinfo.h \
+    bluetooth/device.h \
+    bluetooth/deviceinfo.h \
+    bluetooth/serviceinfo.h
 
 RESOURCES += qml.qrc
 
@@ -85,6 +93,7 @@ DISTFILES += \
     android/res/mipmap-xxxhdpi/ic_launcher_round.png \
     android/res/values/ic_launcher_background.xml \
     android/res/values/libs.xml \
+    android/src/MediaSessionHandler.java \
     images/stop-button.png
 
 

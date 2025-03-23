@@ -3,7 +3,7 @@
 #include <QThread>
 #include <QQmlContext>
 #include "csengine.h"
-// #include "bluetooth/device.h"
+#include "bluetooth/device.h"
 
 
 #ifdef Q_OS_ANDROID
@@ -21,19 +21,57 @@ bool requestPermission(QString permission)
 
 }
 
+
+extern "C" {
+Q_DECL_EXPORT void JNICALL Java_org_qtproject_example_MediaSessionHandler_keyEvent(JNIEnv *, jobject, jint keyCode) {
+    qDebug() << "Media key received in Qt:" << keyCode;
+
+    switch (keyCode) {
+    case 85:  // KEYCODE_MEDIA_PLAY_PAUSE
+        qDebug() << "Play/Pause Pressed!";
+        break;
+    case 86:  // KEYCODE_MEDIA_STOP
+        qDebug() << "Stop Pressed!";
+        break;
+    case 87:  // KEYCODE_MEDIA_NEXT
+        qDebug() << "Next Track!";
+        break;
+    case 88:  // KEYCODE_MEDIA_PREVIOUS
+        qDebug() << "Previous Track!";
+        break;
+    }
+}
+}
+
+void initializeMediaSession() {
+    qDebug() << "Initializing Media Session";
+
+    QJniObject context = QNativeInterface::QAndroidApplication::context();
+
+    if (context.isValid() ) {
+        QJniObject::callStaticMethod<void>(
+            "org/tarmoj/bourdon/MediaSessionHandler",
+            "initialize",
+            "(Landroid/content/Context;)V", // Signature with Context parameter
+            context.object<jobject>() // Pass the Context object
+            );
+    } else {
+        qDebug() << "Context is null";
+    }
+}
+
 #endif
 
 
 int main(int argc, char *argv[])
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#endif
+
     QGuiApplication app(argc, argv);
 
     app.setOrganizationName("Tarmo Johannes Events and Software");
     app.setOrganizationDomain("bourdon-app.org");
     app.setApplicationName("Bourdon App");
+
 
 #ifdef Q_OS_ANDROID
 
@@ -64,6 +102,17 @@ int main(int argc, char *argv[])
         QJniEnvironment env; if (env->ExceptionCheck()) { env->ExceptionClear(); } //Clear any possible pending exceptions.
     }
 
+    // media session
+    if (QThread::currentThread() != QCoreApplication::instance()->thread()) {
+        qDebug() << "NOT UI THREAD";
+        QMetaObject::invokeMethod(&app, []() {
+            initializeMediaSession();
+        }, Qt::QueuedConnection);
+    } else {
+        qDebug() << "UI THREAD";
+        initializeMediaSession();
+    }
+
 #endif
 
 #ifdef Q_OS_MACOS
@@ -90,7 +139,6 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("csound", cs); // forward c++ object that can be reached form qml by object name "csound" NB! include <QQmlContext>
 
-
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
@@ -98,6 +146,8 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
     engine.load(url);
+
+
 
 //    QObject *qmlApp = engine.rootObjects().first();
 

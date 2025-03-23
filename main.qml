@@ -194,10 +194,25 @@ ApplicationWindow {
         }
     }
 
+    // Connections {
+    //     target: device
+    //     function onButtonPressed(button) {
+    //         console.log("Button pressed on blutetooth call: ", button)
+    //         //TODO: implement next and playbutton connection
+    //     }
+
+    //     function onStatusMessage(message) {
+    //         console.log("Message from bluetooth: ", message);
+    //         //bluetoothStatus.text = message;
+    //     }
+    // }
+
+
     Component.onCompleted: {
         presetsArray = JSON.parse(appSettings.presetsArray)
         bourdonForm.presetForm.presetText.text = getPresetsText()
         //searchButton.clicked()
+        //device.startDeviceDiscovery();
 
     }
 
