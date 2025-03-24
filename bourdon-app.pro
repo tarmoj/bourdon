@@ -8,17 +8,11 @@ QT += quick core multimedia bluetooth
 
 SOURCES += main.cpp \
         csengine.cpp \
-        bluetooth/characteristicinfo.cpp \
-        bluetooth/device.cpp \
-        bluetooth/deviceinfo.cpp \
-        bluetooth/serviceinfo.cpp
+
 
 HEADERS += \
     csengine.h \
-    bluetooth/characteristicinfo.h \
-    bluetooth/device.h \
-    bluetooth/deviceinfo.h \
-    bluetooth/serviceinfo.h
+
 
 RESOURCES += qml.qrc
 
@@ -28,7 +22,8 @@ INCLUDEPATH += /usr/local/include/csound/
 android {
   QT += core-private
   INCLUDEPATH += /home/tarmo/src/csound/Android/CsoundAndroid/jni/	 #TODO: should have an extra varaible, not hardcoded personal library
-  HEADERS += AndroidCsound.hpp
+  HEADERS += AndroidCsound.hpp  mediabuttonhandler.h
+  SOURCES += mediabuttonhandler.cpp
 
 #message(ANDROID_TARGET_ARCH: $$ANDROID_TARGET_ARCH)
 

@@ -17,6 +17,12 @@ public class MediaSessionHandler {
     private static MediaSessionHandler instance = null;
     private MediaSession mediaSession;
 
+    static {
+            System.loadLibrary("bourdon-app_arm64-v8a"); // Load your Qt native library NB! hardcoded of arm64, but this is theonly option with Csound anyway
+    }
+
+    private static native void nativeMediaButtonEvent(int action);
+
 
     // Initialize MediaSessionHandler
     public static void initialize(Context context) {
@@ -48,25 +54,34 @@ public class MediaSessionHandler {
                     // Handle media button events
                     @Override
                     public boolean onMediaButtonEvent(Intent mediaButtonIntent) {
-                        Log.d(TAG, "Media button event received: " + mediaButtonIntent);
+                        //Log.d(TAG, "Media button event received: " + mediaButtonIntent);
 
                         KeyEvent event = mediaButtonIntent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
                         if (event != null) {
-                            Log.d(TAG, "Key event: " + event.toString());
+                            //Log.d(TAG, "Key event: " + event.toString());
 
                             if (event.getAction() == KeyEvent.ACTION_DOWN) {
                                 switch (event.getKeyCode()) {
                                     case KeyEvent.KEYCODE_MEDIA_PLAY:
                                         Log.d(TAG, "Play button pressed");
+                                        nativeMediaButtonEvent(1);
                                         break;
                                     case KeyEvent.KEYCODE_MEDIA_PAUSE:
                                         Log.d(TAG, "Pause button pressed");
+                                        nativeMediaButtonEvent(2);
+                                        break;
+                                    case KeyEvent.KEYCODE_MEDIA_STOP:
+                                        Log.
+                                        d(TAG, "Stop button pressed");
+                                        nativeMediaButtonEvent(2); // make both pause and stop act for stop
                                         break;
                                     case KeyEvent.KEYCODE_MEDIA_NEXT:
                                         Log.d(TAG, "Next track button pressed");
+                                        nativeMediaButtonEvent(3);
                                         break;
                                     case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
                                         Log.d(TAG, "Previous track button pressed");
+                                        nativeMediaButtonEvent(4);
                                         break;
                                     default:
                                         Log.d(TAG, "Unhandled key event: " + event.getKeyCode());

@@ -3,12 +3,13 @@
 #include <QThread>
 #include <QQmlContext>
 #include "csengine.h"
-#include "bluetooth/device.h"
+
 
 
 #ifdef Q_OS_ANDROID
     #include <QtCore/private/qandroidextras_p.h>
     #include <QJniEnvironment>
+    #include "mediabuttonhandler.h"
 
 bool requestPermission(QString permission)
 {
@@ -104,12 +105,10 @@ int main(int argc, char *argv[])
 
     // media session
     if (QThread::currentThread() != QCoreApplication::instance()->thread()) {
-        qDebug() << "NOT UI THREAD";
         QMetaObject::invokeMethod(&app, []() {
             initializeMediaSession();
         }, Qt::QueuedConnection);
     } else {
-        qDebug() << "UI THREAD";
         initializeMediaSession();
     }
 
@@ -123,21 +122,14 @@ int main(int argc, char *argv[])
 
     CsEngine * cs = new CsEngine();
     cs->play();
-    /*
-    // move csound into another thread
-    QThread  * csoundThread = new QThread();
-    CsEngine * cs = new CsEngine();
-    cs->moveToThread(csoundThread);
-
-    QObject::connect(csoundThread, &QThread::finished, cs, &CsEngine::deleteLater);
-    QObject::connect(csoundThread, &QThread::finished, csoundThread, &QThread::deleteLater);
-
-    QObject::connect(csoundThread, &QThread::started, cs, &CsEngine::play);
-    csoundThread->start();
-    */
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("csound", cs); // forward c++ object that can be reached form qml by object name "csound" NB! include <QQmlContext>
+
+#ifdef Q_OS_ANDROID
+    MediaButtonHandler mediaButtonHandler;
+    engine.rootContext()->setContextProperty("MediaButtonHandler", &mediaButtonHandler);
+#endif
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

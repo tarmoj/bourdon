@@ -4,7 +4,6 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 import QtCore
-import QtMultimedia
 /*
 
   TODO:
@@ -28,7 +27,7 @@ ApplicationWindow {
     height: 720
     minimumWidth: 350
     visible: true
-    property string version: "0.5.1"
+    property string version: "0.6.0"
     title: qsTr("Bourdon app "+ version)
 
     property color backgroundColor: Material.background // expose to C++
@@ -194,26 +193,22 @@ ApplicationWindow {
         }
     }
 
-    // Connections {
-    //     target: device
-    //     function onButtonPressed(button) {
-    //         console.log("Button pressed on blutetooth call: ", button)
-    //         //TODO: implement next and playbutton connection
-    //     }
-
-    //     function onStatusMessage(message) {
-    //         console.log("Message from bluetooth: ", message);
-    //         //bluetoothStatus.text = message;
-    //     }
-    // }
+    Connections {
+            target: Qt.platform.os === "android" ? MediaButtonHandler : null
+            function onPlay() { console.log("Play received in QML"); bourdonForm.playButton.checked = true; }
+            function onPause() {
+                console.log("Pause received in QML");
+                bourdonForm.playButton.checked = false;
+                bourdonForm.stopAll()
+            }
+            function onNext() {console.log("Next received in QML");  bourdonForm.advancePreset(1); }
+            function onPrevious() {console.log("Previous received in QML"); bourdonForm.advancePreset(-1); }
+    }
 
 
     Component.onCompleted: {
         presetsArray = JSON.parse(appSettings.presetsArray)
         bourdonForm.presetForm.presetText.text = getPresetsText()
-        //searchButton.clicked()
-        //device.startDeviceDiscovery();
-
     }
 
 
