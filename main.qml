@@ -208,7 +208,18 @@ ApplicationWindow {
 
     Component.onCompleted: {
         presetsArray = JSON.parse(appSettings.presetsArray)
-        bourdonForm.presetForm.presetText.text = getPresetsText()
+        //bourdonForm.presetForm.presetText.text = getPresetsText()
+        // Assuming presetsArray is available in the context
+        for (var i = 0; i < presetsArray.length; i++) {
+            bourdonForm.presetForm.presetList.model.append({
+                                        nr: i + 1,
+                                        tuning: presetsArray[i].tuning,
+                                        sound: presetsArray[i].sound,
+                                        notes: presetsArray[i].notes,
+                                        volumeCorrection: presetsArray[i].volumeCorrection
+                                    });
+        }
+
     }
 
 
