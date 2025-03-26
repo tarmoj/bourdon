@@ -215,8 +215,8 @@ ApplicationWindow {
                                         nr: i + 1,
                                         tuning: presetsArray[i].tuning,
                                         sound: presetsArray[i].sound,
-                                        notes: presetsArray[i].notes,
-                                        volumeCorrection: presetsArray[i].volumeCorrection
+                                        notes: presetsArray[i].notes.join(","),
+                                        volumeCorrection: presetsArray[i].volumeCorrection ? presetsArray[i].volumeCorrection : 0
                                     });
         }
 
