@@ -34,7 +34,7 @@ ApplicationWindow {
 
     /*** new preset system: array of objects:
     {
-         {temperament: EQ|G|A|C|D, sound:sample|saw|additive, notes:[] }
+         {temperament: EQ|G|A|C|D, sound:sample|saw|synthesized, notes:[] }
 
          when expressed as text, separated with semicolons like:
          EQ;saw;c,g,c1
@@ -42,14 +42,15 @@ ApplicationWindow {
     ***/
 
 
-    property var presetsArray: [ {tuning: "EQ", sound: "additive", notes:[]},
-        {tuning: "G", sound: "additive", notes:["G","d"]},
+    property var presetsArray: [ {tuning: "EQ", sound: "synthesized", notes:[]}, // first one keep empty, this is for preset 0
+        {tuning: "G", sound: "synthesized", notes:["G","d"]},
         {tuning: "C", sound: "saw", notes:["c","g"]},
+        {tuning: "D", sound: "sample", notes:["d","a", "c1"]}
     ]
     property var bourdonNotes: ["G", "A", "c", "d", "e", "f", "fis", "g", "a", "h", "c1", "d1", "e1", "f1", "fis1", "g1", "a1", "h1"] // make sure the notes are loaded to tables in Csound with according numbers (index+1)
     property double lastPressTime: 0
     property var tunings: ["EQ","G", "D", "A", "C"] // make sure that this is aligned with the widget and the logic in Csound
-    property var soundTypes: ["sample", "saw", "additive"] // same - check the widget and Csound, when changed
+    property var soundTypes: ["sample", "saw", "synthesized"] // same - check the widget and Csound, when changed
 
     //onWidthChanged: console.log("window width: ", width)
 
@@ -111,7 +112,7 @@ ApplicationWindow {
 
 
     function  setPresetsFromText(text) {
-        const arr = [ { tuning: "EQ", sound: "additive", notes: [] } ]; // define with one empty array for 0-preset
+        const arr = [ { tuning: "EQ", sound: "synthesized", notes: [] } ]; // define with one empty array for 0-preset
         //TODO: rewrite to object based version
 
         const rows = text.split("\n");
@@ -141,7 +142,7 @@ ApplicationWindow {
         let text = "";
         for (let i=1;i<presetsArray.length;i++ ) { // NB! start from 1, 0 is for non-saved temporary array
             const tuning =  "tuning" in presetsArray[i] ? presetsArray[i].tuning : "EQ";
-            const sound =  "sound" in presetsArray[i] ? presetsArray[i].sound : "additive";
+            const sound =  "sound" in presetsArray[i] ? presetsArray[i].sound : "synthesized";
             const notes =  "notes" in presetsArray[i] ? presetsArray[i].notes : presetsArray[i]; // quite likely that it was just the old notes there from v 0.4.0
 
             if (! "tuning" in presetsArray[i]) { // probably in old format, replace with new one
@@ -210,16 +211,18 @@ ApplicationWindow {
         presetsArray = JSON.parse(appSettings.presetsArray)
         //bourdonForm.presetForm.presetText.text = getPresetsText()
         // Assuming presetsArray is available in the context
-        for (var i = 0; i < presetsArray.length; i++) {
+        bourdonForm.presetForm.presetList.model.clear()
+
+        for (var i = 1; i < presetsArray.length; i++) { // skip the first as this is for preset 0
+            console.log("i, preset:", i, presetsArray[i].tuning, presetsArray[i].sound, presetsArray[i].notes)
             bourdonForm.presetForm.presetList.model.append({
-                                        nr: i + 1,
+                                        nr: i,
                                         tuning: presetsArray[i].tuning,
                                         sound: presetsArray[i].sound,
                                         notes: presetsArray[i].notes.join(","),
                                         volumeCorrection: presetsArray[i].volumeCorrection ? presetsArray[i].volumeCorrection : 0
                                     });
         }
-
     }
 
 
@@ -356,6 +359,7 @@ ApplicationWindow {
             }
 
             function updateComboBoxes() {
+                console.log("UpdateComboboxes: ", presetsArray[currentPreset].tuning, presetsArray[currentPreset].sound )
                 tuningCombobox.currentIndex = tunings.indexOf(presetsArray[currentPreset].tuning)
                 soundTypeCombobox.currentIndex = soundTypes.indexOf(presetsArray[currentPreset].sound)
             }

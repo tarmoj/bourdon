@@ -709,7 +709,7 @@ endin
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>additive</name>
+    <name>synthesized</name>
     <value>2</value>
     <stringvalue/>
    </bsbDropdownItem>
