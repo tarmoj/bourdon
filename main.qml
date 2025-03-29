@@ -31,28 +31,18 @@ ApplicationWindow {
     title: qsTr("Bourdon app "+ version)
 
     property color backgroundColor: Material.background // expose to C++
+    property alias presetModel: presetModel // expose it to PresetForm
 
-    /*** new preset system: array of objects:
-    {
-         {temperament: EQ|G|A|C|D, sound:sample|saw|synthesized, notes:[] }
-
-         when expressed as text, separated with semicolons like:
-         EQ;saw;c,g,c1
-    }
-    ***/
-
-    // PresetArea Listview model is sort of copy of presetArray, but it is necessary since presetArray[0]
-    // is for preset 0 (tryout preset, not used in Forwar<->Back presets in playing the piece
-
+    // sandBox is sort of preset 0, for tryout, it is not used in next/previous preset
     property var sandBoxData: {"tuning": "EQ", "sound": "synthesized", "notes":[]}
 
-    property var presetsArray: [ {tuning: "EQ", sound: "synthesized", notes:[]}, // first one keep empty, this is for preset 0
-        {tuning: "G", sound: "synthesized", notes:["G","d"]},
-        {tuning: "C", sound: "saw", notes:["c","g"]},
-        {tuning: "D", sound: "sample", notes:["d","a", "c1"]}
-    ]
 
 
+    ListModel {
+        id: presetModel
+        ListElement { tuning: "G"; sound: "sample"; notes: "G,g,c1"; volumeCorrection: 0 }
+        ListElement { tuning: "F"; sound: "saw"; notes: ""; volumeCorrection: 0 }
+    }
 
     property var bourdonNotes: ["G", "A", "c", "d", "e", "f", "fis", "g", "a", "h", "c1", "d1", "e1", "f1", "fis1", "g1", "a1", "h1"] // make sure the notes are loaded to tables in Csound with according numbers (index+1)
     property double lastPressTime: 0
@@ -62,12 +52,9 @@ ApplicationWindow {
     //onWidthChanged: console.log("window width: ", width)
 
 
-    // TODO: vaja mingit funktsiooni, mis käiks vana preseti üle ja kui seal ei ole tuning, sound && notes, siis paneb selle.
     Settings {
         id: appSettings
-        //property alias presetsArray: app.presetsArray
         property string presetsArray: ""
-
     }
 
 
@@ -75,8 +62,7 @@ ApplicationWindow {
         id: singlePressTimer
         interval: 350 // Set the interval in milliseconds (adjust as needed)
         onTriggered: {
-            console.log("Single press detected!")
-            //bourdonForm.nextButton.clicked();
+            //console.log("Single press detected!")
             bourdonForm.advancePreset(1)
         }
         repeat: false
@@ -97,6 +83,41 @@ ApplicationWindow {
     }
 
 
+    function loadPresets() {
+      if (appSettings.presetsArray) {
+        var arr = JSON.parse(appSettings.presetsArray);
+        presetModel.clear();
+        for (var i = 0; i < arr.length; i++) {
+          var preset = arr[i];
+
+          // ✅ Convert notes array to a comma-separated string if needed
+          if (Array.isArray(preset.notes)) {
+            preset.notes = preset.notes.join(",");
+          }
+          presetModel.append(preset);  // Restore from array
+          console.log("presetModel data: ", i, presetModel.get(i).tuning,
+                      presetModel.get(i).sound, presetModel.get(i).notes)
+        }
+      }
+    }
+
+    function savePresets() {
+        var arr = [];
+        for (var i = 0; i < presetModel.count; i++) {
+            arr.push(presetModel.get(i));  // Convert ListModel to array
+        }
+        appSettings.presetsArray = JSON.stringify(arr);
+    }
+
+    function addToPresetModel(preset) {
+        console.log("Add to preset model: ", preset)
+        presetModel.append({
+            tuning: preset.tuning,
+            sound: preset.sound,
+            notes: preset.notes.join(",")
+        })
+    }
+
     // These are bluetooth shortcuts, Airturn Duo, mode 2 (keyboard mode)
     Shortcut {
         sequences: ["Up","PgUp"] // change preset
@@ -110,63 +131,6 @@ ApplicationWindow {
             bourdonForm.playButton.checked = !bourdonForm.playButton.checked
         }
     }
-
-
-    function  setPresetsFromText(text) {
-        const arr = [ { tuning: "EQ", sound: "synthesized", notes: [] } ]; // define with one empty array for 0-preset
-        //TODO: rewrite to object based version
-
-        const rows = text.split("\n");
-        console.log("Rows found: ", rows.length, rows)
-        for (let row of rows) {
-            row = row.replace(/\s/g, ""); // remove white spaces
-            const elements = row.split(";")
-            console.log("Elemets in setPresetsFromText", elements)
-            if (elements.length>=3) {
-                const preset = { tuning:elements[0], sound:elements[1], notes:elements[2].split(",") }
-                console.log("Preset as pbject: ", preset.tuning, preset.sound, preset.notes)
-                if (preset.notes.length>0 && preset.notes[0] ) { // check if not empty
-                    arr.push(preset)
-                }
-            }
-            // is it necessary to check if elements are valid? Later maybe not when presetForm will not be text based. Now let's go for risk
-
-        }
-
-        //console.log("New array: ", arr);
-        app.presetsArray = arr;
-        appSettings.presetsArray = JSON.stringify(arr);
-
-    }
-
-    function getPresetsText() { // turns presets array to text
-        let text = "";
-        for (let i=1;i<presetsArray.length;i++ ) { // NB! start from 1, 0 is for non-saved temporary array
-            const tuning =  "tuning" in presetsArray[i] ? presetsArray[i].tuning : "EQ";
-            const sound =  "sound" in presetsArray[i] ? presetsArray[i].sound : "synthesized";
-            const notes =  "notes" in presetsArray[i] ? presetsArray[i].notes : presetsArray[i]; // quite likely that it was just the old notes there from v 0.4.0
-
-            if (! "tuning" in presetsArray[i]) { // probably in old format, replace with new one
-                presetsArray[i] = {tuning:tuning, sound:sound, notes:notes}
-            }
-
-            console.log("getPresetsText: ", tuning, sound, notes);
-            text  += tuning + ";" + sound + ";" + notes.join(",") + "\n"
-        }
-        console.log("presets as text: ", text)
-        return text
-    }
-
-    function addToPresetModel(preset) {
-        console.log("Add to preset model: ", preset)
-        bourdonForm.presetForm.presetList.model.append({
-            nr: presetsArray.length,
-            tuning: preset.tuning,
-            sound: preset.sound,
-            notes: preset.notes.join(",")
-        })
-    }
-
 
 
     header: ToolBar {
@@ -190,8 +154,6 @@ ApplicationWindow {
             }
         }
     }
-
-
 
     signal setChannel(channel: string, value: double)
     signal readScore(scoreLine: string)
@@ -219,20 +181,9 @@ ApplicationWindow {
 
 
     Component.onCompleted: {
-        presetsArray = JSON.parse(appSettings.presetsArray)
-        //bourdonForm.presetForm.presetText.text = getPresetsText()
-        // Assuming presetsArray is available in the context
-        bourdonForm.presetForm.presetList.model.clear()
-
-        for (var i = 0; i < presetsArray.length; i++) { // skip the first as this is for preset 0
-            console.log("i, preset:", i, presetsArray[i].tuning, presetsArray[i].sound, presetsArray[i].notes)
-            bourdonForm.presetForm.presetList.model.append({
-                                        tuning: presetsArray[i].tuning,
-                                        sound: presetsArray[i].sound,
-                                        notes: presetsArray[i].notes.join(","),
-                                        volumeCorrection: presetsArray[i].volumeCorrection ? presetsArray[i].volumeCorrection : 0
-                                    });
-        }
+      if (appSettings.presetsArray) {
+        loadPresets();
+      }
     }
 
 
@@ -241,28 +192,28 @@ ApplicationWindow {
         focus: true
 
         Keys.onPressed: (event) => {
-                            //console.log("Key pressed:", event.key)
+                          //console.log("Key pressed:", event.key)
 
-                            if (event.key === Qt.Key_MediaPlay) {
-                                console.log("MediaPlay key was pressed!")
-                                bourdonForm.playButton.checked = true
-                            }
+                          if (event.key === Qt.Key_MediaPlay) {
+                            console.log("MediaPlay key was pressed!")
+                            bourdonForm.playButton.checked = true
+                          }
 
-                            if (event.key === 16777349) {
-                                console.log("MediaStop key was pressed!")
-                                bourdonForm.playButton.checked = false
-                                bourdonForm.stopAll() // in case playBotton.checked was already false
-                            }
+                          if (event.key === 16777349) {
+                            console.log("MediaStop key was pressed!")
+                            bourdonForm.playButton.checked = false
+                            bourdonForm.stopAll() // in case playBotton.checked was already false
+                          }
 
-                            if (event.key === Qt.Key_MediaNext) {
-                                console.log("MediaNext key was pressed!")
-                                bourdonForm.advancePreset(1);
-                            }
+                          if (event.key === Qt.Key_MediaNext) {
+                            console.log("MediaNext key was pressed!")
+                            bourdonForm.advancePreset(1);
+                          }
 
-                            if (event.key === Qt.Key_MediaPrevious) {
-                                console.log("MediaNext key was pressed!")
-                                bourdonForm.advancePreset(-1);
-                            }
+                          if (event.key === Qt.Key_MediaPrevious) {
+                            console.log("MediaNext key was pressed!")
+                            bourdonForm.advancePreset(-1);
+                          }
                         }
 
 
@@ -367,7 +318,7 @@ ApplicationWindow {
                     console.log("Sandbox ")
                     return sandBoxData
                 } else {
-                  return presetsArray[currentPreset]
+                  return presetModel.get(currentPreset);
                 }
             }
 
@@ -380,7 +331,7 @@ ApplicationWindow {
                 presetLabel.text = qsTr("Preset") + " " + currentPreset.toString()
                 presetLabel.text = (currentPreset+1).toString() + " " + preset.tuning + " " + preset.sound
               }
-              presetLabel.text += " " + preset.notes.join(",");
+              presetLabel.text += " " + preset.notes;
 
             }
 
@@ -409,7 +360,7 @@ ApplicationWindow {
                 updateComboBoxes()
                 if (isPlaying()) {
                     stopAll();
-                    playFromPreset(app.presetsArray[currentPreset])
+                    playFromPreset(getPresetData())
                 }
                 presetForm.presetList.selectedIndex = currentPreset
                 presetForm.presetList.scrollTo( currentPreset)
@@ -423,10 +374,10 @@ ApplicationWindow {
 
             function advancePreset(advance=1) { // either +1 or -1
                 let newPreset = currentPreset + advance
-                if (newPreset >= app.presetsArray.length ) { // TODO: replace with model
+                if (newPreset >= presetModel.count ) { // TODO: replace with model
                     currentPreset = 0 ;
                 } else if (newPreset<0) {
-                    currentPreset = app.presetsArray.length-1;
+                    currentPreset = presetModel.count-1;
                 } else {
                     currentPreset = newPreset
                 }
@@ -442,16 +393,14 @@ ApplicationWindow {
             stopButton.onClicked: stopAll()
 
             addButton.onClicked: {
-                const preset = getPresetFromButtons()
-                if (preset.notes.length>0) {
-                    presetsArray.push(preset)
-                    appSettings.presetsArray = JSON.stringify(presetsArray);
-                    //presetForm.presetText.text = getPresetsText()
-                    addToPresetModel(preset)
-                } else {
-                    console.log("No playing buttons")
-                }
+              const preset = getPresetFromButtons()
+              if (preset.notes.length>0) {
+                addToPresetModel(preset)
+                savePresets();
 
+              } else {
+                console.log("No playing buttons")
+              }
             }
 
             playButton.onCheckedChanged:  {
@@ -479,13 +428,6 @@ ApplicationWindow {
             }
 
             presetForm.updateButton.onClicked: setPresetsFromText(presetForm.presetText.text)
-
-
-            //        Behavior on presetArea.y {
-            //            NumberAnimation {
-            //                duration: 200
-            //            }
-            //        }
 
             presetMouseArea.onDoubleClicked: {
 

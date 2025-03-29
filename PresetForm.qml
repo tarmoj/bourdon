@@ -75,10 +75,11 @@ Rectangle {
             }
         }
 
-        model: ListModel {
-            id: presetModel
-            ListElement { tuning: "G"; sound: "sample"; notes: "G,g,c1"; volumeCorrection: 0 }
-            ListElement { tuning: "F"; sound: "saw"; notes: ""; volumeCorrection: 0 }
+        model: app.presetModel
+
+        //test
+        Component.onCompleted: {
+            console.log("Preset Model Count:", app.presetModel ? app.presetModel.count : "Model undefined");
         }
 
         delegate: Rectangle {
