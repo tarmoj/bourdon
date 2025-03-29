@@ -67,20 +67,15 @@ Rectangle {
         property int rowHeight: 60
 
         // not sure if this is good, positionView -> visible would be better
-        function scrollTo(index) {
-            console.log("position view to: ", index)
-            if (index >= 0 && index < model.count) {
-                selectedIndex = index;
-                contentY = index * presetList.rowHeight //rowDelegate.height;
+        onSelectedIndexChanged: {
+            console.log("selectedIndex changed: ", selectedIndex)
+            if (selectedIndex >= 0) {
+                positionViewAtIndex(selectedIndex, ListView.Beginning)
             }
         }
 
         model: app.presetModel
 
-        //test
-        Component.onCompleted: {
-            console.log("Preset Model Count:", app.presetModel ? app.presetModel.count : "Model undefined");
-        }
 
         delegate: Rectangle {
             id: rowDelegate
@@ -155,21 +150,15 @@ Rectangle {
                                     text: modelData
                                     anchors.centerIn: parent
                                 }
+                            }
+                        }
 
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: {
-                                        console.log("Clicked note: ", modelData)
-                                        // if (notes) {
-                                        //     var noteArray = notes.split(",");
-                                        //     if (noteArray.length > 1) {
-                                        //         noteArray.splice(index, 1);
-                                        //         model.notes = noteArray.join(",");
-                                        //     } else {
-                                        //         model.notes = "";
-                                        //     }
-                                        }
-                                }
+                        ToolButton {
+                            text: "Ed."
+                            // icon: edit something
+                            onClicked: {
+                                console.log("Edit mode: ", )
+                                bourdonForm.editMode = !bourdonForm.editMode
                             }
                         }
                     }
@@ -185,14 +174,7 @@ Rectangle {
                     }
                 }
 
-                ToolButton {
-                    text: "Ed."
-                    // icon: edit something
-                    onClicked: {
-                        console.log("Edit mode: ", )
-                        bourdonForm.editMode = !bourdonForm.editMode
-                    }
-                }
+
                 ToolButton {
                     text: "Del."
                     // icon: delete something

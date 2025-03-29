@@ -363,7 +363,6 @@ ApplicationWindow {
                     playFromPreset(getPresetData())
                 }
                 presetForm.presetList.selectedIndex = currentPreset
-                presetForm.presetList.scrollTo( currentPreset)
             }
 
             a4SpinBox.onValueChanged: {
