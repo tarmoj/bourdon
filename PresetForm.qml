@@ -12,7 +12,7 @@ Rectangle {
     anchors.fill: parent
 
     color: Material.backgroundColor;
-    radius: 8
+    radius: 4
 
     gradient: Gradient {
         GradientStop {
@@ -28,22 +28,6 @@ Rectangle {
     property alias presetList: presetList
     //property alias presetModel: presetModel
     property alias updateButton: updateButton
-
-
-    function getSoundIndex(sound) {
-        console.log("Sound is: ", sound)
-        switch (sound) {
-            case "sample": return 0;
-            case "saw": return 1;
-            default: return 2;
-        }
-    }
-
-    function getTuningIndex(tuning) {
-        console.log("Tuning is: ", sound)
-
-        return app.tunings.indexOf(tuning);
-    }
 
 
     Label {
@@ -68,9 +52,6 @@ Rectangle {
     }
 
 
-
-
-
     ListView {
         id: presetList
         //width: parent.width
@@ -82,6 +63,17 @@ Rectangle {
         y: 40
         clip: true
 
+        property int selectedIndex: -1
+        property int rowHeight: 60
+
+        // not sure if this is good, positionView -> visible would be better
+        function scrollTo(index) {
+            console.log("position view to: ", index)
+            if (index >= 0 && index < model.count) {
+                selectedIndex = index;
+                contentY = index * presetList.rowHeight //rowDelegate.height;
+            }
+        }
 
         model: ListModel {
             id: presetModel
@@ -89,20 +81,23 @@ Rectangle {
             ListElement { nr: 2; tuning: "F"; sound: "saw"; notes: ""; volumeCorrection: 0 }
         }
 
-        delegate: Item {
+        delegate: Rectangle {
             id: rowDelegate
             width: ListView.view.width
-            height: 60  // Set height explicitly
-
+            height: presetList.rowHeight  // Set height explicitly
+            color: presetList.selectedIndex === index ? Material.backgroundDimColor : "transparent"  // ✅ Highlight selected item
+            radius: 8
 
 
             RowLayout {
                 anchors.fill: parent
                 property string soundValue: model.sound
                 property string tuningValue: model.tuning
-
+                spacing: 5
 
                 Label {
+                    Layout.leftMargin: 5
+
                     text: model.nr
                     Layout.alignment: Qt.AlignHCenter
                 }
@@ -150,8 +145,8 @@ Rectangle {
                                 Layout.alignment:  Qt.AlignVCenter
                                 width: textItem.implicitWidth + 10
                                 height: textItem.implicitHeight + 5
-                                border.color: Material.primaryColor
-                                radius: 5
+                                border.color: Material.frameColor
+                                radius: 4
                                 color: "transparent"
 
                                 Label {
@@ -159,15 +154,57 @@ Rectangle {
                                     text: modelData
                                     anchors.centerIn: parent
                                 }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        console.log("Clicked note: ", modelData)
+                                        // if (notes) {
+                                        //     var noteArray = notes.split(",");
+                                        //     if (noteArray.length > 1) {
+                                        //         noteArray.splice(index, 1);
+                                        //         model.notes = noteArray.join(",");
+                                        //     } else {
+                                        //         model.notes = "";
+                                        //     }
+                                        }
+                                }
                             }
                         }
                     }
                 }
 
+                ToolButton {
+                    text: "Sel."
+                    // icon: select something
+                    onClicked: {
+                        console.log("listelement clicked: ", index, presetList.selectedIndex)
+                        presetList.selectedIndex = index
+                        bourdonForm.currentPreset= index+1 // TODO: maybe remove +1 and make presetArray and model the same
+                    }
+                }
 
-                RoundButton {
-                    text: "Vol."
-
+                ToolButton {
+                    text: "Ed."
+                    // icon: edit something
+                    onClicked: {
+                        console.log("Edit mode: ", )
+                        bourdonForm.editMode = !bourdonForm.editMode
+                    }
+                }
+                ToolButton {
+                    text: "Del."
+                    // icon: delete something
+                    onClicked: {
+                        console.log("Delete mode: ", )
+                        if (model.nr > 0) {
+                            presetModel.remove(index)
+                            if (presetList.selectedIndex === index) {
+                                presetList.selectedIndex = -1
+                            }
+                            // + remove from array, too, if separate
+                        }
+                    }
                 }
 
                 // Dial {

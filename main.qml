@@ -41,18 +41,24 @@ ApplicationWindow {
     }
     ***/
 
+    // PresetArea Listview model is sort of copy of presetArray, but it is necessary since presetArray[0]
+    // is for preset 0 (tryout preset, not used in Forwar<->Back presets in playing the piece
 
     property var presetsArray: [ {tuning: "EQ", sound: "synthesized", notes:[]}, // first one keep empty, this is for preset 0
         {tuning: "G", sound: "synthesized", notes:["G","d"]},
         {tuning: "C", sound: "saw", notes:["c","g"]},
         {tuning: "D", sound: "sample", notes:["d","a", "c1"]}
     ]
+
+
+
     property var bourdonNotes: ["G", "A", "c", "d", "e", "f", "fis", "g", "a", "h", "c1", "d1", "e1", "f1", "fis1", "g1", "a1", "h1"] // make sure the notes are loaded to tables in Csound with according numbers (index+1)
     property double lastPressTime: 0
     property var tunings: ["EQ","G", "D", "A", "C"] // make sure that this is aligned with the widget and the logic in Csound
     property var soundTypes: ["sample", "saw", "synthesized"] // same - check the widget and Csound, when changed
 
     //onWidthChanged: console.log("window width: ", width)
+
 
     // TODO: vaja mingit funktsiooni, mis käiks vana preseti üle ja kui seal ei ole tuning, sound && notes, siis paneb selle.
     Settings {
@@ -156,6 +162,15 @@ ApplicationWindow {
         return text
     }
 
+    function addToPresetModel(preset) { // maybe needed with index?
+        console.log("Add to preset model: ", preset)
+        presetForm.presetList.model.append({
+            tuning: preset.tuning,
+            sound: preset.sound,
+            notes: preset.notes.join(",")
+        })
+    }
+
 
 
     header: ToolBar {
@@ -231,7 +246,7 @@ ApplicationWindow {
         focus: true
 
         Keys.onPressed: (event) => {
-                            console.log("Key pressed:", event.key)
+                            //console.log("Key pressed:", event.key)
 
                             if (event.key === Qt.Key_MediaPlay) {
                                 console.log("MediaPlay key was pressed!")
@@ -253,8 +268,6 @@ ApplicationWindow {
                                 console.log("MediaNext key was pressed!")
                                 bourdonForm.advancePreset(-1);
                             }
-
-
                         }
 
 
@@ -263,6 +276,7 @@ ApplicationWindow {
             id: bourdonForm
             anchors.fill: parent
             property int currentPreset: 0
+            property bool editMode: false
 
             property var bourdonButtons: []
 
@@ -381,6 +395,8 @@ ApplicationWindow {
                     stopAll();
                     playFromPreset(app.presetsArray[currentPreset])
                 }
+                presetForm.presetList.selectedIndex = currentPreset-1 // TODO: should be 0, but now it is 1
+                presetForm.presetList.scrollTo( currentPreset-1)
             }
 
             a4SpinBox.onValueChanged: {
@@ -417,7 +433,8 @@ ApplicationWindow {
                 if (preset.notes.length>0) {
                     presetsArray.push(preset)
                     appSettings.presetsArray = JSON.stringify(presetsArray);
-                    presetForm.presetText.text = getPresetsText()
+                    //presetForm.presetText.text = getPresetsText()
+                    addToPresetModel(preset)
                 } else {
                     console.log("No playing buttons")
                 }
