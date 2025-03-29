@@ -27,7 +27,7 @@ ApplicationWindow {
     height: 720
     minimumWidth: 350
     visible: true
-    property string version: "0.6.0"
+    property string version: "0.7.0-alpha"
     title: qsTr("Bourdon app "+ version)
 
     property color backgroundColor: Material.background // expose to C++
@@ -43,6 +43,8 @@ ApplicationWindow {
 
     // PresetArea Listview model is sort of copy of presetArray, but it is necessary since presetArray[0]
     // is for preset 0 (tryout preset, not used in Forwar<->Back presets in playing the piece
+
+    property var sandBoxData: {"tuning": "EQ", "sound": "synthesized", "notes":[]}
 
     property var presetsArray: [ {tuning: "EQ", sound: "synthesized", notes:[]}, // first one keep empty, this is for preset 0
         {tuning: "G", sound: "synthesized", notes:["G","d"]},
@@ -95,16 +97,9 @@ ApplicationWindow {
     }
 
 
-
-
-
-
-
-
     // These are bluetooth shortcuts, Airturn Duo, mode 2 (keyboard mode)
     Shortcut {
         sequences: ["Up","PgUp"] // change preset
-
         onActivated: checkDoublePress()
     }
 
@@ -162,9 +157,10 @@ ApplicationWindow {
         return text
     }
 
-    function addToPresetModel(preset) { // maybe needed with index?
+    function addToPresetModel(preset) {
         console.log("Add to preset model: ", preset)
-        presetForm.presetList.model.append({
+        bourdonForm.presetForm.presetList.model.append({
+            nr: presetsArray.length,
             tuning: preset.tuning,
             sound: preset.sound,
             notes: preset.notes.join(",")
@@ -228,10 +224,9 @@ ApplicationWindow {
         // Assuming presetsArray is available in the context
         bourdonForm.presetForm.presetList.model.clear()
 
-        for (var i = 1; i < presetsArray.length; i++) { // skip the first as this is for preset 0
+        for (var i = 0; i < presetsArray.length; i++) { // skip the first as this is for preset 0
             console.log("i, preset:", i, presetsArray[i].tuning, presetsArray[i].sound, presetsArray[i].notes)
             bourdonForm.presetForm.presetList.model.append({
-                                        nr: i,
                                         tuning: presetsArray[i].tuning,
                                         sound: presetsArray[i].sound,
                                         notes: presetsArray[i].notes.join(","),
@@ -275,12 +270,12 @@ ApplicationWindow {
         BourdonForm {
             id: bourdonForm
             anchors.fill: parent
-            property int currentPreset: 0
+            property int currentPreset: -1 // -1 for Sandbox
             property bool editMode: false
 
             property var bourdonButtons: []
 
-            signal presetZeroChanged;
+            signal sandboxChanged;
 
 
             Component.onCompleted: {
@@ -367,21 +362,42 @@ ApplicationWindow {
             tuningCombobox.onCurrentIndexChanged:
                 csound.setChannel("tuning", tuningCombobox.currentIndex)
 
+            function getPresetData() {
+                if (currentPreset===-1) {
+                    console.log("Sandbox ")
+                    return sandBoxData
+                } else {
+                  return presetsArray[currentPreset]
+                }
+            }
+
             function updatePresetLabelText() {
-                presetLabel.text = currentPreset.toString() + " " + presetsArray[currentPreset].notes.join(",");
+              var preset = getPresetData();
+              if (currentPreset===-1) {
+                presetLabel.text = qsTr("Sandbox")
+              } else {
+                // maybe this is not needed any more soon, get rid of presetLabel
+                presetLabel.text = qsTr("Preset") + " " + currentPreset.toString()
+                presetLabel.text = (currentPreset+1).toString() + " " + preset.tuning + " " + preset.sound
+              }
+              presetLabel.text += " " + preset.notes.join(",");
 
             }
 
             function updateComboBoxes() {
-                console.log("UpdateComboboxes: ", presetsArray[currentPreset].tuning, presetsArray[currentPreset].sound )
-                tuningCombobox.currentIndex = tunings.indexOf(presetsArray[currentPreset].tuning)
-                soundTypeCombobox.currentIndex = soundTypes.indexOf(presetsArray[currentPreset].sound)
+                var preset = getPresetData();
+                console.log("UpdateComboboxes: ", preset.tuning, preset.sound )
+                tuningCombobox.currentIndex = tunings.indexOf(preset.tuning)
+                soundTypeCombobox.currentIndex = soundTypes.indexOf(preset.sound)
             }
 
-            onPresetZeroChanged: updatePresetLabelText()
+            onSandboxChanged: {
+              currentPreset = -1 ; // is it needed?
+              updatePresetLabelText()
+            }
 
-            presetNullButton.onClicked:  {
-                currentPreset = 0
+            sandBoxButton.onClicked:  {
+                currentPreset = -1
                 if (isPlaying() || playButton.checked) {
                     stopAll()
                     playButton.checked = false
@@ -395,8 +411,8 @@ ApplicationWindow {
                     stopAll();
                     playFromPreset(app.presetsArray[currentPreset])
                 }
-                presetForm.presetList.selectedIndex = currentPreset-1 // TODO: should be 0, but now it is 1
-                presetForm.presetList.scrollTo( currentPreset-1)
+                presetForm.presetList.selectedIndex = currentPreset
+                presetForm.presetList.scrollTo( currentPreset)
             }
 
             a4SpinBox.onValueChanged: {
@@ -407,9 +423,9 @@ ApplicationWindow {
 
             function advancePreset(advance=1) { // either +1 or -1
                 let newPreset = currentPreset + advance
-                if (newPreset >= app.presetsArray.length ) {
-                    currentPreset = 1 ; // should it go preset 0 that is for temporary, non saved experiments
-                } else if (newPreset<1) { // or <1?
+                if (newPreset >= app.presetsArray.length ) { // TODO: replace with model
+                    currentPreset = 0 ;
+                } else if (newPreset<0) {
                     currentPreset = app.presetsArray.length-1;
                 } else {
                     currentPreset = newPreset
@@ -422,9 +438,6 @@ ApplicationWindow {
                 //advancePreset(1);
                 checkDoublePress()
             }
-
-            // TODO: implement double click also on double click
-            //nextButton.onDoubleClicked: advancePreset(-1)
 
             stopButton.onClicked: stopAll()
 
@@ -450,14 +463,15 @@ ApplicationWindow {
                 }
 
                 if (playButton.checked) {
-                    if (app.presetsArray[currentPreset].length>0) {
-                        console.log("Starting: ", currentPreset, app.presetsArray[currentPreset])
+                    var preset = getPresetData()
+                    if (preset.length>0) {
+                        console.log("Starting: ", currentPreset, )
                         stopAll();
                     } else {
                         playButton.checked = false;
                     }
 
-                    playFromPreset(app.presetsArray[currentPreset] );
+                    playFromPreset(preset );
                 } else {
                     stopAll();
                 }

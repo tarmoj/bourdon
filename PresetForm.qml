@@ -77,8 +77,8 @@ Rectangle {
 
         model: ListModel {
             id: presetModel
-            ListElement { nr: 1; tuning: "G"; sound: "sample"; notes: "G,g,c1"; volumeCorrection: 0 }
-            ListElement { nr: 2; tuning: "F"; sound: "saw"; notes: ""; volumeCorrection: 0 }
+            ListElement { tuning: "G"; sound: "sample"; notes: "G,g,c1"; volumeCorrection: 0 }
+            ListElement { tuning: "F"; sound: "saw"; notes: ""; volumeCorrection: 0 }
         }
 
         delegate: Rectangle {
@@ -98,7 +98,7 @@ Rectangle {
                 Label {
                     Layout.leftMargin: 5
 
-                    text: model.nr
+                    text: index+1
                     Layout.alignment: Qt.AlignHCenter
                 }
 
@@ -197,7 +197,7 @@ Rectangle {
                     // icon: delete something
                     onClicked: {
                         console.log("Delete mode: ", )
-                        if (model.nr > 0) {
+                        if (index >= 0) {
                             presetModel.remove(index)
                             if (presetList.selectedIndex === index) {
                                 presetList.selectedIndex = -1

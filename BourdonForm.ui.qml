@@ -18,7 +18,7 @@ Item {
     property alias bourdonArea: bourdonArea
     property alias a4SpinBox: a4SpinBox
     property alias soundTypeCombobox: soundTypeCombobox
-    property alias presetNullButton: presetNullButton
+    property alias sandBoxButton: sandBoxButton
     property alias presetArea: presetArea
     property alias presetMouseArea: presetMouseArea
     property alias presetForm: presetForm
@@ -130,8 +130,8 @@ Item {
                 spacing: 10
 
                 ToolButton {
-                    id: presetNullButton
-                    text: qsTr("Preset 0")
+                    id: sandBoxButton
+                    text: qsTr("Sandbox")
                 }
             }
         }

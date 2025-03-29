@@ -24,10 +24,10 @@ ToolButton {
 
         // if in prest 0 (tryout mode), set/update the preset:
         console.log("Clicked")
-        if (bourdonForm.currentPreset==0) {
+        if (bourdonForm.currentPreset==-1) {
 
-            app.presetsArray[0] =  bourdonForm.getPresetFromButtons()
-            bourdonForm.presetZeroChanged()
+            app.sandBoxData =  bourdonForm.getPresetFromButtons()
+            bourdonForm.sandboxChanged()
         }
 //        const time = new Date().getTime()%1000000;
 //        console.log(scoreLine, time);
