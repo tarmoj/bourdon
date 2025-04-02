@@ -83,7 +83,9 @@ Rectangle {
             height: presetList.rowHeight  // Set height explicitly
             property bool isSelected: presetList.selectedIndex === index
             color: isSelected ? Material.backgroundDimColor : "transparent"  // ✅ Highlight selected item
-            radius: 8
+            radius: 5
+
+
 
 
             RowLayout {
@@ -145,6 +147,19 @@ Rectangle {
 
                     MouseArea {
                         anchors.fill: parent
+
+                        onClicked: {
+                            console.log("Delegate clicked: ", index)
+                            if (isSelected) {
+                                presetList.selectedIndex = -1
+                                bourdonForm.currentPreset = -1
+                                bourdonForm.sandBoxButton.clicked()
+                            } else {
+                                console.log("Clicked: ", index)
+                                presetList.selectedIndex = index
+                                bourdonForm.currentPreset = index
+                            }
+                        }
                     }
 
                     RowLayout {
@@ -170,27 +185,27 @@ Rectangle {
                                 }
                             }
                         }
-
-                        ToolButton {
-                            text: "Ed."
-                            icon.name: "pencil"
-                            // icon: edit something
-                            onClicked: {
-                                console.log("Edit mode: ", )
-                                bourdonForm.editMode = !bourdonForm.editMode
-                            }
-                        }
                     }
                 }
 
+                // ToolButton {
+                //     //text: "Sel."
+                //     icon.name: "select"
+                //     // icon: select something
+                //     onClicked: {
+                //         console.log("listelement clicked: ", index, presetList.selectedIndex)
+                //         presetList.selectedIndex = index
+                //         bourdonForm.currentPreset= index
+                //     }
+                // }
+
                 ToolButton {
-                    //text: "Sel."
-                    icon.name: "select"
-                    // icon: select something
+                    text: "Ed."
+                    icon.name: "pencil"
+                    // icon: edit something
                     onClicked: {
-                        console.log("listelement clicked: ", index, presetList.selectedIndex)
-                        presetList.selectedIndex = index
-                        bourdonForm.currentPreset= index
+                        console.log("Edit mode: ", )
+                        bourdonForm.editMode = !bourdonForm.editMode
                     }
                 }
 

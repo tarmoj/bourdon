@@ -293,8 +293,8 @@ ApplicationWindow {
                     console.log("No notes in preset", preset)
                     return
                 }
-
-                for  (let note of preset.notes) {
+                const notes = preset.notes.split(",")
+                for  (let note of notes) {
                     const index = app.bourdonNotes.indexOf(note);
                     if (index>=0) {
                         const b = bourdonButtons[index];
