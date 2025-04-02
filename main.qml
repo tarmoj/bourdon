@@ -95,8 +95,6 @@ ApplicationWindow {
             preset.notes = preset.notes.join(",");
           }
           presetModel.append(preset);  // Restore from array
-          console.log("presetModel data: ", i, presetModel.get(i).tuning,
-                      presetModel.get(i).sound, presetModel.get(i).notes)
         }
       }
     }
@@ -337,7 +335,6 @@ ApplicationWindow {
 
             function updateComboBoxes() {
                 var preset = getPresetData();
-                console.log("UpdateComboboxes: ", preset.tuning, preset.sound )
                 tuningCombobox.currentIndex = tunings.indexOf(preset.tuning)
                 soundTypeCombobox.currentIndex = soundTypes.indexOf(preset.sound)
             }

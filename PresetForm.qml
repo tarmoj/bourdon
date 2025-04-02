@@ -81,7 +81,8 @@ Rectangle {
             id: rowDelegate
             width: ListView.view.width
             height: presetList.rowHeight  // Set height explicitly
-            color: presetList.selectedIndex === index ? Material.backgroundDimColor : "transparent"  // ✅ Highlight selected item
+            property bool isSelected: presetList.selectedIndex === index
+            color: isSelected ? Material.backgroundDimColor : "transparent"  // ✅ Highlight selected item
             radius: 8
 
 
@@ -105,9 +106,19 @@ Rectangle {
                     indicator: Item { width: 0; height: 0 }
 
                     model: [qsTr("Sample"), qsTr("Saw"), qsTr("Synth")]
-                    currentIndex: parent.soundValue === "sample" ? 0 : (parent.soundValue === "saw" ? 1 : 2)
                     Layout.preferredWidth: 70
                     Layout.preferredHeight: rowDelegate.height
+
+                    Component.onCompleted: { // initilize currentIndex from stored settings
+                        currentIndex = parent.soundValue === "sample" ? 0 : (parent.soundValue === "saw" ? 1 : 2)
+                    }
+
+                    onCurrentIndexChanged: {
+                        app.presetModel.set(index, { "sound": app.soundTypes[currentIndex] })
+                        if (rowDelegate.isSelected) { // set it also on master combobox
+                            bourdonForm.soundTypeCombobox.currentIndex = currentIndex
+                        }
+                    }
                 }
 
                 ComboBox {
@@ -119,6 +130,13 @@ Rectangle {
                     currentIndex: app.tunings.indexOf(parent.tuningValue)
                     Layout.preferredWidth: 55
                     Layout.preferredHeight: rowDelegate.height
+
+                    onCurrentValueChanged: {
+                        app.presetModel.set(index, { "tuning": currentText })
+                        if (rowDelegate.isSelected) { // set it also on master combobox
+                            bourdonForm.tuningCombobox.currentIndex = currentIndex
+                        }
+                    }
                 }
 
                 Item {
@@ -155,6 +173,7 @@ Rectangle {
 
                         ToolButton {
                             text: "Ed."
+                            icon.name: "pencil"
                             // icon: edit something
                             onClicked: {
                                 console.log("Edit mode: ", )
@@ -165,27 +184,27 @@ Rectangle {
                 }
 
                 ToolButton {
-                    text: "Sel."
+                    //text: "Sel."
+                    icon.name: "select"
                     // icon: select something
                     onClicked: {
                         console.log("listelement clicked: ", index, presetList.selectedIndex)
                         presetList.selectedIndex = index
-                        bourdonForm.currentPreset= index+1 // TODO: maybe remove +1 and make presetArray and model the same
+                        bourdonForm.currentPreset= index
                     }
                 }
 
 
                 ToolButton {
-                    text: "Del."
-                    // icon: delete something
+                    //text: "Del."
+                    icon.name: "delete"
                     onClicked: {
-                        console.log("Delete mode: ", )
                         if (index >= 0) {
                             presetModel.remove(index)
                             if (presetList.selectedIndex === index) {
                                 presetList.selectedIndex = -1
                             }
-                            // + remove from array, too, if separate
+                            app.savePresets()
                         }
                     }
                 }
