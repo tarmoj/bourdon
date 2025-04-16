@@ -34,7 +34,7 @@ ApplicationWindow {
     property alias presetModel: presetModel // expose it to PresetForm
 
     // sandBox is sort of preset 0, for tryout, it is not used in next/previous preset
-    property var sandBoxData: {"tuning": "EQ", "sound": "synthesized", "notes":[]}
+    property var sandBoxData: {"tuning": "EQ", "sound": "synthesized", "notes":""}
 
 
 
@@ -92,7 +92,7 @@ ApplicationWindow {
 
           // ✅ Convert notes array to a comma-separated string if needed
           if (Array.isArray(preset.notes)) {
-            preset.notes = preset.notes.join(",");
+            preset.notes = preset.notes;
           }
           presetModel.append(preset);  // Restore from array
         }
@@ -112,7 +112,7 @@ ApplicationWindow {
       presetModel.set(index, {
                            tuning: preset.tuning,
                            sound: preset.sound,
-                           notes: preset.notes.join(",")
+                           notes: preset.notes
                          })
     }
 
@@ -121,7 +121,7 @@ ApplicationWindow {
         presetModel.append({
             tuning: preset.tuning,
             sound: preset.sound,
-            notes: preset.notes.join(",")
+            notes: preset.notes
         })
     }
 
@@ -280,14 +280,16 @@ ApplicationWindow {
                 const preset = {
                     tuning: tunings[tuningCombobox.currentIndex],
                     sound: soundTypes[soundTypeCombobox.currentIndex],
-                    notes: []
+                    notes: "" // store as comma separated string
                 };
+                const noteArray = [];
                 for (let i=0; i<bourdonButtons.length; i++) {
                     const b = bourdonButtons[i];
                     if (b.checked) {
-                        preset.notes.push(b.text)
+                        noteArray.push(b.text)
                     }
                 }
+                preset.notes = noteArray.join(",")
                 console.log("Preset from buttons: ", preset.notes)
 
                 return preset;
@@ -295,15 +297,15 @@ ApplicationWindow {
 
 
             function playFromPreset(preset) { // preset is an array of the notest to be played like [G,d,e]
-                var tuning = preset.tuning
-                var sound = preset.sound
-                console.log("Play from preset:", tuning, sound, preset.notes)
+                const tuning = preset.tuning
+                const sound = preset.sound
+                const notes = preset.notes.split(",")
+                console.log("Play from preset:", tuning, sound, notes)
 
-                if (!preset.notes || preset.notes.length===0) {
+                if (notes.length===0) {
                     console.log("No notes in preset", preset)
                     return
                 }
-                const notes = preset.notes.split(",")
                 for  (let note of notes) {
                     const index = app.bourdonNotes.indexOf(note);
                     if (index>=0) {
@@ -314,9 +316,10 @@ ApplicationWindow {
             }
 
             onPresetChanged: {
-                const preset = getPresetFromButtons();
-                console.log("Notes in preset now: ", preset.notes, currentPreset)
-                updatePresetModel(currentPreset, preset)
+              const preset = getPresetFromButtons();
+              console.log("Notes in preset now: ", preset.notes, currentPreset)
+              updatePresetModel(currentPreset, preset)
+              updatePresetLabelText()
             }
 
 
