@@ -107,6 +107,15 @@ ApplicationWindow {
         appSettings.presetsArray = JSON.stringify(arr);
     }
 
+    function updatePresetModel(index, preset) {
+      console.log("insert to preset model: ", preset.tuning, preset.sound, preset.notes, index)
+      presetModel.set(index, {
+                           tuning: preset.tuning,
+                           sound: preset.sound,
+                           notes: preset.notes.join(",")
+                         })
+    }
+
     function addToPresetModel(preset) {
         console.log("Add to preset model: ", preset)
         presetModel.append({
@@ -225,6 +234,7 @@ ApplicationWindow {
             property var bourdonButtons: []
 
             signal sandboxChanged;
+            signal presetChanged;
 
 
             Component.onCompleted: {
@@ -278,7 +288,7 @@ ApplicationWindow {
                         preset.notes.push(b.text)
                     }
                 }
-                console.log("Preset from buttons: ", preset)
+                console.log("Preset from buttons: ", preset.notes)
 
                 return preset;
             }
@@ -302,6 +312,13 @@ ApplicationWindow {
                     }
                 }
             }
+
+            onPresetChanged: {
+                const preset = getPresetFromButtons();
+                console.log("Notes in preset now: ", preset.notes, currentPreset)
+                updatePresetModel(currentPreset, preset)
+            }
+
 
 
             soundTypeCombobox.onCurrentIndexChanged:

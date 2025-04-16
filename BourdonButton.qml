@@ -8,28 +8,34 @@ ToolButton {
     property int sound: 0
 
     onCheckedChanged: {
-        const instrument = "1."+sound.toString()
-        let scoreLine = "";
-        if (checked) {
-            scoreLine = `i ${instrument} 0 -1 ${sound}`;
-        } else {
-            scoreLine = `i -${instrument} 0 -0 ${sound}`;
-        }
-        //app.readScore(scoreLine); // this does not, when no QCoreApplication::processEvents() in while loop...
-        csound.readScore(scoreLine) // this works
+
+        // if (bourdonForm.editMode) {
+        //     // make changes in model but do not play
+        //     bourdonForm.presetChanged();
+        // } else {
+            const instrument = "1."+sound.toString()
+            let scoreLine = "";
+            if (checked) {
+                scoreLine = `i ${instrument} 0 -1 ${sound}`;
+            } else {
+                scoreLine = `i -${instrument} 0 -0 ${sound}`;
+            }
+            csound.readScore(scoreLine)
+        // }
     }
 
     onClicked: {
 
 
-        // if in prest 0 (tryout mode), set/update the preset:
+        // if in preset 0 (sandbox mode), set/update the preset:
         console.log("Clicked")
         if (bourdonForm.currentPreset==-1) {
 
             app.sandBoxData =  bourdonForm.getPresetFromButtons()
             bourdonForm.sandboxChanged()
+        } else {
+            bourdonForm.presetChanged(); // make the changes in the model data
         }
-
     }
 
     // add clear border

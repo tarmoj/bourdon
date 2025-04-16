@@ -150,6 +150,7 @@ Rectangle {
 
                         onClicked: {
                             console.log("Delegate clicked: ", index)
+                            bourdonForm.editMode = false
                             if (isSelected) {
                                 presetList.selectedIndex = -1
                                 bourdonForm.currentPreset = -1

@@ -4,7 +4,7 @@
         <file>BourdonButton.qml</file>
         <file>bourdon.csd</file>
         <file>PresetForm.qml</file>
-        <file>BourdonForm.ui.qml</file>
+        <file>BourdonForm.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>images/stop-button.png</file>
         <file>images/add.png</file>
