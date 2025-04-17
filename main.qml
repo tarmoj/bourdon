@@ -19,6 +19,7 @@ ApplicationWindow {
     property color backgroundColor: Material.background // expose to C++
     property alias presetModel: presetModel // expose it to PresetForm
 
+
     // sandBox is sort of preset 0, for tryout, it is not used in next/previous preset
     property var sandBoxData: {"tuning": "EQ", "sound": "synthesized", "notes":""}
 
