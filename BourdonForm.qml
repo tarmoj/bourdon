@@ -280,6 +280,11 @@ Item {
                     drag.minimumY: parent.minY
                     drag.maximumY: parent.maxY
 
+                    onDoubleClicked: {
+                        presetArea.y = (presetArea.y===presetArea.maxY) ? presetArea.minY : presetArea.maxY;
+                    }
+
+
                 }
 
 

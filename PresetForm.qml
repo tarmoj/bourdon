@@ -27,7 +27,6 @@ Rectangle {
 
     property alias presetList: presetList
     //property alias presetModel: presetModel
-    property alias updateButton: updateButton
 
 
     Label {
@@ -42,13 +41,6 @@ Rectangle {
         height: 2
         width: 100
         color: Material.backgroundDimColor
-    }
-
-    ToolButton {
-        id: updateButton
-        anchors.right: parent.right
-        anchors.rightMargin: 10
-        text: qsTr("Update")
     }
 
 

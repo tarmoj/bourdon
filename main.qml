@@ -468,15 +468,6 @@ ApplicationWindow {
 
             }
 
-            presetForm.updateButton.onClicked: setPresetsFromText(presetForm.presetText.text)
-
-            presetMouseArea.onDoubleClicked: {
-
-                presetArea.y = (presetArea.y===presetArea.maxY) ? presetArea.minY : presetArea.maxY;
-
-            }
-
-
         }
 
     }
