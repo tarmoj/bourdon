@@ -7,9 +7,9 @@ Item {
     height: 40
     enabled: mixerFrom.individualVolume
     property int bourdonIndex: 0
+    property alias volume: bourdonSlider.value
 
     RowLayout {
-        //width: parent.width
         anchors.fill: parent
         //spacing: 5
         anchors.margins: 10
@@ -28,10 +28,10 @@ Item {
             value: 0
 
             onValueChanged: {
-                // TODO: set to Csound
-                //csound.tableSet(app.volumeTable, bourdonIndex, value) // <- this is slow, also via signal slot...
-                // try
+                csound.setChannel("volume" + bourdonIndex, value)
                 bourdonVolumeLabel.text = bourdonSlider.value.toFixed(1) + " dB"
+                // TODO: set to model
+                //presetModel.set(bourdonForm.currentPreset, {"volume"+i.toString(): 0})
             }
 
         }

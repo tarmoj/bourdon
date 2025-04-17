@@ -96,6 +96,12 @@ Rectangle {
             Button {
                 enabled: individualVolumeCheckbox.checked
                 text: qsTr("Reset all")
+                onClicked: {
+                    for (var i = 0; i < volumeRepeater.count; i++) {
+                        let item = volumeRepeater.itemAt(i);
+                        if (item) item.volume = 0;
+                    }
+                }
             }
         }
 
@@ -103,6 +109,7 @@ Rectangle {
             Layout.fillWidth: true
             columns: 2
             Repeater {
+                id: volumeRepeater
                 model: app.bourdonNotes.length
                 delegate: BourdonVolume {
                     bourdonIndex: model.index
