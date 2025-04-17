@@ -21,7 +21,7 @@ ApplicationWindow {
 
 
     // sandBox is sort of preset 0, for tryout, it is not used in next/previous preset
-    property var sandBoxData: {"tuning": "EQ", "sound": "synthesized", "notes":""}
+    property var sandBoxData: {"tuning": "EQ", "sound": 2, "notes":""}
 
     property var bourdonNotes: ["G", "A", "c", "d", "e", "f", "fis", "g", "a", "h", "c1", "d1", "e1", "f1", "fis1", "g1", "a1", "h1"] // make sure the notes are loaded to tables in Csound with according numbers (index+1)
     property double lastPressTime: 0
