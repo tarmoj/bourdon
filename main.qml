@@ -446,7 +446,7 @@ ApplicationWindow {
 
             playButton.onCheckedChanged:  {
 
-                console.log("Playbutton checked: ", playButton.checked, bourdonForm.isPlaying() )
+                // console.log("Playbutton checked: ", playButton.checked, bourdonForm.isPlaying() )
 
                 if ( bourdonForm.isPlaying() ) {
                     playButton.checked = false; // stop will happen below
@@ -455,7 +455,7 @@ ApplicationWindow {
                 if (playButton.checked) {
                     var preset = getPresetData()
                     if (preset.length>0) {
-                        console.log("Starting: ", currentPreset, )
+                        // console.log("Starting: ", currentPreset, )
                         stopAll();
                     } else {
                         playButton.checked = false;

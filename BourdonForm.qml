@@ -235,6 +235,7 @@ Item {
             Row {
                 id: presetLabelRow
                 Layout.alignment: Qt.AlignHCenter
+                visible: false
 
                 spacing: 20
 
@@ -262,7 +263,7 @@ Item {
             width: parent.width-20
             height: parent.height - y
             anchors.horizontalCenter: parent.horizontalCenter
-            property int maxY: Math.max(parent.height*0.75, (controlArea.y + controlArea.height + 10) )
+            property int maxY: Math.max(parent.height*0.65, (controlArea.y + controlArea.height + 10) )
             property int minY: soundTypeCombobox.y
             y: maxY
 
