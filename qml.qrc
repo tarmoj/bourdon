@@ -8,5 +8,7 @@
         <file>qtquickcontrols2.conf</file>
         <file>images/stop-button.png</file>
         <file>images/add.png</file>
+        <file>MixerForm.qml</file>
+        <file>BourdonVolume.qml</file>
     </qresource>
 </RCC>

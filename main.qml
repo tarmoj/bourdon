@@ -191,9 +191,32 @@ ApplicationWindow {
     }
 
 
+    SwipeView {
+        id: mainView
+        anchors.fill: parent
+
+        Page {
+
+            Label {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                text: qsTr("BourdonForm later here")
+                font.pointSize: 16
+                font.bold: true
+            }
+
+        }
+
+        MixerForm {
+
+        }
+
+    }
+
     FocusScope { // for catching Bluehtooth media keys
         anchors.fill: parent
         focus: true
+        visible: false
 
         Keys.onPressed: (event) => {
                           //console.log("Key pressed:", event.key)
