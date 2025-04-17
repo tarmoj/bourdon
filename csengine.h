@@ -31,6 +31,7 @@ public slots:
     void setChannel(const QString &channel, double value);
     void readScore(const QString &event);
     void compileOrc(const QString &code);
+    void tableSet(int table, int index, double value);
 
 	//Q_INVOKABLE double getChannel(const char *channel);
     Q_INVOKABLE QVariant getAudioDevices();

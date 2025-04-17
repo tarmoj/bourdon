@@ -141,7 +141,8 @@ int main(int argc, char *argv[])
 
 
 
-//    QObject *qmlApp = engine.rootObjects().first();
+    // QObject *qmlApp = engine.rootObjects().first();
+    // QObject::connect(qmlApp, SIGNAL(tableSet(int, int,double)), cs, SLOT(tableSet(int, int, double)));
 
 //    QObject::connect(qmlApp, SIGNAL(setChannel(QString,double)), cs, SLOT(setChannel(QString,double)));
 //    QObject::connect(qmlApp, SIGNAL(readScore(QString)), cs, SLOT(readScore(QString)));

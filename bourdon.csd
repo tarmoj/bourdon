@@ -2,7 +2,8 @@
 <CsOptions>
 -odac 
 ; -d
-; -b 256 -B 1024 ; et äkki see mõjutab Androidi, aga vist mitte....;; ;--env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/
+; -b 256 -B 1024 ; et äkki see mõjutab Androidi, aga vist mitte....;; 
+--env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/
 </CsOptions>
 <CsInstruments>
 
@@ -16,9 +17,11 @@ chn_k "tuning",3
 chn_k "type",3
 chn_k "sawtooth",3
 chn_k "a4",3
+chn_k "volumeCorrection", 3
 
 chnset 440, "a4"
 chnset 2, "type"
+chnset 0, "volumeCorrection"
 
 ; indexes of the notes in giFrequencies[] and giRatiosX[] arrays
 #define G #0#
@@ -29,6 +32,7 @@ chnset 2, "type"
 giFrequencies[] fillarray cpspch(6.07), cpspch(6.09),
  cpspch(7.00), cpspch(7.02), cpspch(7.04), cpspch(7.05), cpspch(7.06), cpspch(7.07), cpspch(7.09),cpspch(7.11),
  cpspch(8.00), cpspch(8.02), cpspch(8.04), cpspch(8.05), cpspch(8.06), cpspch(8.07), cpspch(8.09), cpspch(8.11)
+
 
 
 
@@ -101,7 +105,13 @@ giAmps1 ftgen 201, 0, 64, -2, 0.4263,
 0.0088	,
 0.0113	,
 0.0099
-		
+
+giVolumeTable ftgen 303, 0, 20, -2, 0 ; contains volumes in db for sepearate bourdon notes.
+
+;test
+scoreline_i "i 1.1 0 -1 1"
+
+;tablew 12, 0, giVolumeTable		
 
 opcode getFrequency,k, i; in args: base note by index in giFrequencies (negative, if equal temperament), note index, A4
 	iNoteIndex xin
@@ -130,7 +140,7 @@ opcode getFrequency,k, i; in args: base note by index in giFrequencies (negative
 	endif
 	
 	;printk2 kBaseFrequency
-	printk2 kRatio
+	;printk2 kRatio
 		
 	if (kTuning==0) then ; equal temperament
 		kFrequency = giFrequencies[iNoteIndex]
@@ -145,6 +155,7 @@ endop
 
 instr Bourdon
 	iTable =  p4
+	iNoteIndex = iTable-1
 	kSpeed init 1
 	
 
@@ -152,26 +163,25 @@ instr Bourdon
 	; võibolla vaja iType 
 	
 	
-	kFreq getFrequency iTable-1
+	kFreq getFrequency iNoteIndex
 	
-	if (kType==1) then
-                iamp = 0.8
-		aSaw vco2 iamp, kFreq ;, 10
-		aSaw butterlp aSaw, 6000
-	  
+	if (kType==1) then ; saw wave
+   kamp = 0.2
+		aSaw vco2 kamp, kFreq ;, 10
+		aSaw butterlp aSaw, 6000	  
 	  aOut = aSaw	
 
 	elseif (kType==2) then ; synthesized sound
-                iamp = 0.1
+   kamp = 0.2
 		
-		aWave adsynt iamp, kFreq, -1, giPartials1 , giAmps1 , 64
+		aWave adsynt kamp, kFreq, -1, giPartials1 , giAmps1 , 64
 		aBuzz buzz 0.1*(1+jspline(0.1, 1/4, 1/2)), kFreq, 256, -1
 		aOut = aWave+aBuzz
 		aOut butterlp aOut, 8000
 	
 	elseif (kType==0) then
 		if ftexists:i(iTable)>0 then
-			aSound loscil3 1, 1, iTable, 1 ; kõrguse muutmine Androidi peal ei toimi sel moel...
+			aSound loscil3 0.7, 1, iTable, 1 ; kõrguse muutmine Androidi peal ei toimi sel moel...
 		else
 			aSound = 0
 		endif
@@ -194,10 +204,12 @@ instr Bourdon
 	
 	;dispfft aOut, 0.1, 2048
 		
-	
-	
-        aEnv linenr 1, 0.1, 0.5, 0.001
-	kVolume = 0.2 ; chnget   
+	aEnv linenr 1, 0.1, 0.5, 0.001
+  kBourdonVolume table  iNoteIndex, giVolumeTable
+  printk2 kBourdonVolume    
+	kVolume = 0.2 * ampdbfs(chnget:k("volumeCorrection")) *
+		ampdbfs(kBourdonVolume)
+	kVolume port kVolume, 0.01  
 	aOut *= aEnv * kVolume
 	outall aOut 	
 endin
@@ -276,6 +288,8 @@ endin
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -309,7 +323,7 @@ endin
   <eventLine>i1.1 0 -1 1</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
@@ -392,7 +406,7 @@ endin
   <eventLine>i1.2 0 -1 2</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -414,7 +428,7 @@ endin
   <eventLine>i1.3 0 -1 3</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -436,7 +450,7 @@ endin
   <eventLine>i1.4 0 -1 4</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -458,7 +472,7 @@ endin
   <eventLine>i1.5 0 -1 5</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -480,7 +494,7 @@ endin
   <eventLine>i1.8 0 -1 8</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -502,7 +516,7 @@ endin
   <eventLine>i1.9 0 -1 9</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -524,7 +538,7 @@ endin
   <eventLine>i1.010 0 -1 10</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -546,7 +560,7 @@ endin
   <eventLine>i1.11 0 -1 11</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -568,7 +582,7 @@ endin
   <eventLine>i1.12 0 -1 12</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -590,7 +604,7 @@ endin
   <eventLine>i1.13 0 -1 13</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -612,7 +626,7 @@ endin
   <eventLine>i1.16 0 -1 16</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -634,7 +648,7 @@ endin
   <eventLine>i1.17 0 -1 17</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -656,7 +670,7 @@ endin
   <eventLine>i1.18 0 -1 18</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBGraph" version="2">
@@ -670,7 +684,7 @@ endin
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <value>1</value>
+  <value>0</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -714,7 +728,7 @@ endin
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>2</selectedIndex>
+  <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -736,7 +750,7 @@ endin
   <eventLine>i1.6 0 -1 6</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -758,7 +772,7 @@ endin
   <eventLine>i1.14 0 -1 14</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -780,7 +794,7 @@ endin
   <eventLine>i1.7 0 -1 7</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -802,7 +816,7 @@ endin
   <eventLine>i1.15 0 -1 15</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
@@ -843,7 +857,7 @@ endin
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>1</selectedIndex>
+  <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
 </bsbPanel>

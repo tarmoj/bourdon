@@ -34,11 +34,9 @@ CsEngine::CsEngine(QObject *parent) : QObject(parent)
     mStop=false;
 	cs->SetOption("-odac");
     cs->SetOption("-d");
-    // maybe here start the engine?
-    if (!open(":/bourdon.csd")) {
-        //cs->Start();
-        perfThread = new CsoundPerformanceThread(cs);
 
+    if (!open(":/bourdon.csd")) {
+        perfThread = new CsoundPerformanceThread(cs);
     }
 }
 
@@ -87,17 +85,13 @@ void CsEngine::stop()
 
 void CsEngine::setChannel(const QString &channel, MYFLT value)
 {
-    qDebug()<<"setChannel "<<channel<<" value: "<<value;
-    cs->SetChannel(channel.toLocal8Bit(), value);
+    //qDebug()<<"setChannel "<<channel<<" value: "<<value;
+    if (cs)
+        cs->SetChannel(channel.toLocal8Bit(), value);
 }
 
 void CsEngine::readScore(const QString &scoreLine)
 {
-    // test time:
-//    int time =  QDateTime::currentMSecsSinceEpoch()%1000000;
-
-    qDebug()<<"csEvent" << scoreLine ; // << time;
-    // cs->ReadScore(scoreLine.toLocal8Bit());
     if (perfThread) {
         perfThread->InputMessage(scoreLine.toLocal8Bit());
     }
@@ -105,7 +99,18 @@ void CsEngine::readScore(const QString &scoreLine)
 
 void CsEngine::compileOrc(const QString &code)
 {
-    cs->CompileOrc(code.toLocal8Bit());
+    if (cs)
+        cs->CompileOrc(code.toLocal8Bit());
+}
+
+void CsEngine::tableSet(int table, int index, double value)
+{
+    if (cs && table>0 && index>=0)
+
+        cs->TableSet(table, index, value); // this is slow and seem to block UI
+    else {
+        qDebug() << "CsEngine::tableSet: invalid table or index";
+    }
 }
 
 QVariant CsEngine::getAudioDevices()

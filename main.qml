@@ -27,7 +27,7 @@ ApplicationWindow {
     property double lastPressTime: 0
     property var tunings: ["EQ","G", "D", "A", "C"] // make sure that this is aligned with the widget and the logic in Csound
     property var soundTypes: ["sample", "saw", "synthesized"] // same - check the widget and Csound, when changed
-
+    property int volumeTable: 303 // NB! make sure that it is the same in Csound code!
 
     ListModel {
         id: presetModel
@@ -161,7 +161,7 @@ ApplicationWindow {
 
     signal setChannel(channel: string, value: double)
     signal readScore(scoreLine: string)
-
+    signal tableSet(table: int, index: int, value: double)
 
     Connections {
         target: Application
@@ -194,6 +194,7 @@ ApplicationWindow {
     SwipeView {
         id: mainView
         anchors.fill: parent
+        currentIndex: 1
 
         Page {
 
