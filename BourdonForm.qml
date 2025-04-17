@@ -261,13 +261,11 @@ Item {
         Rectangle {
             id: presetArea
             width: parent.width-20
-            height: parent.height - y
+            height: parent.height - y - 5
             anchors.horizontalCenter: parent.horizontalCenter
             property int maxY: Math.max(parent.height*0.65, (controlArea.y + controlArea.height + 10) )
             property int minY: soundTypeCombobox.y
             y: maxY
-
-
 
             color: Material.backgroundColor; // otherwise presetForm is semi-transparent
             radius: 8
@@ -288,7 +286,10 @@ Item {
                 }
 
 
-            PresetForm { id:presetForm }
+            PresetForm {
+                id:presetForm
+                anchors.fill: parent
+            }
 
 
         }

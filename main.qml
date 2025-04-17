@@ -4,22 +4,8 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 import QtCore
-/*
-
-  TODO:
 
 
-Akna alumine serv?
-
-NEXT Kõrvale ka Back?
-
-min akna kõrgus?
-
-ListView Presetide muutmiseks ? Darg&Drop nootide lisamiseks, longPress eemaldamiseks?
-LongPress on temperament/sound -  context menu with dropDpwn? või lihtsalt väike DropDown
-
-
-*/
 
 ApplicationWindow {
     id: app
@@ -132,7 +118,6 @@ ApplicationWindow {
             arr.push(presetModel.get(i));  // Convert ListModel to array
         }
         appSettings.presetsArray = JSON.stringify(arr);
-        console.log()
     }
 
 
@@ -381,7 +366,7 @@ ApplicationWindow {
                 var preset = getPresetData();
                 console.log("Update comboboxes: ", preset.tuning, preset.sound)
                 tuningCombobox.currentIndex = tunings.indexOf(preset.tuning)
-                soundTypeCombobox.currentIndex = preset.sound //soundTypes.indexOf(preset.sound)
+                soundTypeCombobox.currentIndex = parseInt(preset.sound) //soundTypes.indexOf(preset.sound)
             }
 
             onSandboxChanged: {

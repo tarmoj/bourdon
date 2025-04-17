@@ -46,13 +46,9 @@ Rectangle {
 
     ListView {
         id: presetList
-        //width: parent.width
-        anchors.left: parent.left
-        anchors.leftMargin: 10
-        anchors.right: parent.right
-        anchors.rightMargin: 10
-        height: parent.height
-        y: 40
+        anchors.fill: parent
+        anchors.topMargin: 40
+        anchors.leftMargin: 5
         clip: true
 
         property int selectedIndex: -1
