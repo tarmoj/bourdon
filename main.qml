@@ -36,18 +36,17 @@ ApplicationWindow {
     // sandBox is sort of preset 0, for tryout, it is not used in next/previous preset
     property var sandBoxData: {"tuning": "EQ", "sound": "synthesized", "notes":""}
 
-
-
-    ListModel {
-        id: presetModel
-        ListElement { tuning: "G"; sound: "sample"; notes: "G,g,c1"; volumeCorrection: 0 }
-        ListElement { tuning: "F"; sound: "saw"; notes: ""; volumeCorrection: 0 }
-    }
-
     property var bourdonNotes: ["G", "A", "c", "d", "e", "f", "fis", "g", "a", "h", "c1", "d1", "e1", "f1", "fis1", "g1", "a1", "h1"] // make sure the notes are loaded to tables in Csound with according numbers (index+1)
     property double lastPressTime: 0
     property var tunings: ["EQ","G", "D", "A", "C"] // make sure that this is aligned with the widget and the logic in Csound
     property var soundTypes: ["sample", "saw", "synthesized"] // same - check the widget and Csound, when changed
+
+
+    ListModel {
+        id: presetModel
+        ListElement { tuning: "G"; sound: 0; notes: "G,g,c1"; volumeCorrection: 0 }
+        ListElement { tuning: "C"; sound: 1; notes: "c,e,g"; volumeCorrection: 0 }
+    }
 
     //onWidthChanged: console.log("window width: ", width)
 
@@ -99,12 +98,11 @@ ApplicationWindow {
       }
     }
 
-    function savePresets() {
-        var arr = [];
-        for (var i = 0; i < presetModel.count; i++) {
-            arr.push(presetModel.get(i));  // Convert ListModel to array
+    function removePreset(index) {
+        if (index >= 0 && index < presetModel.count) {
+            presetModel.remove(index);
+            savePresets();
         }
-        appSettings.presetsArray = JSON.stringify(arr);
     }
 
     function updatePresetModel(index, preset) {
@@ -114,6 +112,7 @@ ApplicationWindow {
                            sound: preset.sound,
                            notes: preset.notes
                          })
+      savePresets()
     }
 
     function addToPresetModel(preset) {
@@ -123,7 +122,19 @@ ApplicationWindow {
             sound: preset.sound,
             notes: preset.notes
         })
+      savePresets()
     }
+
+    function savePresets() {
+        console.log("Saving presets to appSettings");
+        var arr = [];
+        for (var i = 0; i < presetModel.count; i++) {
+            arr.push(presetModel.get(i));  // Convert ListModel to array
+        }
+        appSettings.presetsArray = JSON.stringify(arr);
+        console.log()
+    }
+
 
     // These are bluetooth shortcuts, Airturn Duo, mode 2 (keyboard mode)
     Shortcut {
@@ -279,7 +290,7 @@ ApplicationWindow {
 
                 const preset = {
                     tuning: tunings[tuningCombobox.currentIndex],
-                    sound: soundTypes[soundTypeCombobox.currentIndex],
+                    sound: soundTypeCombobox.currentIndex, //soundTypes[soundTypeCombobox.currentIndex],
                     notes: "" // store as comma separated string
                 };
                 const noteArray = [];
@@ -324,12 +335,25 @@ ApplicationWindow {
 
 
 
-            soundTypeCombobox.onCurrentIndexChanged:
-                csound.setChannel("type", soundTypeCombobox.currentIndex)
+            soundTypeCombobox.onCurrentIndexChanged: {
+              csound.setChannel("type", soundTypeCombobox.currentIndex)
+              //TODO: change it in the model, too
+              if (currentPreset>=0) {
+                presetModel.set(currentPreset, { "sound": soundTypeCombobox.currentIndex })
+                savePresets()
+              }
+            }
 
 
-            tuningCombobox.onCurrentIndexChanged:
-                csound.setChannel("tuning", tuningCombobox.currentIndex)
+            tuningCombobox.onCurrentIndexChanged: {
+              csound.setChannel("tuning", tuningCombobox.currentIndex)
+              if (currentPreset>=0) {
+                // TODO: bind loop: this sets model, model triggers currentIndexChane in presetForm and that this one...
+                presetModel.set(currentPreset, { "tuning": app.tunings[tuningCombobox.currentIndex] })
+                savePresets()
+
+              }
+            }
 
             function getPresetData() {
                 if (currentPreset===-1) {
@@ -347,7 +371,7 @@ ApplicationWindow {
               } else {
                 // maybe this is not needed any more soon, get rid of presetLabel
                 presetLabel.text = qsTr("Preset") + " " + currentPreset.toString()
-                presetLabel.text = (currentPreset+1).toString() + " " + preset.tuning + " " + preset.sound
+                presetLabel.text = (currentPreset+1).toString() + " " + preset.tuning + " " + soundTypes[preset.sound]
               }
               presetLabel.text += " " + preset.notes;
 
@@ -355,8 +379,9 @@ ApplicationWindow {
 
             function updateComboBoxes() {
                 var preset = getPresetData();
+                console.log("Update comboboxes: ", preset.tuning, preset.sound)
                 tuningCombobox.currentIndex = tunings.indexOf(preset.tuning)
-                soundTypeCombobox.currentIndex = soundTypes.indexOf(preset.sound)
+                soundTypeCombobox.currentIndex = preset.sound //soundTypes.indexOf(preset.sound)
             }
 
             onSandboxChanged: {

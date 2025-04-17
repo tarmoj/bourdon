@@ -85,12 +85,9 @@ Rectangle {
             color: isSelected ? Material.backgroundDimColor : "transparent"  // ✅ Highlight selected item
             radius: 5
 
-
-
-
             RowLayout {
                 anchors.fill: parent
-                property string soundValue: model.sound
+                property int soundValue: model.sound
                 property string tuningValue: model.tuning
                 spacing: 5
 
@@ -111,12 +108,10 @@ Rectangle {
                     Layout.preferredWidth: 70
                     Layout.preferredHeight: rowDelegate.height
 
-                    Component.onCompleted: { // initilize currentIndex from stored settings
-                        currentIndex = parent.soundValue === "sample" ? 0 : (parent.soundValue === "saw" ? 1 : 2)
-                    }
+                    currentIndex: parent.soundValue
 
                     onCurrentIndexChanged: {
-                        app.presetModel.set(index, { "sound": app.soundTypes[currentIndex] })
+                        app.presetModel.set(index, { "sound": currentIndex })
                         if (rowDelegate.isSelected) { // set it also on master combobox
                             bourdonForm.soundTypeCombobox.currentIndex = currentIndex
                         }
@@ -149,14 +144,12 @@ Rectangle {
                         anchors.fill: parent
 
                         onClicked: {
-                            console.log("Delegate clicked: ", index)
                             bourdonForm.editMode = false
                             if (isSelected) {
                                 presetList.selectedIndex = -1
                                 bourdonForm.currentPreset = -1
                                 bourdonForm.sandBoxButton.clicked()
                             } else {
-                                console.log("Clicked: ", index)
                                 presetList.selectedIndex = index
                                 bourdonForm.currentPreset = index
                             }
@@ -166,6 +159,7 @@ Rectangle {
                     RowLayout {
                         spacing: 5
                         height: parent.height
+                        clip:true
                         property var notes: model.notes
 
                         Repeater {
@@ -203,6 +197,7 @@ Rectangle {
                 ToolButton {
                     text: "Ed."
                     icon.name: "pencil"
+                    enabled: false
                     // icon: edit something
                     onClicked: {
                         console.log("Edit mode: ", )
@@ -220,7 +215,7 @@ Rectangle {
                             if (presetList.selectedIndex === index) {
                                 presetList.selectedIndex = -1
                             }
-                            app.savePresets()
+                            app.savePresets() // maybe better to do it on app level as removePreset(index)
                         }
                     }
                 }
