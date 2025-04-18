@@ -5,9 +5,21 @@ import QtQuick.Layouts
 Item {
     width:  500
     height: 40
-    enabled: mixerFrom.individualVolume
+    enabled: mixerFrom.individualVolume  // does not work: ...&& presetNotes.includes(bourdonNote)
     property int bourdonIndex: 0
     property alias volume: bourdonSlider.value
+
+    // property string presetNotes: bourdonForm.currentPreset>=0 ?
+    //                                  app.presetModel.get(bourdonForm.currentPreset).notes : []
+    // property string bourdonNote: app.bourdonNotes[bourdonIndex]
+
+
+    // function isNoteInCurrentPreset() {
+    //     const currentPreset = app.presetModel.get(bourdonForm.currentPreset)
+    //     const notes = currentPreset.notes.split(",")
+    //     console.log("isNoteInCurrentPreset notes: ", notes, app.bourdonNotes[bourdonIndex] )
+    //     return notes.includes(app.bourdonNotes[bourdonIndex])
+    // }
 
     RowLayout {
         anchors.fill: parent
@@ -15,7 +27,7 @@ Item {
         anchors.margins: 10
 
         Label {
-            text: app.bourdonNotes[bourdonIndex]
+            text: bourdonNote
         }
 
         Slider {
@@ -28,10 +40,13 @@ Item {
             value: 0
 
             onValueChanged: {
-                csound.setChannel("volume" + bourdonIndex, value)
-                bourdonVolumeLabel.text = bourdonSlider.value.toFixed(1) + " dB"
-                // TODO: set to model
-                //presetModel.set(bourdonForm.currentPreset, {"volume"+i.toString(): 0})
+                const channel = "volume" + bourdonIndex
+                csound.setChannel(channel, value)
+                bourdonVolumeLabel.text = bourdonSlider.value.toFixed(1) + " dB"         
+                if (bourdonForm.currentPreset >= 0) {
+                    // Set the volume for the current preset
+                    presetModel.set(bourdonForm.currentPreset, {[channel]: value})
+                }
             }
 
         }

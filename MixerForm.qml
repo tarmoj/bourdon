@@ -6,10 +6,14 @@ import QtQuick.Controls.Material
 Rectangle {
     width: 400
     height: 600
-    color: "lightgreen"
+    color: Material.backgroundColor
 
     gradient: Gradient {
         GradientStop { position: 0.0; color: Material.backgroundColor }  // Material background
+        GradientStop {
+            position: 0.5
+            color: Material.backgroundColor
+        }
         GradientStop { position: 1.0; color: "darkgreen" }  // Dark Green
     }
 
@@ -21,24 +25,27 @@ Rectangle {
         anchors.margins: 10
         spacing: 5
 
-        Label {
-            font.pointSize: 16
-            font.bold: true
-
-            text: qsTr("Volumes")
-        }
 
         RowLayout {
             spacing: 5
+
+            Label {
+                font.pointSize: 16
+                font.bold: true
+
+                text: qsTr("Volumes")
+            }
+
+            Item {Layout.fillWidth: true}
 
             Label {
                 text: qsTr("Preset: ")
             }
 
             SpinBox {
-                from: 1
+                from: 0
                 to: app.presetModel.count
-                value: 1
+                value: 0
 
                 onValueChanged: {
                     bourdonForm.currentPreset = value-1
@@ -63,7 +70,9 @@ Rectangle {
                 onValueChanged: {
                     presetVolumeLabel.text = presetVolume.value.toFixed(1) + " dB"
                     csound.setChannel("volumeCorrection", presetVolume.value)
-                    presetModel.set(bourdonForm.currentPreset, {"volumeCorrection": presetVolume.value})
+                    if (bourdonForm.currentPreset>=0) {
+                        presetModel.set(bourdonForm.currentPreset, {"volumeCorrection": presetVolume.value})
+                    }
                 }
             }
 
