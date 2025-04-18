@@ -5,22 +5,20 @@ import QtQuick.Layouts
 Item {
     width:  500
     height: 40
-    enabled: mixerFrom.individualVolume  // does not work: ...&& presetNotes.includes(bourdonNote)
     property int bourdonIndex: 0
     property string bourdonNote: app.bourdonNotes[bourdonIndex]
     property alias volume: bourdonSlider.value
+    property string presetNotes: bourdonForm.currentPreset>=0 ? app.presetModel.get(bourdonForm.currentPreset)?.notes : ""
 
-    // property string presetNotes: bourdonForm.currentPreset>=0 ?
-    //                                  app.presetModel.get(bourdonForm.currentPreset).notes : []
+    enabled: mixerForm.individualVolume && (bourdonForm.currentPreset < 0 || isNoteInCurrentPreset() )
 
 
-
-    // function isNoteInCurrentPreset() {
-    //     const currentPreset = app.presetModel.get(bourdonForm.currentPreset)
-    //     const notes = currentPreset.notes.split(",")
-    //     console.log("isNoteInCurrentPreset notes: ", notes, app.bourdonNotes[bourdonIndex] )
-    //     return notes.includes(app.bourdonNotes[bourdonIndex])
-    // }
+    function isNoteInCurrentPreset() {
+        const currentPreset = app.presetModel.get(bourdonForm.currentPreset)
+        const notes = currentPreset.notes.split(",")
+        //console.log("isNoteInCurrentPreset notes: ", notes, app.bourdonNotes[bourdonIndex] )
+        return notes.includes(app.bourdonNotes[bourdonIndex])
+    }
 
     Connections {
         target: bourdonForm
@@ -28,7 +26,16 @@ Item {
         function onCurrentPresetChanged() {
             updateVolumeFromPreset()
         }
+
+        function onPresetChanged() {
+
+            console.log("Preset changed received in BourdonVolume") // this is received but the next has no effect.
+            enabled = mixerForm.individualVolume && (bourdonForm.currentPreset < 0 || isNoteInCurrentPreset() )
+        }
     }
+
+
+
 
     function updateVolumeFromPreset() {
         if (bourdonForm.currentPreset < 0) {

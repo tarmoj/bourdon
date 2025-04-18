@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import QtQuick.Controls.Material
 
 Rectangle {
+    id: mixerForm
     width: 400
     height: 600
     color: Material.backgroundColor
@@ -123,7 +124,7 @@ Rectangle {
                 delegate: BourdonVolume {
                     bourdonIndex: model.index
                     Layout.fillWidth: true
-                    enabled: individualVolumeCheckbox.checked
+                    //enabled:  individualVolumeCheckbox.checked
                 }
 
             }
