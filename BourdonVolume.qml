@@ -8,9 +8,10 @@ Item {
     property int bourdonIndex: 0
     property string bourdonNote: app.bourdonNotes[bourdonIndex]
     property alias volume: bourdonSlider.value
-    property string presetNotes: bourdonForm.currentPreset>=0 ? app.presetModel.get(bourdonForm.currentPreset)?.notes : ""
-
-    enabled: mixerForm.individualVolume && (bourdonForm.currentPreset < 0 || isNoteInCurrentPreset() )
+    //property string presetNotes: bourdonForm.currentPreset>=0 ? app.presetModel.get(bourdonForm.currentPreset)?.notes : ""
+    property bool isEnabled: ( bourdonForm.currentPreset < 0 && mixerForm.individualVolume)  ||
+                             (bourdonForm.currentPreset>=0 && isNoteInCurrentPreset() &&  mixerForm.individualVolume )
+    enabled: isEnabled
 
 
     function isNoteInCurrentPreset() {
@@ -20,22 +21,10 @@ Item {
         return notes.includes(app.bourdonNotes[bourdonIndex])
     }
 
-    Connections {
-        target: bourdonForm
-
-        function onCurrentPresetChanged() {
-            updateVolumeFromPreset()
-        }
-
-        function onPresetChanged() {
-
-            console.log("Preset changed received in BourdonVolume") // this is received but the next has no effect.
-            enabled = mixerForm.individualVolume && (bourdonForm.currentPreset < 0 || isNoteInCurrentPreset() )
-        }
+    function updateEnabled() {
+        isEnabled = ( bourdonForm.currentPreset < 0 && mixerForm.individualVolume)  ||
+                (bourdonForm.currentPreset>=0 && isNoteInCurrentPreset() &&  mixerForm.individualVolume )
     }
-
-
-
 
     function updateVolumeFromPreset() {
         if (bourdonForm.currentPreset < 0) {
@@ -53,7 +42,31 @@ Item {
         }
     }
 
+    Connections {
+        target: bourdonForm
+
+        function onCurrentPresetChanged() {
+            updateEnabled()
+            updateVolumeFromPreset()
+        }
+
+        function onPresetChanged() {
+            // TODO: check notes here app.presetModel.get(bourdonForm.currentPreset)?.notes
+            //console.log("Preset changed received in BourdonVolume. Notes: ", app.presetModel.get(bourdonForm.currentPreset).notes) // this is received but the next has no effect.
+            updateEnabled()
+        }
+    }
+
+    Connections {
+        target: mixerForm
+
+        function onIndividualVolumeChanged() {
+            updateEnabled()
+        }
+    }
+
     Component.onCompleted: updateVolumeFromPreset()
+
 
     RowLayout {
         anchors.fill: parent

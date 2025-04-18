@@ -20,6 +20,30 @@ Rectangle {
 
     property alias individualVolume: individualVolumeCheckbox.checked
 
+    function updateVolumeFromPreset() {
+        if (bourdonForm.currentPreset < 0) {
+            presetVolume.value = 0
+            return
+        }
+
+        const item = presetModel.get(bourdonForm.currentPreset)
+        const field = "volumeCorrection"
+
+        if (item && field in item) {
+            presetVolume.value = item[field]
+        } else {
+            presetVolume.value = 0
+        }
+    }
+
+    Connections {
+        target: bourdonForm
+
+        function onCurrentPresetChanged() {
+            updateVolumeFromPreset()
+        }
+    }
+
     ColumnLayout {
         id: volumeColumn
         anchors.fill: parent
@@ -68,6 +92,7 @@ Rectangle {
                 from: -48
                 to: 12
                 stepSize: 0.1
+                value: 0
                 onValueChanged: {
                     presetVolumeLabel.text = presetVolume.value.toFixed(1) + " dB"
                     csound.setChannel("volumeCorrection", presetVolume.value)
@@ -117,7 +142,9 @@ Rectangle {
 
         GridLayout {
             Layout.fillWidth: true
-            columns: 2
+            flow: GridLayout.TopToBottom
+            rows: Math.round(app.bourdonNotes.length / 2)
+
             Repeater {
                 id: volumeRepeater
                 model: app.bourdonNotes.length
