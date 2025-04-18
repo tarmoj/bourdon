@@ -200,6 +200,38 @@ ApplicationWindow {
         BourdonForm {
             id: bourdonForm
             //anchors.fill: parent
+
+            FocusScope { // for catching Bluehtooth media keys -- not tested with Swipeview!
+                anchors.fill: parent
+                focus: true
+                visible: false
+
+                Keys.onPressed: (event) => {
+                                  //console.log("Key pressed:", event.key)
+
+                                  if (event.key === Qt.Key_MediaPlay) {
+                                    console.log("MediaPlay key was pressed!")
+                                    bourdonForm.playButton.checked = true
+                                  }
+
+                                  if (event.key === 16777349) {
+                                    console.log("MediaStop key was pressed!")
+                                    bourdonForm.playButton.checked = false
+                                    bourdonForm.stopAll() // in case playBotton.checked was already false
+                                  }
+
+                                  if (event.key === Qt.Key_MediaNext) {
+                                    console.log("MediaNext key was pressed!")
+                                    bourdonForm.advancePreset(1);
+                                  }
+
+                                  if (event.key === Qt.Key_MediaPrevious) {
+                                    console.log("MediaNext key was pressed!")
+                                    bourdonForm.advancePreset(-1);
+                                  }
+                                }
+
+            }
         }
 
         MixerForm {
@@ -208,44 +240,6 @@ ApplicationWindow {
 
     }
 
-    FocusScope { // for catching Bluehtooth media keys
-        anchors.fill: parent
-        focus: true
-        visible: false
-
-        Keys.onPressed: (event) => {
-                          //console.log("Key pressed:", event.key)
-
-                          if (event.key === Qt.Key_MediaPlay) {
-                            console.log("MediaPlay key was pressed!")
-                            bourdonForm.playButton.checked = true
-                          }
-
-                          if (event.key === 16777349) {
-                            console.log("MediaStop key was pressed!")
-                            bourdonForm.playButton.checked = false
-                            bourdonForm.stopAll() // in case playBotton.checked was already false
-                          }
-
-                          if (event.key === Qt.Key_MediaNext) {
-                            console.log("MediaNext key was pressed!")
-                            bourdonForm.advancePreset(1);
-                          }
-
-                          if (event.key === Qt.Key_MediaPrevious) {
-                            console.log("MediaNext key was pressed!")
-                            bourdonForm.advancePreset(-1);
-                          }
-                        }
-
-
-
-        // BourdonForm {
-        //     //id: bourdonForm
-        //     anchors.fill: parent
-        // }
-
-    }
 
 
 }
