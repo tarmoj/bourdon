@@ -9,20 +9,10 @@ Item {
     height: 600
     //anchors.fill: parent
 
-    // property alias addButton: addButton
-    // property alias stopButton: stopButton
-    // property alias bourdonButtonGrid: bourdonButtonGrid
-    // property alias playButton: playButton
-    // property alias nextButton: nextButton
-    // property alias presetLabel: presetLabel
-    // property alias bourdonArea: bourdonArea
-    // property alias a4SpinBox: a4SpinBox
-    property alias soundTypeCombobox: soundTypeCombobox
-    // property alias sandBoxButton: sandBoxButton
-    // property alias presetArea: presetArea
-    // property alias presetMouseArea: presetMouseArea
-    // property alias presetForm: presetForm
+
+    property alias soundTypeCombobox: soundTypeCombobox // to expose it to presetForm
     property alias tuningCombobox: tuningCombobox
+    property alias sandBoxButton: sandBoxButton
 
     property int roundedScale: Material.ExtraSmallScale
 
@@ -95,7 +85,7 @@ Item {
     }
 
 
-    function playFromPreset(preset) { // preset is an array of the notest to be played like [G,d,e]
+    function playFromPreset(preset) {
         const tuning = preset.tuning
         const sound = preset.sound
         const notes = preset.notes.split(",")
@@ -123,18 +113,6 @@ Item {
         }
     }
 
-    // function updatePresetLabelText() {
-    //   var preset = getPresetData();
-    //   if (currentPreset===-1) {
-    //     presetLabel.text = qsTr("Sandbox")
-    //   } else {
-    //     // maybe this is not needed any more soon, get rid of presetLabel
-    //     presetLabel.text = qsTr("Preset") + " " + currentPreset.toString()
-    //     presetLabel.text = (currentPreset+1).toString() + " " + preset.tuning + " " + soundTypes[preset.sound]
-    //   }
-    //   presetLabel.text += " " + preset.notes;
-
-    // }
 
     function updateComboBoxes() {
         var preset = getPresetData();
@@ -161,16 +139,13 @@ Item {
       const preset = getPresetFromButtons();
       console.log("Notes in preset now: ", preset.notes, currentPreset)
       updatePresetModel(currentPreset, preset)
-      //updatePresetLabelText()
     }
 
     onSandboxChanged: {
       currentPreset = -1 ; // is it needed?
-      //updatePresetLabelText()
     }
 
     onCurrentPresetChanged: {
-        //updatePresetLabelText()
         updateComboBoxes()
         if (isPlaying()) {
             stopAll();
@@ -204,7 +179,7 @@ Item {
 
 
         Column {
-            id: configArea // we need better name. not config any more
+            id: bourdonFormColumn
             width: parent.width-20
             anchors.horizontalCenter: parent.horizontalCenter
             //height: a4SpinBox.height + 4
@@ -225,7 +200,6 @@ Item {
 
                     onCurrentIndexChanged: {
                       csound.setChannel("type", currentIndex)
-                      //TODO: change it in the model, too
                       if (currentPreset>=0) {
                         presetModel.set(currentPreset, { "sound": currentIndex })
                         savePresets()
@@ -264,15 +238,6 @@ Item {
                 width: parent.width
                 spacing: 10
 
-                //TODO: remove stopButton
-                ToolButton {
-                    id: stopButton
-                    visible: false
-                    icon.source: "qrc:/images/stop-button.png"
-                    //text: qsTr("Stop all")
-
-                    onClicked: stopAll()
-                }
 
                 ComboBox {
                     id: tuningCombobox
@@ -287,7 +252,6 @@ Item {
                         // TODO: bind loop: this sets model, model triggers currentIndexChane in presetForm and that this one...
                         presetModel.set(currentPreset, { "tuning": app.tunings[currentIndex] })
                         savePresets()
-
                       }
                     }
                 }
@@ -316,7 +280,7 @@ Item {
                 }
             }
 
-            RowLayout { // later place null button somewhere else
+            RowLayout {
                 width: parent.width
                 spacing: 10
 
@@ -337,14 +301,11 @@ Item {
 
 
         Column {
-            id: bourdonArea // name to: bourdonButtonArea
+            id: bourdonButtonColumn
 
-            //Layout.preferredHeight: column.height * 0.3 //bourdonButtonGrid.height //
-            width: configArea.width
+            width: bourdonFormColumn.width
             anchors.horizontalCenter: parent.horizontalCenter
-            //height: bourdonButtonGrid.height
-            anchors.top: configArea.bottom
-
+            anchors.top: bourdonFormColumn.bottom
 
             GridLayout {
                 id: bourdonButtonGrid
@@ -398,29 +359,26 @@ Item {
             id: controlArea
 
             width: parent.width-20
-            anchors.top: bourdonArea.bottom
+            anchors.top: bourdonButtonColumn.bottom
             anchors.horizontalCenter: parent.horizontalCenter
 
             //Rectangle {anchors.fill: parent; color: "darkblue"}
 
-            //anchors.bottom: presetArea.top
             RowLayout {
                 id: mainButtonRow
                 width: parent.width
                 Layout.alignment: Qt.AlignHCenter
 
-                //anchors.horizontalCenter: parent.horizontalCenter
                 spacing: 30
 
                 Button {
                     id: nextButton
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    text: "NEXT"
+                    text: qsTr("Next/Prev.")
                     Material.roundedScale: roundedScale
 
                     onClicked: {
-                        //advancePreset(1);
                         checkDoublePress()
                     }
                 }
@@ -454,30 +412,7 @@ Item {
 
                     }
                 }
-            }
-
-            // Row {
-            //     id: presetLabelRow
-            //     Layout.alignment: Qt.AlignHCenter
-            //     visible: false
-
-            //     spacing: 20
-
-            //     Label {
-            //         font.pointSize: 18
-            //         text: qsTr("Current preset: ")
-            //         fontSizeMode: Text.Fit
-            //         anchors.verticalCenter: parent.verticalCenter
-            //     }
-
-            //     Label {
-            //         id: presetLabel
-            //         font.pointSize: 22
-            //         font.bold: true
-            //         fontSizeMode: Text.Fit
-            //         text: "0"
-            //     }
-            // }
+            }          
         }
 
 
@@ -487,7 +422,7 @@ Item {
             width: parent.width-20
             height: parent.height - y - 5
             anchors.horizontalCenter: parent.horizontalCenter
-            property int maxY: Math.max(parent.height*0.65, (controlArea.y + controlArea.height + 10) )
+            property int maxY: controlArea.y + controlArea.height + 10
             property int minY: soundTypeCombobox.y
             y: maxY
 

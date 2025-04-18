@@ -38,7 +38,7 @@ Rectangle {
             SpinBox {
                 from: 1
                 to: app.presetModel.count
-                value: bourdonForm.currentPreset + 1
+                value: 1
 
                 onValueChanged: {
                     bourdonForm.currentPreset = value-1
