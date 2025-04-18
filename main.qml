@@ -163,11 +163,12 @@ ApplicationWindow {
     signal readScore(scoreLine: string)
     signal tableSet(table: int, index: int, value: double)
 
-    Connections {
+    Connections { // for later: you can use also onClosing if ApplicationWindow is used
         target: Application
         function onAboutToQuit() {
             console.log("Bye!")
             csound.stop();
+            savePresets()
         }
     }
 
