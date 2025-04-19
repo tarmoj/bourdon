@@ -10,5 +10,7 @@
         <file>images/add.png</file>
         <file>MixerForm.qml</file>
         <file>BourdonVolume.qml</file>
+        <file>images/clear.png</file>
+        <file>images/dj-mixer.png</file>
     </qresource>
 </RCC>

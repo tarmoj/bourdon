@@ -144,6 +144,7 @@ Rectangle {
             Layout.fillWidth: true
             flow: GridLayout.TopToBottom
             rows: Math.round(app.bourdonNotes.length / 2)
+            
 
             Repeater {
                 id: volumeRepeater

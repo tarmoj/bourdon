@@ -18,6 +18,7 @@ ApplicationWindow {
 
     property color backgroundColor: Material.background // expose to C++
     property alias presetModel: presetModel // expose it to PresetForm
+    property alias mainView: mainView
 
 
     // sandBox is sort of preset 0, for tryout, it is not used in next/previous preset
@@ -195,7 +196,7 @@ ApplicationWindow {
     SwipeView {
         id: mainView
         anchors.fill: parent
-        currentIndex: 1
+        //currentIndex: 1
 
         BourdonForm {
             id: bourdonForm

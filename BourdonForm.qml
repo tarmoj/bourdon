@@ -107,7 +107,7 @@ Item {
     function getPresetData() {
         if (currentPreset===-1) {
             console.log("Sandbox ")
-            return sandBoxData
+            return app.sandBoxData
         } else {
           return presetModel.get(currentPreset);
         }
@@ -143,6 +143,7 @@ Item {
 
     onSandboxChanged: {
       currentPreset = -1 ; // is it needed?
+      sandboxNotesRepeater.model = app.sandBoxData.notes ? app.sandBoxData.notes.split(",") : []
     }
 
     onCurrentPresetChanged: {
@@ -263,22 +264,15 @@ Item {
 
 
                 ToolButton {
-                    id: addButton
-                    icon.source: "qrc:/images/add.png"
-                    //text: "+" // qsTr("Add to presets")
-                    //Material.roundedScale: roundedScale
-
+                    id: mixerViewButton
+                    icon.source: "qrc:/images/dj-mixer.png"
                     onClicked: {
-                      const preset = getPresetFromButtons()
-                      if (preset.notes.length>0) {
-                        addToPresetModel(preset)
-                        savePresets();
-                      } else {
-                        console.log("No playing buttons")
-                      }
+                        app.mainView.currentIndex = 1
                     }
                 }
             }
+
+
 
             RowLayout {
                 width: parent.width
@@ -296,6 +290,61 @@ Item {
                         }
                     }
                 }
+
+                Repeater {
+                    id: sandboxNotesRepeater
+                    model: app.sandBoxData.notes ? app.sandBoxData.notes.split(",") : []
+
+                    Rectangle {
+                        Layout.alignment:  Qt.AlignVCenter
+                        width: textItem.implicitWidth + 10
+                        height: textItem.implicitHeight + 5
+                        border.color: Material.frameColor
+                        radius: 4
+                        color: "transparent"
+
+                        Label {
+                            id: textItem
+                            text: modelData
+                            anchors.centerIn: parent
+                        }
+                    }
+                }
+
+                ToolButton {
+                    icon.source: "qrc:/images/clear.png"
+                    //icon.name: "delete"
+                    visible: sandboxNotesRepeater.model.length>0
+                    onClicked:  {
+                        stopAll()
+                        app.sandBoxData.notes = ""
+                        sandboxNotesRepeater.model = app.sandBoxData.notes ? app.sandBoxData.notes.split(",") : []
+                    }
+                }
+
+
+
+
+                ToolButton {
+                    id: addButton
+                    //icon.source: "qrc:/images/add.png"
+                    text: qsTr("Add to presets")
+                    //Material.roundedScale: roundedScale
+
+                    onClicked: {
+                      const preset = getPresetFromButtons()
+                      if (preset.notes.length>0) {
+                        addToPresetModel(preset)
+                        savePresets();
+                      } else {
+                        console.log("No playing buttons")
+                      }
+                    }
+                }
+
+                Item {Layout.fillWidth: true}
+
+
             }
         }
 
