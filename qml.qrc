@@ -13,5 +13,13 @@
         <file>images/clear.png</file>
         <file>images/equalizer.png</file>
         <file>images/back.png</file>
+        <file>images/down.png</file>
+        <file>images/remove.png</file>
+        <file>images/up.png</file>
+        <file>images/move_down.svg</file>
+        <file>images/move_up.svg</file>
+        <file>images/delete.svg</file>
+        <file>images/arrow_downward.svg</file>
+        <file>images/arrow_upward.svg</file>
     </qresource>
 </RCC>

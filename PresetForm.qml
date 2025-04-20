@@ -85,9 +85,10 @@ Rectangle {
 
             RowLayout {
                 anchors.fill: parent
+                anchors.margins: 5
                 property int soundValue: model.sound
                 property string tuningValue: model.tuning
-                spacing: 5
+                spacing: 2
 
                 Label {
                     Layout.leftMargin: 5
@@ -142,7 +143,6 @@ Rectangle {
                         anchors.fill: parent
 
                         onClicked: {
-                            bourdonForm.editMode = false
                             if (isSelected) {
                                 presetList.selectedIndex = -1
                                 bourdonForm.currentPreset = -1
@@ -181,32 +181,53 @@ Rectangle {
                     }
                 }
 
-                // ToolButton {
-                //     //text: "Sel."
-                //     icon.name: "select"
-                //     // icon: select something
-                //     onClicked: {
-                //         console.log("listelement clicked: ", index, presetList.selectedIndex)
-                //         presetList.selectedIndex = index
-                //         bourdonForm.currentPreset= index
-                //     }
-                // }
 
                 ToolButton {
-                    text: "Ed."
-                    icon.name: "pencil"
-                    enabled: false
-                    // icon: edit something
+                    id: upButton
+                    icon.source: "qrc:/images/move_up.svg"
+                    visible: index > 0
+                    padding: 0
+                    Layout.preferredWidth: 24
+                    Layout.preferredHeight: 24
+
                     onClicked: {
-                        console.log("Edit mode: ", )
-                        bourdonForm.editMode = !bourdonForm.editMode
+                        if (index > 0) {
+                            presetModel.move(index, index - 1, 1)
+                            presetList.selectedIndex = index
+                            bourdonForm.currentPreset = presetList.selectedIndex
+                            app.savePresets() // maybe better to do it on app level as movePreset(index, index - 1)
+                        }
+                    }
+
+                }
+
+                ToolButton {
+                    id: downButton
+                    //icon.name: "arrow_downward"
+                    icon.source: "qrc:/images/move_down.svg"
+                    visible: index < presetList.model.count - 1
+                    padding: 0
+                    Layout.preferredWidth: 24
+                    Layout.preferredHeight: 24
+
+                    onClicked: {
+                        if (index < presetList.model.count - 1) {
+                            presetModel.move(index, index + 1, 1)
+                            presetList.selectedIndex = index
+                            bourdonForm.currentPreset = presetList.selectedIndex
+                            app.savePresets() // maybe better to do it on app level as movePreset(index, index + 1)
+                        }
                     }
                 }
 
 
                 ToolButton {
-                    //text: "Del."
-                    icon.name: "delete"
+                    //icon.name: "delete"
+                    icon.source: "qrc:/images/delete.svg"
+                    padding: 0
+                    Layout.preferredWidth: 24
+                    Layout.preferredHeight: 24
+
                     onClicked: {
                         if (index >= 0) {
                             presetModel.remove(index)
@@ -218,22 +239,6 @@ Rectangle {
                     }
                 }
 
-                // Dial {
-                //     from: -48
-                //     to: 12
-                //     scale: 0.6
-                //     Layout.preferredHeight:  rowDelegate.height
-                //     Layout.maximumWidth: rowDelegate.heightvSize
-                //     Layout.alignment:  Qt.AlignRight
-                //     value: model.volumeCorrection
-
-                //     Label {
-                //         anchors.horizontalCenter: parent.horizontalCenter
-                //         anchors.top: parent.top
-                //         anchors.topMargin: -20
-                //         text: parent.value.toFixed(1) + " dB"
-                //     }
-                // }
             }
         }
 
