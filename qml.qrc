@@ -6,20 +6,15 @@
         <file>PresetForm.qml</file>
         <file>BourdonForm.qml</file>
         <file>qtquickcontrols2.conf</file>
-        <file>images/stop-button.png</file>
-        <file>images/add.png</file>
         <file>MixerForm.qml</file>
         <file>BourdonVolume.qml</file>
         <file>images/clear.png</file>
         <file>images/equalizer.png</file>
-        <file>images/back.png</file>
-        <file>images/down.png</file>
-        <file>images/remove.png</file>
-        <file>images/up.png</file>
         <file>images/move_down.svg</file>
         <file>images/move_up.svg</file>
         <file>images/delete.svg</file>
         <file>images/arrow_downward.svg</file>
         <file>images/arrow_upward.svg</file>
+        <file>images/arrow_back.svg</file>
     </qresource>
 </RCC>

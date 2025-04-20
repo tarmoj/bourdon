@@ -56,7 +56,7 @@ Rectangle {
 
             ToolButton {
                 id: bourdonViewButton
-                icon.source: "qrc:/images/back.png"
+                icon.source: "qrc:/images/arrow_back.svg"
                 onClicked: {
                     app.mainView.currentIndex = 0
                 }
