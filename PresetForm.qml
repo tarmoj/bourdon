@@ -43,6 +43,16 @@ Rectangle {
         color: Material.backgroundDimColor
     }
 
+    ToolButton {
+        id: mixerViewButton
+        anchors.right: parent.right
+        anchors.rightMargin: 5
+        icon.source: "qrc:/images/equalizer.png"
+        onClicked: {
+            app.mainView.currentIndex = 1
+        }
+    }
+
 
     ListView {
         id: presetList

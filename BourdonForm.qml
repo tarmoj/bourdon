@@ -262,14 +262,6 @@ Item {
                     Layout.fillWidth: true
                 }
 
-
-                ToolButton {
-                    id: mixerViewButton
-                    icon.source: "qrc:/images/dj-mixer.png"
-                    onClicked: {
-                        app.mainView.currentIndex = 1
-                    }
-                }
             }
 
 

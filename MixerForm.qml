@@ -54,11 +54,12 @@ Rectangle {
         RowLayout {
             spacing: 5
 
-            Label {
-                font.pointSize: 16
-                font.bold: true
-
-                text: qsTr("Volumes")
+            ToolButton {
+                id: bourdonViewButton
+                icon.source: "qrc:/images/back.png"
+                onClicked: {
+                    app.mainView.currentIndex = 0
+                }
             }
 
             Item {Layout.fillWidth: true}
