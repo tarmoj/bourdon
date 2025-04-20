@@ -270,6 +270,9 @@ Item {
                 width: parent.width
                 spacing: 10
 
+                // add a border around sandBoxbutton, visible whn currentPreset = -1
+
+
                 ToolButton {
                     id: sandBoxButton
                     text: qsTr("Sandbox")
@@ -280,6 +283,14 @@ Item {
                             stopAll()
                             playButton.checked = false
                         }
+                    }
+
+                    Rectangle {
+                        anchors.fill: parent
+                        color: "transparent"
+                        border.color: Material.frameColor
+                        radius: 4
+                        visible: currentPreset===-1
                     }
                 }
 

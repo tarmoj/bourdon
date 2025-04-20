@@ -186,7 +186,7 @@ Rectangle {
                     id: upButton
                     icon.source: "qrc:/images/move_up.svg"
                     visible: index > 0
-                    padding: 0
+                    padding: 2
                     Layout.preferredWidth: 24
                     Layout.preferredHeight: 24
 
@@ -206,7 +206,7 @@ Rectangle {
                     //icon.name: "arrow_downward"
                     icon.source: "qrc:/images/move_down.svg"
                     visible: index < presetList.model.count - 1
-                    padding: 0
+                    padding: 2
                     Layout.preferredWidth: 24
                     Layout.preferredHeight: 24
 
@@ -224,7 +224,7 @@ Rectangle {
                 ToolButton {
                     //icon.name: "delete"
                     icon.source: "qrc:/images/delete.svg"
-                    padding: 0
+                    padding: 2
                     Layout.preferredWidth: 24
                     Layout.preferredHeight: 24
 

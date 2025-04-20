@@ -44,7 +44,7 @@ ToolButton {
         anchors.fill: parent
         color: "transparent"
         radius: 4
-        border.color:  "lightyellow"
+        border.color:  Material.frameColor //"lightyellow"
         border.width: parent.checked? 2 : 0
 
 

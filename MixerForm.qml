@@ -94,6 +94,9 @@ Rectangle {
                 to: 12
                 stepSize: 0.1
                 value: 0
+                Layout.preferredWidth: 80
+                Layout.fillWidth: true
+
                 onValueChanged: {
                     presetVolumeLabel.text = presetVolume.value.toFixed(1) + " dB"
                     csound.setChannel("volumeCorrection", presetVolume.value)
