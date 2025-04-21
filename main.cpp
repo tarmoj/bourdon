@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
     // https://doc-snapshots.qt.io/qt6-dev/qcoreapplication.html#requestPermission
 
     requestPermission("android.permission.WRITE_EXTERNAL_STORAGE");
-    requestPermission("android.permission.BLUETOOTH");
+    //requestPermission("android.permission.BLUETOOTH");
 
     //keep screen on:
     QJniObject activity =  QNativeInterface::QAndroidApplication::context(); //  QtAndroid::androidActivity();

@@ -19,6 +19,18 @@ CsEngine::CsEngine(QObject *parent) : QObject(parent)
 #ifdef Q_OS_ANDROID
 	cs = new AndroidCsound();
 	cs->setOpenSlCallbacks(); // for android audio to work
+
+    // test
+    if (QFile::exists("/sdcard/Music/Bourdon/samples/G0.wav")) {
+        qDebug() << "G0.wav found";
+    } else {
+        qDebug() << "G0.wav not found";
+    }
+
+    // add code that checks check if file G0.wav exist in dir
+
+
+
     cs->SetOption("--env:SSDIR=/sdcard/Music/Bourdon/samples/");
 #elif defined(Q_OS_MACOS)
     cs = new Csound();

@@ -16,5 +16,10 @@
         <file>images/arrow_downward.svg</file>
         <file>images/arrow_upward.svg</file>
         <file>images/arrow_back.svg</file>
+        <file>images/menu.svg</file>
+        <file>images/info.svg</file>
+        <file>images/save.svg</file>
+        <file>images/open.svg</file>
+        <file>images/bmc-logo.svg</file>
     </qresource>
 </RCC>

@@ -3,6 +3,7 @@ import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
+import QtQuick.Dialogs
 import QtCore
 
 
@@ -13,7 +14,7 @@ ApplicationWindow {
     height: 720
     minimumWidth: 350
     visible: true
-    property string version: "0.7.0-alpha"
+    property string version: "0.7.0"
     title: qsTr("Bourdon app "+ version)
 
     property color backgroundColor: Material.background // expose to C++
@@ -42,6 +43,7 @@ ApplicationWindow {
     Settings {
         id: appSettings
         property string presetsArray: ""
+        //property a4: bourdonForm
     }
 
 
@@ -122,6 +124,9 @@ ApplicationWindow {
         appSettings.presetsArray = JSON.stringify(arr);
     }
 
+    // signal setChannel(channel: string, value: double)
+    // signal readScore(scoreLine: string)
+
 
     // These are bluetooth shortcuts, Airturn Duo, mode 2 (keyboard mode)
     Shortcut {
@@ -139,6 +144,7 @@ ApplicationWindow {
 
 
     header: ToolBar {
+        id: toolBar
         width: parent.width
         height: titleLabel.height + 10
 
@@ -157,12 +163,111 @@ ApplicationWindow {
                 horizontalAlignment: Qt.AlignHCenter
 
             }
+
+            ToolButton {
+                id: menuButton
+                //height: titleLabel.height
+                anchors.left: parent.left
+                anchors.leftMargin: 5
+                anchors.verticalCenter: parent.verticalCenter
+                icon.source: "qrc:/images/menu.svg"
+                onClicked: drawer.opened ? drawer.close() : drawer.open()
+            }
         }
     }
 
-    signal setChannel(channel: string, value: double)
-    signal readScore(scoreLine: string)
-    signal tableSet(table: int, index: int, value: double)
+    MessageDialog { // maybe replace with normal Dialog later
+            id: helpDialog
+            buttons: MessageDialog.Ok
+
+            text: qsTr(`Bourdon App
+
+is an app for bagpipe players (or why not other musicians) who want to play against long drone notes.
+
+Build your chords from given bourdon notes, set the tuning, temperement and sound type.
+You can set the relative volume of each preset, also the individual volumes of the bourdon notes.
+You can start/stop the sound from bluetooth speaker or pedal.
+
+Built using Csound sound engine and Qt framework.
+
+(c) Tarmo Johannes trmjhnns@gmail.com`)
+
+            onButtonClicked: function (button, role) { // does not close on Android otherwise
+                switch (button) {
+                case MessageDialog.Ok:
+                    helpDialog.close()
+                }
+            }
+    }
+
+    Drawer {
+        id: drawer
+        width: buyMeACoffeeItem + 40
+        height: app.height - toolBar.height
+        y: toolBar.height
+        property int marginLeft: 20
+
+        background: Rectangle {anchors.fill:parent; color: Material.backgroundColor.lighter()}
+
+
+        ColumnLayout {
+            anchors.fill: parent
+            spacing: 5
+            visible: true
+
+
+            ComboBox {
+                id: languageComboBox
+                visible: false
+
+                Layout.leftMargin: drawer.marginLeft
+
+                model: ["EST", "EN"]
+
+                onActivated: console.log("Laguage: ", currentText)
+            }
+
+            MenuItem {
+                text: qsTr("Load Session")
+                icon.source: "qrc:/images/open.svg"
+                onTriggered: {
+                    drawer.close()
+                    // load
+                }
+            }
+
+            MenuItem {
+                text: qsTr("Save Session")
+                icon.source: "qrc:/images/save.svg"
+                onTriggered: {
+                    drawer.close()
+                    // save
+                }
+            }
+
+            MenuItem {
+                id: buyMeACoffeeItem
+                icon.source: "qrc:/images/bmc-logo.svg"
+                text: qsTr("Buy me a coffee")
+                onTriggered: Qt.openUrlExternally("https://ko-fi.com/tarmojohannes")
+            }
+
+            MenuItem {
+                text: qsTr("Info")
+                icon.source: "qrc:/images/info.svg"
+                onTriggered: {
+                    drawer.close()
+                    helpDialog.open()
+                }
+            }
+
+            Item {Layout.fillHeight: true}
+
+        }
+
+
+    }
+
 
     Connections { // for later: you can use also onClosing if ApplicationWindow is used
         target: Application

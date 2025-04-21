@@ -13,9 +13,9 @@ Rectangle {
         GradientStop { position: 0.0; color: Material.backgroundColor }  // Material background
         GradientStop {
             position: 0.5
-            color: Material.backgroundColor
+            color: "#002200"
         }
-        GradientStop { position: 1.0; color: "darkgreen" }  // Dark Green
+        GradientStop { position: 1.0; color: "#005500" }  // Dark Green
     }
 
     property alias individualVolume: individualVolumeCheckbox.checked
