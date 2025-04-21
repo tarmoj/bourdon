@@ -43,7 +43,7 @@ ApplicationWindow {
     Settings {
         id: appSettings
         property string presetsArray: ""
-        //property a4: bourdonForm
+        property int a4: 440
     }
 
 

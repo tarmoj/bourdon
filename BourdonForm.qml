@@ -13,6 +13,7 @@ Item {
     property alias soundTypeCombobox: soundTypeCombobox // to expose it to presetForm
     property alias tuningCombobox: tuningCombobox
     property alias sandBoxButton: sandBoxButton
+    property alias a4SpinBox: a4SpinBox
 
     property int roundedScale: Material.ExtraSmallScale
 
@@ -33,6 +34,9 @@ Item {
                 bourdonButtons.push(element);
             }
         }
+
+        a4SpinBox.value = appSettings.a4
+
         //test:
         //getAudioDevices()
     }
@@ -230,6 +234,7 @@ Item {
                     onValueChanged: {
                         console.log("A4: ", value )
                         csound.setChannel("a4", value);
+                        appSettings.a4 = value
                     }
                 }
             }
