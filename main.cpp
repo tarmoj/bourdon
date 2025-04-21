@@ -3,6 +3,7 @@
 #include <QThread>
 #include <QQmlContext>
 #include "csengine.h"
+#include "fileio.h"
 
 
 
@@ -130,6 +131,8 @@ int main(int argc, char *argv[])
     MediaButtonHandler mediaButtonHandler;
     engine.rootContext()->setContextProperty("MediaButtonHandler", &mediaButtonHandler);
 #endif
+
+    qmlRegisterType<FileIO>("MyApp.FileIO", 1, 0, "FileIO");
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

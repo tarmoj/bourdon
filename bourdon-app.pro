@@ -8,10 +8,12 @@ QT += quick core multimedia bluetooth
 
 SOURCES += main.cpp \
         csengine.cpp \
+    fileio.cpp
 
 
 HEADERS += \
     csengine.h \
+    fileio.h
 
 
 RESOURCES += qml.qrc

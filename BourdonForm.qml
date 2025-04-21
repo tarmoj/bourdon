@@ -320,7 +320,7 @@ Item {
                 }
 
                 ToolButton {
-                    icon.source: "qrc:/images/clear.png"
+                    icon.source: "qrc:/images/backspace.svg"
                     //icon.name: "delete"
                     visible: sandboxNotesRepeater.model.length>0
                     onClicked:  {

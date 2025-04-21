@@ -4,7 +4,9 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 import QtQuick.Dialogs
+//import Qt.labs.platform
 import QtCore
+import MyApp.FileIO 1.0 // for loading/saving files
 
 
 
@@ -124,8 +126,28 @@ ApplicationWindow {
         appSettings.presetsArray = JSON.stringify(arr);
     }
 
-    // signal setChannel(channel: string, value: double)
-    // signal readScore(scoreLine: string)
+
+    function savePresetsToFile(fileUrl) {
+        savePresets();  // make sure appSettings.presetsArray is up to date
+
+        const json = appSettings.presetsArray;
+        const path = fileUrl.toString().replace("file://", "");  // still needed!
+        console.log("Trying to save contents to: ", fileUrl, path)
+        const ok = fileio.writeFile(path, json);
+        if (!ok) console.error("Failed to save file");
+    }
+
+    function loadPresetsFromFile(fileUrl) {
+        const path = fileUrl.toString().replace("file://", "");
+        console.log("Read from file: ", fileUrl, path)
+        const data = fileio.readFile(path);
+        if (data) {
+            appSettings.presetsArray = data;
+            loadPresets();
+        } else {
+            console.error("Failed to load file");
+        }
+    }
 
 
     // These are bluetooth shortcuts, Airturn Duo, mode 2 (keyboard mode)
@@ -228,20 +250,20 @@ Built using Csound sound engine and Qt framework.
             }
 
             MenuItem {
-                text: qsTr("Load Session")
+                text: qsTr("Load Presets")
                 icon.source: "qrc:/images/open.svg"
                 onTriggered: {
                     drawer.close()
-                    // load
+                    loadDialog.open()
                 }
             }
 
             MenuItem {
-                text: qsTr("Save Session")
+                text: qsTr("Save Presets")
                 icon.source: "qrc:/images/save.svg"
                 onTriggered: {
                     drawer.close()
-                    // save
+                    saveDialog.open()
                 }
             }
 
@@ -266,6 +288,40 @@ Built using Csound sound engine and Qt framework.
         }
 
 
+    }
+
+    FileIO {
+        id: fileio
+    }
+
+
+    FileDialog {
+        id: saveDialog
+        title: qsTr("Save Presets to File")
+        fileMode: FileDialog.SaveFile
+        //currentFolder: StandardPaths.writableLocation(StandardPaths.MusicLocation) + "/Bourdon"
+        nameFilters: ["JSON files (*.json)", "All files (*)"]
+        onAccepted: {
+            // if (selectedFile.indexOf("content://") === 0) {
+            //     console.warn("Cannot save to content URI directly in QML. Please choose a local path.");
+            //     return
+            // }
+            let path = selectedFile.toString();
+            if (!path.endsWith(".json")) {
+                path += ".json";
+            }
+            savePresetsToFile(path)
+        }
+    }
+
+    FileDialog {
+        id: loadDialog
+        title: qsTr("Load Presets from File")
+        fileMode: FileDialog.OpenFile
+        nameFilters: ["JSON files (*.json)", "All files (*)"]
+        onAccepted: {
+            loadPresetsFromFile(selectedFile)
+        }
     }
 
 
