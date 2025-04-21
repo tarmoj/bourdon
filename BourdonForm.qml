@@ -14,6 +14,7 @@ Item {
     property alias tuningCombobox: tuningCombobox
     property alias sandBoxButton: sandBoxButton
     property alias a4SpinBox: a4SpinBox
+    property alias playButton: playButton
 
     property int roundedScale: Material.ExtraSmallScale
 
@@ -340,7 +341,7 @@ Item {
                     //Material.roundedScale: roundedScale
 
                     onClicked: {
-                      const preset = getPresetFromButtons()
+                      const preset = app.sandBoxData;  //getPresetFromButtons()
                       if (preset.notes.length>0) {
                         addToPresetModel(preset)
                         savePresets();
@@ -477,7 +478,7 @@ Item {
         Rectangle {
             id: presetArea
             width: parent.width-20
-            height: parent.height - y - 5
+            height: parent.height - y - 2
             anchors.horizontalCenter: parent.horizontalCenter
             property int maxY: controlArea.y + controlArea.height + 10
             property int minY: soundTypeCombobox.y

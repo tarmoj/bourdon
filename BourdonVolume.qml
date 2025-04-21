@@ -35,7 +35,7 @@ Item {
         const item = presetModel.get(bourdonForm.currentPreset)
         const channel = "volume" + bourdonIndex
 
-        if (item && channel in item) {
+        if (item && channel in item && item[channel]!==undefined) {
             bourdonSlider.value = item[channel]
         } else {
             bourdonSlider.value = 0

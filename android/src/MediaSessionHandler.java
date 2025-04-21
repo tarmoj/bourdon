@@ -66,23 +66,28 @@ public class MediaSessionHandler {
                                         Log.d(TAG, "Play button pressed");
                                         nativeMediaButtonEvent(1);
                                         break;
-                                    case KeyEvent.KEYCODE_MEDIA_PAUSE:
-                                        Log.d(TAG, "Pause button pressed");
+                                    case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+                                        Log.d(TAG, "Play_Pause pressed");
                                         nativeMediaButtonEvent(2);
+                                        break;
+                                    case KeyEvent.KEYCODE_MEDIA_PAUSE:  // send STOP with pause and stop
+                                        Log.d(TAG, "Pause button pressed");
+                                        nativeMediaButtonEvent(3);
                                         break;
                                     case KeyEvent.KEYCODE_MEDIA_STOP:
                                         Log.
                                         d(TAG, "Stop button pressed");
-                                        nativeMediaButtonEvent(2); // make both pause and stop act for stop
+                                        nativeMediaButtonEvent(3); // make both pause and stop act for stop
                                         break;
                                     case KeyEvent.KEYCODE_MEDIA_NEXT:
                                         Log.d(TAG, "Next track button pressed");
-                                        nativeMediaButtonEvent(3);
+                                        nativeMediaButtonEvent(4);
                                         break;
                                     case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
                                         Log.d(TAG, "Previous track button pressed");
-                                        nativeMediaButtonEvent(4);
+                                        nativeMediaButtonEvent(5);
                                         break;
+
                                     default:
                                         Log.d(TAG, "Unhandled key event: " + event.getKeyCode());
                                 }

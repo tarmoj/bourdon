@@ -41,6 +41,10 @@ Rectangle {
 
         function onCurrentPresetChanged() {
             updateVolumeFromPreset()
+            if (presetIndexSpinbox.value !== bourdonForm.currentPreset + 1) {
+                presetIndexSpinbox.value = bourdonForm.currentPreset + 1
+            }
+
         }
     }
 
@@ -69,6 +73,7 @@ Rectangle {
             }
 
             SpinBox {
+                id: presetIndexSpinbox
                 from: 0
                 to: app.presetModel.count
                 value: 0

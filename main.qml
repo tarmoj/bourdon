@@ -339,6 +339,10 @@ Built using Csound sound engine and Qt framework.
             function onPlay() { console.log("Play received in QML"); bourdonForm.playButton.checked = true; }
             function onPause() {
                 console.log("Pause received in QML");
+                bourdonForm.playButton.checked = !bourdonForm.playButton.checked;
+            }
+            function onStop() {
+                console.log("Stop received in QML");
                 bourdonForm.playButton.checked = false;
                 bourdonForm.stopAll()
             }
@@ -357,6 +361,7 @@ Built using Csound sound engine and Qt framework.
     SwipeView {
         id: mainView
         anchors.fill: parent
+        anchors.topMargin:10
         //currentIndex: 1
 
         BourdonForm {

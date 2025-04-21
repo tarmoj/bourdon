@@ -25,7 +25,8 @@ Java_org_tarmoj_bourdon_MediaSessionHandler_nativeMediaButtonEvent(JNIEnv *env, 
     switch (action) {
     case 1: emit s_instance->play(); break;
     case 2: emit s_instance->pause(); break;
-    case 3: emit s_instance->next(); break;
-    case 4: emit s_instance->previous(); break;
+    case 3: emit s_instance->stop(); break;
+    case 4: emit s_instance->next(); break;
+    case 5: emit s_instance->previous(); break;
     }
 }
