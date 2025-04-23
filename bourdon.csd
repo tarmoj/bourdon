@@ -3,7 +3,7 @@
 -odac 
 ; -d
 ; -b 256 -B 1024 ; et äkki see mõjutab Androidi, aga vist mitte....;; 
---env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/
+; --env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/
 </CsOptions>
 <CsInstruments>
 
@@ -206,12 +206,15 @@ instr Bourdon
 	;dispfft aOut, 0.1, 2048
 		
 	aEnv linenr 1, 0.1, 0.5, 0.001
-  kBourdonVolume chnget sprintf("volume%d", iNoteIndex)  
+  kBourdonVolume chnget sprintf("volume%d", iNoteIndex) 
+  kPan chnget sprintf("pan%d", iNoteIndex) // comes in in scale -1...1, 0 gives center
+  kPan = kPan/2 + 0.5 
 	kVolume = 0.2 * ampdbfs(chnget:k("volumeCorrection")) *
 		ampdbfs(kBourdonVolume)
 	kVolume port kVolume, 0.01  
 	aOut *= aEnv * kVolume
-	outall aOut 	
+	aL, aR pan2 aOut, kPan
+	out aL, aR	
 endin
 
 
@@ -261,6 +264,8 @@ endin
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 

@@ -104,6 +104,25 @@ Item {
             text: bourdonSlider.value.toFixed(1) + " dB"
         }
 
+        Slider {
+            id: panSlider
+            Layout.preferredWidth: 80
+
+            from: -1
+            to: 1
+            value: 0
+
+            onValueChanged: {
+                const channel = "pan" + bourdonIndex
+                // scale value from -1..1 to 0..1
+                csound.setChannel(channel, value) ; // NB pan -1...1 -  scale in Csound (then 0 wod give centre)
+                if (bourdonForm.currentPreset >= 0) {
+                    // Set the volume for the current preset
+                    presetModel.set(bourdonForm.currentPreset, {[channel]: value})
+                }
+
+            }
+        }
     }
 
 }
