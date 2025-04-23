@@ -58,7 +58,7 @@ public class MediaSessionHandler {
 
                         KeyEvent event = mediaButtonIntent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
                         if (event != null) {
-                            //Log.d(TAG, "Key event: " + event.toString());
+                            Log.d(TAG, "Key event: " + event.toString());
 
                             if (event.getAction() == KeyEvent.ACTION_DOWN) {
                                 switch (event.getKeyCode()) {
@@ -72,7 +72,7 @@ public class MediaSessionHandler {
                                         break;
                                     case KeyEvent.KEYCODE_MEDIA_PAUSE:  // send STOP with pause and stop
                                         Log.d(TAG, "Pause button pressed");
-                                        nativeMediaButtonEvent(3);
+                                        nativeMediaButtonEvent(2);
                                         break;
                                     case KeyEvent.KEYCODE_MEDIA_STOP:
                                         Log.
