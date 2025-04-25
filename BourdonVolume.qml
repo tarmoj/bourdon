@@ -29,19 +29,26 @@ Item {
                 (bourdonForm.currentPreset>=0 && isNoteInCurrentPreset() &&  mixerForm.individualVolume )
     }
 
-    function updateVolumeFromPreset() {
+    function updateVolumeAndPanFromPreset() {
         if (bourdonForm.currentPreset < 0) {
             volumeSlider.value = 0
             return
         }
 
         const item = presetModel.get(bourdonForm.currentPreset)
-        const channel = "volume" + bourdonIndex
+        const volumeChannel = "volume" + bourdonIndex
+        const panChannel = "pan" + bourdonIndex
 
-        if (item && channel in item && item[channel]!==undefined) {
-            volumeSlider.value = item[channel]
+        if (item && volumeChannel in item && item[volumeChannel]!==undefined) {
+            volumeSlider.value = item[volumeChannel]
         } else {
             volumeSlider.value = 0
+        }
+
+        if (item && panChannel in item && item[panChannel]!==undefined) {
+            panSlider.value = item[panChannel]
+        } else {
+            panSlider.value = 0
         }
     }
 
@@ -50,7 +57,7 @@ Item {
 
         function onCurrentPresetChanged() {
             updateEnabled()
-            updateVolumeFromPreset()
+            updateVolumeAndPanFromPreset()
         }
 
         function onPresetChanged() {
@@ -68,7 +75,7 @@ Item {
         }
     }
 
-    Component.onCompleted: updateVolumeFromPreset()
+    Component.onCompleted: updateVolumeAndPanFromPreset()
 
 
     RowLayout {

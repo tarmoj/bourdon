@@ -16,7 +16,7 @@ ApplicationWindow {
     height: 720
     minimumWidth: 350
     visible: true
-    property string version: "0.7.0"
+    property string version: "0.7.1"
     title: qsTr("Bourdon Player "+ version)
 
     property color backgroundColor: Material.background // expose to C++
@@ -83,7 +83,7 @@ ApplicationWindow {
 
           // ✅ Convert notes array to a comma-separated string if needed
           if (Array.isArray(preset.notes)) {
-            preset.notes = preset.notes;
+            preset.notes = preset.notes.join(",");
           }
           presetModel.append(preset);  // Restore from array
         }
