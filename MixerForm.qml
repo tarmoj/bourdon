@@ -139,39 +139,62 @@ Rectangle {
 
             Button {
                 enabled: individualVolumeCheckbox.checked
-                text: qsTr("Reset all")
+                text: qsTr("Reset vol.")
                 onClicked: {
-                    for (var i = 0; i < volumeRepeater.count; i++) {
-                        let item = volumeRepeater.itemAt(i);
+                    for (var i = 0; i < volumeListView.model; i++) {
+                        let item = volumeListView.itemAtIndex(i);
                         if (item) item.volume = 0;
+                    }
+                }
+            }
+
+            Button {
+                enabled: individualVolumeCheckbox.checked
+                text: qsTr("Reset PAN")
+                onClicked: {
+                    for (var i = 0; i < volumeListView.model; i++) {
+                        let item = volumeListView.itemAtIndex(i);
+                        if (item) item.pan = 0;
                     }
                 }
             }
         }
 
-        GridLayout {
+        ListView {
+            id: volumeListView
             Layout.fillWidth: true
-            flow: GridLayout.TopToBottom
-            rows: Math.round(app.bourdonNotes.length / 2)
+            Layout.fillHeight: true
+            model: app.bourdonNotes.length
+            delegate: BourdonVolume {
+                bourdonIndex: model.index
+                width: volumeListView.width
+            }
+            //spacing: 5
+        }
+
+        // GridLayout {
+        //     Layout.fillWidth: true
+        //     flow: GridLayout.TopToBottom
+        //     rows: app.bourdonNotes.length  //;Math.round(app.bourdonNotes.length / 2)
             
 
-            Repeater {
-                id: volumeRepeater
-                model: app.bourdonNotes.length
-                delegate: BourdonVolume {
-                    bourdonIndex: model.index
-                    Layout.fillWidth: true
-                    //enabled:  individualVolumeCheckbox.checked
-                }
+        //     Repeater {
+        //         id: volumeRepeater
+        //         model: app.bourdonNotes.length
+        //         delegate: BourdonVolume {
+        //             bourdonIndex: model.index
+        //             Layout.fillWidth: true
+        //             //enabled:  individualVolumeCheckbox.checked
+        //         }
 
-            }
-        }
+        //     }
+        // }
 
 
 
-        Item { // spacer
-            Layout.fillHeight:  true
-        }
+        // Item { // spacer
+        //     Layout.fillHeight:  true
+        // }
     }
 
 }

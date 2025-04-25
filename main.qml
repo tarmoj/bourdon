@@ -17,7 +17,7 @@ ApplicationWindow {
     minimumWidth: 350
     visible: true
     property string version: "0.7.0"
-    title: qsTr("Bourdon app "+ version)
+    title: qsTr("Bourdon Player "+ version)
 
     property color backgroundColor: Material.background // expose to C++
     property alias presetModel: presetModel // expose it to PresetForm
@@ -202,7 +202,7 @@ ApplicationWindow {
             id: helpDialog
             buttons: MessageDialog.Ok
 
-            text: qsTr(`Bourdon App
+            text: qsTr(`Bourdon Player
 
 is an app for bagpipe players (or why not other musicians) who want to play against long drone notes.
 

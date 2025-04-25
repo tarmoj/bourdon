@@ -4,14 +4,17 @@ import QtQuick.Layouts
 
 Item {
     width:  500
-    height: 40
+    height: visible ? 30 : 0 // hide when not visible. But keep it sill in the model  for easier data management
     property int bourdonIndex: 0
     property string bourdonNote: app.bourdonNotes[bourdonIndex]
-    property alias volume: bourdonSlider.value
-    //property string presetNotes: bourdonForm.currentPreset>=0 ? app.presetModel.get(bourdonForm.currentPreset)?.notes : ""
+
     property bool isEnabled: ( bourdonForm.currentPreset < 0 && mixerForm.individualVolume)  ||
                              (bourdonForm.currentPreset>=0 && isNoteInCurrentPreset() &&  mixerForm.individualVolume )
     enabled: isEnabled
+    property int smallFontSize: 10
+    visible: bourdonForm.currentPreset < 0 || (bourdonForm.currentPreset>=0  && isNoteInCurrentPreset())
+    property alias volume: volumeSlider.value
+    property alias pan: panSlider.value
 
 
     function isNoteInCurrentPreset() {
@@ -28,7 +31,7 @@ Item {
 
     function updateVolumeFromPreset() {
         if (bourdonForm.currentPreset < 0) {
-            bourdonSlider.value = 0
+            volumeSlider.value = 0
             return
         }
 
@@ -36,9 +39,9 @@ Item {
         const channel = "volume" + bourdonIndex
 
         if (item && channel in item && item[channel]!==undefined) {
-            bourdonSlider.value = item[channel]
+            volumeSlider.value = item[channel]
         } else {
-            bourdonSlider.value = 0
+            volumeSlider.value = 0
         }
     }
 
@@ -77,8 +80,9 @@ Item {
             text: bourdonNote
         }
 
+
         Slider {
-            id: bourdonSlider
+            id: volumeSlider
             Layout.preferredWidth: 80
             Layout.fillWidth: true
             from: -48
@@ -89,7 +93,7 @@ Item {
             onValueChanged: {
                 const channel = "volume" + bourdonIndex
                 csound.setChannel(channel, value)
-                bourdonVolumeLabel.text = bourdonSlider.value.toFixed(1) + " dB"         
+                bourdonVolumeLabel.text = volumeSlider.value.toFixed(1) + " dB"
                 if (bourdonForm.currentPreset >= 0) {
                     // Set the volume for the current preset
                     presetModel.set(bourdonForm.currentPreset, {[channel]: value})
@@ -101,12 +105,22 @@ Item {
         Label {
             Layout.maximumWidth: 30
             id:bourdonVolumeLabel
-            text: bourdonSlider.value.toFixed(1) + " dB"
+            text: volumeSlider.value.toFixed(1) + " dB"
+            font.pointSize: smallFontSize
         }
 
+        Item { Layout.preferredWidth: 30} // small spacer
+
+
+        Label {
+            text: qsTr("L")
+            font.pointSize: smallFontSize
+        }
         Slider {
             id: panSlider
             Layout.preferredWidth: 80
+            Layout.maximumWidth: 120
+            Layout.fillWidth: true
 
             from: -1
             to: 1
@@ -122,6 +136,11 @@ Item {
                 }
 
             }
+        }
+
+        Label {
+            text: qsTr("R")
+            font.pointSize: smallFontSize
         }
     }
 
