@@ -230,11 +230,11 @@ Rectangle {
 
                     onClicked: {
                         if (index >= 0) {
-                            presetModel.remove(index)
                             if (presetList.selectedIndex === index) {
                                 presetList.selectedIndex = -1
                             }
-                            app.savePresets() // maybe better to do it on app level as removePreset(index)
+                            presetModel.remove(index)
+                            app.savePresets()
                         }
                     }
                 }
