@@ -8,25 +8,31 @@ Item {
     property int bourdonIndex: 0
     property string bourdonNote: app.bourdonNotes[bourdonIndex]
 
-    property bool isEnabled: ( bourdonForm.currentPreset < 0 && mixerForm.individualVolume)  ||
-                             (bourdonForm.currentPreset>=0 && isNoteInCurrentPreset() &&  mixerForm.individualVolume )
-    enabled: isEnabled
+    // property bool isEnabled: ( bourdonForm.currentPreset < 0 && mixerForm.individualVolume)  ||
+    //                          (bourdonForm.currentPreset>=0 && isNoteInCurrentPreset() &&  mixerForm.individualVolume )
+    enabled: false
     property int smallFontSize: 10
-    visible: bourdonForm.currentPreset < 0 || (bourdonForm.currentPreset>=0  && isNoteInCurrentPreset())
+    visible: true //bourdonForm.currentPreset < 0 || (bourdonForm.currentPreset>=0  && isNoteInCurrentPreset())
     property alias volume: volumeSlider.value
     property alias pan: panSlider.value
 
 
     function isNoteInCurrentPreset() {
-        const currentPreset = app.presetModel.get(bourdonForm.currentPreset)
-        const notes = currentPreset.notes.split(",")
+        let notes = [];
+        if (bourdonForm.currentPreset < 0) {
+            notes = app.sandBoxData.notes ? app.sandBoxData.notes.split(",") : []
+        } else {
+            notes = app.presetModel.get(bourdonForm.currentPreset).notes.split(",")
+        }
         //console.log("isNoteInCurrentPreset notes: ", notes, app.bourdonNotes[bourdonIndex] )
         return notes.includes(app.bourdonNotes[bourdonIndex])
     }
 
     function updateEnabled() {
-        isEnabled = ( bourdonForm.currentPreset < 0 && mixerForm.individualVolume)  ||
-                (bourdonForm.currentPreset>=0 && isNoteInCurrentPreset() &&  mixerForm.individualVolume )
+        const noteIsInCurrentPreset = isNoteInCurrentPreset()
+        enabled = ( bourdonForm.currentPreset < 0 && mixerForm.individualVolume)  ||
+                (bourdonForm.currentPreset>=0 && noteIsInCurrentPreset &&  mixerForm.individualVolume )
+        visible = bourdonForm.currentPreset < 0 || (bourdonForm.currentPreset>=0  && noteIsInCurrentPreset)
     }
 
     function updateVolumeAndPanFromPreset() {
@@ -126,7 +132,7 @@ Item {
         Slider {
             id: panSlider
             Layout.preferredWidth: 80
-            Layout.maximumWidth: 120
+            Layout.maximumWidth: 100
             Layout.fillWidth: true
 
             from: -1
