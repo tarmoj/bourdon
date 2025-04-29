@@ -1,6 +1,6 @@
 lessThan(QT_MAJOR_VERSION,6): error("Qt6 is required for this build.")
 
-QT += quick core multimedia bluetooth
+QT += quick core multimedia bluetooth websockets
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.

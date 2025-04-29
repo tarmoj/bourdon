@@ -6,7 +6,9 @@ import QtQuick.Layouts
 import QtQuick.Dialogs
 //import Qt.labs.platform
 import QtCore
+import QtWebSockets
 import MyApp.FileIO 1.0 // for loading/saving files
+
 
 
 
@@ -22,6 +24,7 @@ ApplicationWindow {
     property color backgroundColor: Material.background // expose to C++
     property alias presetModel: presetModel // expose it to PresetForm
     property alias mainView: mainView
+    property alias socket: socket // expose it to C++
 
 
     // sandBox is sort of preset 0, for tryout, it is not used in next/previous preset
@@ -41,6 +44,35 @@ ApplicationWindow {
 
     //onWidthChanged: console.log("window width: ", width)
 
+
+    // Add here a websocket section that connects to wss://live.uuu.ee:1234 on start
+    // when connected, send a message to the server
+
+
+    WebSocket {
+        id: socket
+        url:  "wss://live.uuu.ee:1234"
+        active: true
+        onTextMessageReceived: function(message) {
+            console.log("Message received:", message)
+            // Handle incoming messages here
+        }
+        onStatusChanged: function(status) {
+            if (status === WebSocket.Open) {
+                console.log("WebSocket connected", url)
+                bourdonForm.wsStatusLabel.text = "Connected";
+                socket.sendTextMessage("Hello from Bourdon Player!")
+            } else if (status === WebSocket.Closed) {
+                console.log("WebSocket disconnected")
+                bourdonForm.wsStatusLabel.text = "Disconnected";
+            } else if (status === WebSocket.Error) {
+                console.log("WebSocket error", socket.errorString)
+                bourdonForm.wsStatusLabel.text = "Error";
+            }
+        }
+
+
+    }
 
     Settings {
         id: appSettings

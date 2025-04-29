@@ -15,6 +15,7 @@ Item {
     property alias sandBoxButton: sandBoxButton
     property alias a4SpinBox: a4SpinBox
     property alias playButton: playButton
+    property alias wsStatusLabel: wsStatusLabel
 
     property int roundedScale: Material.ExtraSmallScale
 
@@ -143,8 +144,7 @@ Item {
     onPresetChanged: {
       const preset = getPresetFromButtons();
       console.log("Notes in preset now: ", preset.notes, currentPreset)
-      updatePresetModel(currentPreset, preset)
-    }
+ur    }
 
     onSandboxChanged: {
       currentPreset = -1 ; // is it needed?
@@ -158,6 +158,11 @@ Item {
             playFromPreset(getPresetData())
         }
         presetForm.presetList.selectedIndex = currentPreset
+
+        // send over websocket to let clients know
+        if (currentPreset>=0 && sendWsCheckBox.checked) {
+            app.socket.sendTextMessage("section"+(currentPreset+1).toString())
+        }
     }
 
 
@@ -211,6 +216,20 @@ Item {
                         savePresets()
                       }
                     }
+                }
+
+                Label {
+                    text: "Send ws:"
+                }
+
+                CheckBox {
+                    id: sendWsCheckBox
+                    checked: true
+                }
+
+                Label {
+                    id: wsStatusLabel
+                    text: ""
                 }
 
 
