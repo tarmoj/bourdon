@@ -7,12 +7,12 @@ QT += quick core multimedia bluetooth
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += main.cpp \
-        csengine.cpp \
+       # csengine.cpp \
     fileio.cpp
 
 
 HEADERS += \
-    csengine.h \
+   #  csengine.h \
     fileio.h
 
 
@@ -24,18 +24,24 @@ INCLUDEPATH += /usr/local/include/csound/
 android {
   QT += core-private
   INCLUDEPATH += /home/tarmo/src/csound/Android/CsoundAndroid/jni/	 #TODO: should have an extra varaible, not hardcoded personal library
-  HEADERS += AndroidCsound.hpp  mediabuttonhandler.h
+  HEADERS += mediabuttonhandler.h
   SOURCES += mediabuttonhandler.cpp
 
 #message(ANDROID_TARGET_ARCH: $$ANDROID_TARGET_ARCH)
 
-    LIBS +=  -L/home/tarmo/src/csound-android-6.18.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/$$ANDROID_TARGET_ARCH/ -lcsoundandroid -lsndfile -lc++_shared
+equals(ANDROID_TARGET_ARCH, arm64-v8a) {
+  HEADERS += AndroidCsound.hpp
+
+LIBS +=  -L/home/tarmo/src/csound-android-6.18.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/$$ANDROID_TARGET_ARCH/ \
+             -lcsoundandroid -lsndfile -lc++_shared
 
     ANDROID_EXTRA_LIBS = \
         $$PWD/../../../../src/csound-android-6.18.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/$$ANDROID_TARGET_ARCH/libsndfile.so \
         $$PWD/../../../../src/csound-android-6.18.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/$$ANDROID_TARGET_ARCH/libcsoundandroid.so \
         $$PWD/../../../../src/csound-android-6.18.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/$$ANDROID_TARGET_ARCH/libc++_shared.so
-
+} else {
+    DEFINES += NO_CSOUND
+}
     ANDROID_PACKAGE_SOURCE_DIR = \
         $$PWD/android
 }

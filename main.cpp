@@ -2,9 +2,12 @@
 #include <QQmlApplicationEngine>
 #include <QThread>
 #include <QQmlContext>
-#include "csengine.h"
 #include "fileio.h"
 
+#ifndef NO_CSOUND
+#include "csengine.h"
+
+#endif
 
 
 #ifdef Q_OS_ANDROID
@@ -121,11 +124,17 @@ int main(int argc, char *argv[])
     setenv("OPCODE6DIR64", pluginsPath.toLocal8Bit() ,1);
 #endif
 
-    CsEngine * cs = new CsEngine();
-    cs->play();
+
 
     QQmlApplicationEngine engine;
-    engine.rootContext()->setContextProperty("csound", cs); // forward c++ object that can be reached form qml by object name "csound" NB! include <QQmlContext>
+
+#ifndef NO_CSOUND
+    CsEngine * cs = new CsEngine();
+    cs->play();
+    engine.rootContext()->setContextProperty("CsEngine", cs);
+#endif
+
+
 
 #ifdef Q_OS_ANDROID
     MediaButtonHandler mediaButtonHandler;
