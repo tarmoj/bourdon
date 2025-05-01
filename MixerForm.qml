@@ -22,7 +22,7 @@ Rectangle {
 
     function updateVolumeFromPreset() {
         if (bourdonForm.currentPreset < 0) {
-            presetVolume.value = 0
+            presetVolume.value = app.sandBoxData.volumeCorrection ? app.sandBoxData.volumeCorrection : 0
             return
         }
 
@@ -107,6 +107,8 @@ Rectangle {
                     csound.setChannel("volumeCorrection", presetVolume.value)
                     if (bourdonForm.currentPreset>=0) {
                         presetModel.set(bourdonForm.currentPreset, {"volumeCorrection": presetVolume.value})
+                    } else {
+                        app.sandBoxData.volumeCorrection = presetVolume.value
                     }
                 }
             }
@@ -169,32 +171,8 @@ Rectangle {
                 bourdonIndex: model.index
                 width: volumeListView.width
             }
-            //spacing: 5
         }
 
-        // GridLayout {
-        //     Layout.fillWidth: true
-        //     flow: GridLayout.TopToBottom
-        //     rows: app.bourdonNotes.length  //;Math.round(app.bourdonNotes.length / 2)
-            
-
-        //     Repeater {
-        //         id: volumeRepeater
-        //         model: app.bourdonNotes.length
-        //         delegate: BourdonVolume {
-        //             bourdonIndex: model.index
-        //             Layout.fillWidth: true
-        //             //enabled:  individualVolumeCheckbox.checked
-        //         }
-
-        //     }
-        // }
-
-
-
-        // Item { // spacer
-        //     Layout.fillHeight:  true
-        // }
     }
 
 }

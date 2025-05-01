@@ -4,7 +4,7 @@ import QtQuick.Layouts
 
 Item {
     width:  500
-    height: visible ? 30 : 0 // hide when not visible. But keep it sill in the model  for easier data management
+    height: visible ? 40 : 0 // hide when not visible. But keep it sill in the model  for easier data management
     property int bourdonIndex: 0
     property string bourdonNote: app.bourdonNotes[bourdonIndex]
 
@@ -24,38 +24,44 @@ Item {
         } else {
             notes = app.presetModel.get(bourdonForm.currentPreset).notes.split(",")
         }
-        //console.log("isNoteInCurrentPreset notes: ", notes, app.bourdonNotes[bourdonIndex] )
+        //console.log("isNoteInCurrentPreset notes: ",bourdonForm.currentPreset,  notes, app.bourdonNotes[bourdonIndex] )
         return notes.includes(app.bourdonNotes[bourdonIndex])
     }
 
     function updateEnabled() {
         const noteIsInCurrentPreset = isNoteInCurrentPreset()
-        enabled = ( bourdonForm.currentPreset < 0 && mixerForm.individualVolume)  ||
-                (bourdonForm.currentPreset>=0 && noteIsInCurrentPreset &&  mixerForm.individualVolume )
-        visible = bourdonForm.currentPreset < 0 || (bourdonForm.currentPreset>=0  && noteIsInCurrentPreset)
+
+        enabled = mixerForm.individualVolume
+        visible =  noteIsInCurrentPreset
     }
 
     function updateVolumeAndPanFromPreset() {
-        if (bourdonForm.currentPreset < 0) {
-            volumeSlider.value = 0
-            return
-        }
+
 
         const item = presetModel.get(bourdonForm.currentPreset)
         const volumeChannel = "volume" + bourdonIndex
         const panChannel = "pan" + bourdonIndex
 
-        if (item && volumeChannel in item && item[volumeChannel]!==undefined) {
-            volumeSlider.value = item[volumeChannel]
+        if (bourdonForm.currentPreset < 0) {
+            volumeSlider.value = app.sandBoxData[volumeChannel] ? app.sandBoxData[volumeChannel] : 0
+            panSlider.value = app.sandBoxData[panChannel] ? app.sandBoxData[panChannel] : 0
+
         } else {
-            volumeSlider.value = 0
+
+            if (item && volumeChannel in item && item[volumeChannel]!==undefined) {
+                volumeSlider.value = item[volumeChannel]
+            } else {
+                volumeSlider.value = 0
+            }
+
+            if (item && panChannel in item && item[panChannel]!==undefined) {
+                panSlider.value = item[panChannel]
+            } else {
+                panSlider.value = 0
+            }
         }
 
-        if (item && panChannel in item && item[panChannel]!==undefined) {
-            panSlider.value = item[panChannel]
-        } else {
-            panSlider.value = 0
-        }
+
     }
 
     Connections {
@@ -71,6 +77,11 @@ Item {
             //console.log("Preset changed received in BourdonVolume. Notes: ", app.presetModel.get(bourdonForm.currentPreset).notes) // this is received but the next has no effect.
             updateEnabled()
         }
+
+        function onSandboxChanged() {
+            //console.log("Sandbox changed received in BourdonVolume. Notes: ", app.sandBoxData.notes)
+            updateEnabled()
+        }
     }
 
     Connections {
@@ -80,6 +91,8 @@ Item {
             updateEnabled()
         }
     }
+
+
 
     Component.onCompleted: updateVolumeAndPanFromPreset()
 
@@ -108,8 +121,9 @@ Item {
                 csound.setChannel(channel, value)
                 bourdonVolumeLabel.text = volumeSlider.value.toFixed(1) + " dB"
                 if (bourdonForm.currentPreset >= 0) {
-                    // Set the volume for the current preset
                     presetModel.set(bourdonForm.currentPreset, {[channel]: value})
+                } else {
+                    app.sandBoxData[channel] = value
                 }
             }
 
@@ -146,6 +160,8 @@ Item {
                 if (bourdonForm.currentPreset >= 0) {
                     // Set the volume for the current preset
                     presetModel.set(bourdonForm.currentPreset, {[channel]: value})
+                } else {
+                    app.sandBoxData[channel] = value
                 }
 
             }
