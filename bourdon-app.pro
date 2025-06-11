@@ -1,6 +1,7 @@
 lessThan(QT_MAJOR_VERSION,6): error("Qt6 is required for this build.")
 
-QT += quick core multimedia bluetooth
+QT += quick core multimedia # bluetooth
+# maybe needed: QTPLUGIN += qtaudio_coreaudio
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -8,11 +9,13 @@ QT += quick core multimedia bluetooth
 
 SOURCES += main.cpp \
         csengine.cpp \
+    csoundproxy.mm \
     fileio.cpp
 
 
 HEADERS += \
     csengine.h \
+    csoundproxy.h \
     fileio.h
 
 
@@ -44,7 +47,7 @@ linux:!android {
   LIBS += -lcsound64 -lsndfile -lcsnd6
 }
 
-mac: {
+mac: !ios {
     ICON = images/bourdon.icns
     QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
     LIBS += -F/Library/Frameworks/ -framework CsoundLib64  -L/usr/local/lib/ -lcsnd6.6.0
@@ -94,6 +97,67 @@ DISTFILES += \
     images/stop-button.png
 
 
+
+ios {
+
+
+    csdfiles.files = bourdon.csd
+    QMAKE_BUNDLE_DATA += csdfiles
+
+    SOURCES += \
+        csoundproxy.mm \
+        csound-iOS/classes/CsoundObj.m
+
+    HEADERS += \
+        csound-iOS/classes/CsoundObj.h \
+        csoundproxy.h
+
+    SOURCES -= csengine.cpp
+    HEADERS -= csengine.h
+
+    HEADERS += \
+        csound-iOS/classes/bindings/motion/CsoundAccelerometerBinding.h \
+        csound-iOS/classes/bindings/motion/CsoundAttitudeBinding.h \
+        csound-iOS/classes/bindings/motion/CsoundGyroscopeBinding.h \
+        csound-iOS/classes/bindings/motion/CsoundMotion.h \
+        csound-iOS/classes/bindings/ui/CsoundButtonBinding.h \
+        csound-iOS/classes/bindings/ui/CsoundLabelBinding.h \
+        csound-iOS/classes/bindings/ui/CsoundMomentaryButtonBinding.h \
+        csound-iOS/classes/bindings/ui/CsoundSliderBinding.h \
+        csound-iOS/classes/bindings/ui/CsoundSwitchBinding.h \
+        csound-iOS/classes/bindings/ui/CsoundUI.h \
+        csound-iOS/classes/midi/CsoundMIDI.h \
+        csound-iOS/classes/midi/MidiWidgetWrapper.h \
+        csound-iOS/classes/midi/MidiWidgetsManager.h \
+        csound-iOS/classes/midi/SliderMidiWidgetWrapper.h
+
+    SOURCES += \
+        csound-iOS/classes/bindings/motion/CsoundAccelerometerBinding.m \
+        csound-iOS/classes/bindings/motion/CsoundAttitudeBinding.m \
+        csound-iOS/classes/bindings/motion/CsoundGyroscopeBinding.m \
+        csound-iOS/classes/bindings/motion/CsoundMotion.m \
+        csound-iOS/classes/bindings/ui/CsoundButtonBinding.m \
+        csound-iOS/classes/bindings/ui/CsoundLabelBinding.m \
+        csound-iOS/classes/bindings/ui/CsoundMomentaryButtonBinding.m \
+        csound-iOS/classes/bindings/ui/CsoundSliderBinding.m \
+        csound-iOS/classes/bindings/ui/CsoundSwitchBinding.m \
+        csound-iOS/classes/bindings/ui/CsoundUI.m \
+        csound-iOS/classes/midi/CsoundMIDI.m \
+        csound-iOS/classes/midi/MidiWidgetsManager.m \
+        csound-iOS/classes/midi/SliderMidiWidgetWrapper.m
+
+
+    INCLUDEPATH += $$PWD/csound-iOS/headers
+    INCLUDEPATH += $$PWD/csound-iOS/classes
+    INCLUDEPATH += $$PWD/csound-iOS/classes/midi
+    LIBS += $$PWD/csound-iOS/libs/libcsound.a
+    LIBS += $$PWD/csound-iOS/libs/libsndfile.a
+    LIBS += -framework Accelerate
+    LIBS += -framework AVFAudio
+    LIBS += -framework CoreMidi
+    LIBS += -framework CoreMotion
+
+}
 
 macx {
 

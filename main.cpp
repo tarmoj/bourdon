@@ -2,9 +2,12 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QThread>
-#include "csengine.h"
 #include "fileio.h"
-
+#ifdef Q_OS_IOS
+    #include "csoundproxy.h"
+#else
+    #include "csengine.h"
+#endif
 
 #ifdef Q_OS_ANDROID
     #include <QtCore/private/qandroidextras_p.h>
@@ -123,8 +126,12 @@ int main(int argc, char *argv[])
     setenv("OPCODE6DIR64", pluginsPath.toLocal8Bit(), 1);
 #endif
 
+#ifdef Q_OS_IOS
+    CsoundProxy *cs = new CsoundProxy();
+#else
     CsEngine *cs = new CsEngine();
     cs->play();
+#endif
 
     QQmlApplicationEngine engine;
 
