@@ -3,11 +3,10 @@
 #include <QObject>
 #include <QVariant>
 
-
 #ifdef Q_OS_ANDROID
-    #include "AndroidCsound.hpp"
+#include "AndroidCsound.hpp"
 #else
-    #include <csound.hpp>
+#include <csound.hpp>
 #endif
 
 #include <csPerfThread.hpp>
@@ -17,13 +16,11 @@ class CsEngine : public QObject
     Q_OBJECT
 
 public:
+    explicit CsEngine(QObject *parent = 0);
+    ~CsEngine();
 
-	explicit CsEngine(QObject *parent = 0);
-	~CsEngine();
-
-
-	void play();
-	int open(QString csd);
+    void play();
+    int open(QString csd);
 
 public slots:
 
@@ -33,19 +30,18 @@ public slots:
     void compileOrc(const QString &code);
     void tableSet(int table, int index, double value);
 
-	//Q_INVOKABLE double getChannel(const char *channel);
+    //Q_INVOKABLE double getChannel(const char *channel);
     Q_INVOKABLE QVariant getAudioDevices();
 
 private:
     bool mStop;
 #ifdef Q_OS_ANDROID
-	AndroidCsound * cs;    
+    AndroidCsound *cs;
 #else
-	Csound * cs;
+    Csound *cs;
 #endif
 
-    CsoundPerformanceThread * perfThread;
-
+    CsoundPerformanceThread *perfThread;
 };
 
 #endif // CSENGINE_H
