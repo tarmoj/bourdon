@@ -104,6 +104,13 @@ ios {
     csdfiles.files = bourdon.csd
     QMAKE_BUNDLE_DATA += csdfiles
 
+    QMAKE_INFO_PLIST = $$PWD/ios/Info.plist
+
+    QMAKE_ASSET_CATALOGS += $$PWD/ios/Assets.xcassets
+    QMAKE_ASSET_CATALOGS_APP_ICON = AppIcon
+
+    QMAKE_LAUNCH_SCREEN_STORYBOARD = $$PWD/ios/LaunchScreen.storyboard
+
     SOURCES += \
         csoundproxy.mm \
         csound-iOS/classes/CsoundObj.m
