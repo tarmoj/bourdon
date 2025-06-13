@@ -145,7 +145,7 @@ Item {
         }
         Slider {
             id: panSlider
-            Layout.preferredWidth: 80
+            Layout.preferredWidth:  80
             Layout.maximumWidth: 100
             Layout.fillWidth: true
 

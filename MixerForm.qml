@@ -140,8 +140,13 @@ Rectangle {
             }
 
             Button {
+                Layout.fillWidth: true
+                Layout.maximumWidth: 120
+                horizontalPadding: 8
                 enabled: individualVolumeCheckbox.checked
-                text: qsTr("Reset vol.")
+                text: qsTr("0dB")
+                ToolTip.text: qsTr("All volumes to 0dB")
+                ToolTip.visible: hovered
                 onClicked: {
                     for (var i = 0; i < volumeListView.model; i++) {
                         let item = volumeListView.itemAtIndex(i);
@@ -151,8 +156,14 @@ Rectangle {
             }
 
             Button {
+                Layout.fillWidth: true
+                Layout.maximumWidth: 120
+                horizontalPadding: 8
                 enabled: individualVolumeCheckbox.checked
-                text: qsTr("Reset PAN")
+                text: qsTr("Center")
+                ToolTip.text: qsTr("All pans to center")
+                ToolTip.visible: hovered
+
                 onClicked: {
                     for (var i = 0; i < volumeListView.model; i++) {
                         let item = volumeListView.itemAtIndex(i);
