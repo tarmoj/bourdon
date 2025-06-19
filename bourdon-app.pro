@@ -1,23 +1,29 @@
 lessThan(QT_MAJOR_VERSION,6): error("Qt6 is required for this build.")
 
-QT += quick core multimedia # bluetooth
-# maybe needed: QTPLUGIN += qtaudio_coreaudio
+QT += quick core
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+
 SOURCES += main.cpp \
+        fileio.cpp \
         csengine.cpp \
-    csoundproxy.mm \
-    fileio.cpp
+
 
 
 HEADERS += \
     csengine.h \
-    csoundproxy.h \
     fileio.h
 
+ios {
+    HEADERS += \
+        csoundproxy.h \
+
+    SOURCES += \
+        csoundproxy.mm
+}
 
 RESOURCES += qml.qrc
 
@@ -27,8 +33,7 @@ INCLUDEPATH += /usr/local/include/csound/
 android {
   QT += core-private
   INCLUDEPATH += /home/tarmo/src/csound/Android/CsoundAndroid/jni/	 #TODO: should have an extra varaible, not hardcoded personal library
-  HEADERS += AndroidCsound.hpp  mediabuttonhandler.h
-  SOURCES += mediabuttonhandler.cpp
+  HEADERS += AndroidCsound.hpp
 
 #message(ANDROID_TARGET_ARCH: $$ANDROID_TARGET_ARCH)
 
@@ -93,7 +98,6 @@ DISTFILES += \
     android/res/mipmap-xxxhdpi/ic_launcher_round.png \
     android/res/values/ic_launcher_background.xml \
     android/res/values/libs.xml \
-    android/src/MediaSessionHandler.java \
     images/stop-button.png
 
 
@@ -169,17 +173,17 @@ ios {
 macx {
 
     samples.path = Contents/Resources/
-	samples.files = $$PWD/samples
-	QMAKE_BUNDLE_DATA += samples
+        samples.files = $$PWD/samples
+        QMAKE_BUNDLE_DATA += samples
 
     first.path = $$PWD
-	first.commands = $$[QT_INSTALL_PREFIX]/bin/macdeployqt $$OUT_PWD/$$DESTDIR/$${TARGET}.app -qmldir=$$PWD # deployment
+        first.commands = $$[QT_INSTALL_PREFIX]/bin/macdeployqt $$OUT_PWD/$$DESTDIR/$${TARGET}.app -qmldir=$$PWD # deployment
 
     second.path = $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks
-	second.files = /Library/Frameworks/CsoundLib64.framework
-	#second.commands = rm -rf $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/CsoundLib64.framework/
-	#TODO: remove Resources Java, Luajit, Manual, Opcodes64 enamus...  PD, Python, samples
-	# remove lbCsoundAc, võibolla libcsnd6
+        second.files = /Library/Frameworks/CsoundLib64.framework
+        #second.commands = rm -rf $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/CsoundLib64.framework/
+        #TODO: remove Resources Java, Luajit, Manual, Opcodes64 enamus...  PD, Python, samples
+        # remove lbCsoundAc, võibolla libcsnd6
 
     third.path = $$PWD
         third.commands = install_name_tool -change /Library/Frameworks/CsoundLib64.framework/CsoundLib64 @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/bourdon-app ;
@@ -188,8 +192,8 @@ macx {
         third.commands += install_name_tool -change libcsnd6.6.0.dylib @rpath/CsoundLib64.framework/Versions/6.0/libcsnd6.6.0.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/bourdon-app
 
     final.path = $$PWD
-	#final.commands = $$[QT_INSTALL_PREFIX]/bin/macdeployqt $$OUT_PWD/$$DESTDIR/$${TARGET}.app -qmldir=$$PWD -dmg# deployment BETTER: use hdi-util
-	final.commands = hdiutil create -fs HFS+ -srcfolder $$OUT_PWD/$$DESTDIR/$${TARGET}.app -volname \"Bourdon\" $$OUT_PWD/$$DESTDIR/$${TARGET}.dmg
+        #final.commands = $$[QT_INSTALL_PREFIX]/bin/macdeployqt $$OUT_PWD/$$DESTDIR/$${TARGET}.app -qmldir=$$PWD -dmg# deployment BETTER: use hdi-util
+        final.commands = hdiutil create -fs HFS+ -srcfolder $$OUT_PWD/$$DESTDIR/$${TARGET}.app -volname \"Bourdon\" $$OUT_PWD/$$DESTDIR/$${TARGET}.dmg
 
     INSTALLS += first  third  final #final don't forget second on first compile!!! (later makes sense to remove extra folders from Csound.Frameworks)
 

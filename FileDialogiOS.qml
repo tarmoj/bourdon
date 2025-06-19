@@ -21,6 +21,7 @@ Dialog {
     signal fileSelected(string fileUrl)
 
     // TODO: add rename & delete buttons
+    // FIXME: show only filenames with .json...
 
     // Load files when dialog opens
     onVisibleChanged: {

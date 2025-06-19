@@ -43,7 +43,7 @@ bool FileIO::writeFile(const QString &path, const QString &content) {
 
 QStringList FileIO::listPresets() {
     QDir dir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
-    QStringList list = dir.entryList(QStringList() << "*.json", QDir::Files);
+    QStringList list = dir.entryList(QStringList() << "*.*", QDir::Files);
     qDebug() << "File list in c++ " << list;
     return list;
 }
