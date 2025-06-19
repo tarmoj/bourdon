@@ -21,5 +21,6 @@
         <file>images/open.svg</file>
         <file>images/bmc-logo.svg</file>
         <file>images/backspace.svg</file>
+        <file>FileDialogiOS.qml</file>
     </qresource>
 </RCC>
