@@ -6,6 +6,7 @@ QT += quick core
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+#for iOS download Csound-iOS from https://csound.com/download.html and put to the source's root folder
 
 SOURCES += main.cpp \
         fileio.cpp \
@@ -113,7 +114,8 @@ ios {
     QMAKE_ASSET_CATALOGS += $$PWD/ios/Assets.xcassets
     QMAKE_ASSET_CATALOGS_APP_ICON = AppIcon
 
-    QMAKE_LAUNCH_SCREEN_STORYBOARD = $$PWD/ios/LaunchScreen.storyboard
+    QMAKE_IOS_LAUNCH_SCREEN = $$PWD/ios/LaunchScreen.storyboard
+
 
     SOURCES += \
         csoundproxy.mm \

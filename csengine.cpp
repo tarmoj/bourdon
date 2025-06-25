@@ -14,8 +14,8 @@ CsEngine::CsEngine(QObject *parent)
     //csoundInitialize(CSOUNDINIT_NO_ATEXIT | CSOUNDINIT_NO_SIGNAL_HANDLER); // not sure if necessary, but Steven Yi claims, it should be there
 
 #ifdef Q_OS_ANDROID
-	cs = new AndroidCsound();
-	cs->setOpenSlCallbacks(); // for android audio to work
+    cs = new AndroidCsound();
+    cs->setOpenSlCallbacks(); // for android audio to work
 
     // test
     if (QFile::exists("/sdcard/Music/Bourdon/samples/G0.wav")) {
@@ -109,7 +109,7 @@ void CsEngine::compileOrc(const QString &code)
 
 void CsEngine::tableSet(int table, int index, double value)
 {
-    if (cs && table>0 && index>=0)
+    if (cs && table > 0 && index >= 0)
 
         cs->TableSet(table, index, value); // this is slow and seem to block UI
     else {

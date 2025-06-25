@@ -4,15 +4,15 @@
 #include <QThread>
 #include "fileio.h"
 #ifdef Q_OS_IOS
-    #include "csoundproxy.h"
+#include "csoundproxy.h"
 #else
-    #include "csengine.h"
+#include "csengine.h"
 #endif
 
 #ifdef Q_OS_ANDROID
-    #include <QtCore/private/qandroidextras_p.h>
-    #include <QJniEnvironment>
-    #include "mediabuttonhandler.h"
+#include <QJniEnvironment>
+#include <QtCore/private/qandroidextras_p.h>
+#include "mediabuttonhandler.h"
 
 bool requestPermission(QString permission)
 {
@@ -24,40 +24,43 @@ bool requestPermission(QString permission)
         return true;
 }
 
-
 extern "C" {
-Q_DECL_EXPORT void JNICALL Java_org_qtproject_example_MediaSessionHandler_keyEvent(JNIEnv *, jobject, jint keyCode) {
+Q_DECL_EXPORT void JNICALL Java_org_qtproject_example_MediaSessionHandler_keyEvent(JNIEnv *,
+                                                                                   jobject,
+                                                                                   jint keyCode)
+{
     qDebug() << "Media key received in Qt:" << keyCode;
 
     switch (keyCode) {
-    case 85:  // KEYCODE_MEDIA_PLAY_PAUSE
+    case 85: // KEYCODE_MEDIA_PLAY_PAUSE
         qDebug() << "Play/Pause Pressed!";
         break;
-    case 86:  // KEYCODE_MEDIA_STOP
+    case 86: // KEYCODE_MEDIA_STOP
         qDebug() << "Stop Pressed!";
         break;
-    case 87:  // KEYCODE_MEDIA_NEXT
+    case 87: // KEYCODE_MEDIA_NEXT
         qDebug() << "Next Track!";
         break;
-    case 88:  // KEYCODE_MEDIA_PREVIOUS
+    case 88: // KEYCODE_MEDIA_PREVIOUS
         qDebug() << "Previous Track!";
         break;
     }
 }
 }
 
-void initializeMediaSession() {
+void initializeMediaSession()
+{
     qDebug() << "Initializing Media Session";
 
     QJniObject context = QNativeInterface::QAndroidApplication::context();
 
-    if (context.isValid() ) {
+    if (context.isValid()) {
         QJniObject::callStaticMethod<void>(
             "org/tarmoj/bourdon/MediaSessionHandler",
             "initialize",
             "(Landroid/content/Context;)V", // Signature with Context parameter
-            context.object<jobject>() // Pass the Context object
-            );
+            context.object<jobject>()       // Pass the Context object
+        );
     } else {
         qDebug() << "Context is null";
     }
@@ -67,13 +70,11 @@ void initializeMediaSession() {
 
 int main(int argc, char *argv[])
 {
-
     QGuiApplication app(argc, argv);
 
     app.setOrganizationName("Tarmo Johannes Events and Software");
     app.setOrganizationDomain("bourdon-app.org");
     app.setApplicationName("Bourdon App");
-
 
 #ifdef Q_OS_ANDROID
 
@@ -98,7 +99,10 @@ int main(int argc, char *argv[])
             // try setting titlebar color here...
             window.callMethod<void>("addFlags", "(I)V", 0x80000000);
             window.callMethod<void>("clearFlags", "(I)V", 0x04000000);
-            window.callMethod<void>("setStatusBarColor", "(I)V", 0x1c1b1f); // hardcoded color for now. later try to get via QML engine Material.background
+            window.callMethod<void>(
+                "setStatusBarColor",
+                "(I)V",
+                0x1c1b1f); // hardcoded color for now. later try to get via QML engine Material.background
             QJniObject decorView = window.callObjectMethod("getDecorView", "()Landroid/view/View;");
             decorView.callMethod<void>("setSystemUiVisibility", "(I)V", 0x00002000);
         }
@@ -110,9 +114,7 @@ int main(int argc, char *argv[])
 
     // media session
     if (QThread::currentThread() != QCoreApplication::instance()->thread()) {
-        QMetaObject::invokeMethod(&app, []() {
-            initializeMediaSession();
-        }, Qt::QueuedConnection);
+        QMetaObject::invokeMethod(&app, []() { initializeMediaSession(); }, Qt::QueuedConnection);
     } else {
         initializeMediaSession();
     }
@@ -135,7 +137,9 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    engine.rootContext()->setContextProperty("csound", cs); // forward c++ object that can be reached form qml by object name "csound" NB! include <QQmlContext>
+    engine.rootContext()->setContextProperty(
+        "csound",
+        cs); // forward c++ object that can be reached form qml by object name "csound" NB! include <QQmlContext>
 
 #ifdef Q_OS_ANDROID
     MediaButtonHandler mediaButtonHandler;
@@ -143,7 +147,6 @@ int main(int argc, char *argv[])
 #endif
 
     qmlRegisterType<FileIO>("MyApp.FileIO", 1, 0, "FileIO");
-
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(
@@ -157,13 +160,11 @@ int main(int argc, char *argv[])
         Qt::QueuedConnection);
     engine.load(url);
 
-
     // QObject *qmlApp = engine.rootObjects().first();
     // QObject::connect(qmlApp, SIGNAL(tableSet(int, int,double)), cs, SLOT(tableSet(int, int, double)));
 
-//    QObject::connect(qmlApp, SIGNAL(setChannel(QString,double)), cs, SLOT(setChannel(QString,double)));
-//    QObject::connect(qmlApp, SIGNAL(readScore(QString)), cs, SLOT(readScore(QString)));
-
+    //    QObject::connect(qmlApp, SIGNAL(setChannel(QString,double)), cs, SLOT(setChannel(QString,double)));
+    //    QObject::connect(qmlApp, SIGNAL(readScore(QString)), cs, SLOT(readScore(QString)));
 
     //    QObject::connect(qmlApp, SIGNAL(setChannel(QString,double)), cs, SLOT(setChannel(QString,double)));
     //    QObject::connect(qmlApp, SIGNAL(readScore(QString)), cs, SLOT(readScore(QString)));

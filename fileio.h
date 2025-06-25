@@ -1,11 +1,12 @@
 #ifndef FILEIO_H
 #define FILEIO_H
 
-#include <QObject>
 #include <QFile>
+#include <QObject>
 #include <QTextStream>
 
-class FileIO : public QObject {
+class FileIO : public QObject
+{
     Q_OBJECT
 public:
     explicit FileIO(QObject *parent = nullptr);
