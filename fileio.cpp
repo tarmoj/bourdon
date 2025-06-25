@@ -1,8 +1,9 @@
 #include "fileio.h"
-#include "qurl.h"
 #include <QDebug>
 #include <QFile>
 #include <QFileInfo>
+#include <QStandardPaths>
+#include <QDir>
 
 FileIO::FileIO(QObject *parent) : QObject(parent) {}
 
@@ -39,3 +40,21 @@ bool FileIO::writeFile(const QString &path, const QString &content) {
     file.close();
     return true;
 }
+
+QStringList FileIO::listPresets() {
+    QDir dir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+    QStringList list = dir.entryList(QStringList() << "*.*", QDir::Files);
+    qDebug() << "File list in c++ " << list;
+    return list;
+}
+
+QString FileIO::documentsPath() const {
+    return QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+}
+
+bool FileIO::fileExists(const QString &path) const {
+    return QFile::exists(path);
+}
+
+
+

@@ -256,7 +256,13 @@ Built using Csound sound engine and Qt framework.
                 icon.source: "qrc:/images/open.svg"
                 onTriggered: {
                     drawer.close()
-                    loadDialog.open()
+                    if (Qt.platform.os !== "ios") {
+                        loadDialog.open();
+                    } else {
+                        // fileio.listPresets()
+                        //loadPresetDialog.open()
+                        loadDialogIOs.open()
+                    }
                 }
             }
 
@@ -265,7 +271,11 @@ Built using Csound sound engine and Qt framework.
                 icon.source: "qrc:/images/save.svg"
                 onTriggered: {
                     drawer.close()
-                    saveDialog.open()
+                    if (Qt.platform.os !== "ios") {
+                        saveDialog.open();
+                    } else {
+                        savePresetDialogIOs.open()
+                    }
                 }
             }
 
@@ -302,6 +312,8 @@ Built using Csound sound engine and Qt framework.
         title: qsTr("Save Presets to File")
         fileMode: FileDialog.SaveFile
         //currentFolder: StandardPaths.writableLocation(StandardPaths.MusicLocation) + "/Bourdon"
+        currentFolder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
+
         nameFilters: ["JSON files (*.json)", "All files (*)"]
         onAccepted: {
             // if (selectedFile.indexOf("content://") === 0) {
@@ -325,6 +337,33 @@ Built using Csound sound engine and Qt framework.
             loadPresetsFromFile(selectedFile)
         }
     }
+
+    // for iOS
+    FileDialogiOS {
+        id: loadDialogIOs
+
+
+        fileMode: "open"
+
+        onFileSelected: function(fileUrl) {
+            console.log("Load from: ", fileUrl)
+            loadPresetsFromFile(fileUrl)
+        }
+
+    }
+
+    FileDialogiOS {
+        id: savePresetDialogIOs
+        fileMode: "save"
+
+        onFileSelected: function(fileUrl) {
+            console.log("Saving to", fileUrl)
+            savePresetsToFile(fileUrl)
+        }
+
+    }
+
+
 
 
     Connections { // for later: you can use also onClosing if ApplicationWindow is used

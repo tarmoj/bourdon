@@ -1,11 +1,13 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QThread>
 #include <QQmlContext>
-#include "csengine.h"
+#include <QThread>
 #include "fileio.h"
-
-
+#ifdef Q_OS_IOS
+    #include "csoundproxy.h"
+#else
+    #include "csengine.h"
+#endif
 
 #ifdef Q_OS_ANDROID
     #include <QtCore/private/qandroidextras_p.h>
@@ -16,11 +18,10 @@ bool requestPermission(QString permission)
 {
     auto r = QtAndroidPrivate::requestPermission(permission).result();
     if (r == QtAndroidPrivate::Denied) {
-        qDebug() <<  permission << " Denied.";
+        qDebug() << permission << " Denied.";
         return false;
     } else
         return true;
-
 }
 
 
@@ -64,7 +65,6 @@ void initializeMediaSession() {
 
 #endif
 
-
 int main(int argc, char *argv[])
 {
 
@@ -85,7 +85,8 @@ int main(int argc, char *argv[])
     //requestPermission("android.permission.BLUETOOTH");
 
     //keep screen on:
-    QJniObject activity =  QNativeInterface::QAndroidApplication::context(); //  QtAndroid::androidActivity();
+    QJniObject activity
+        = QNativeInterface::QAndroidApplication::context(); //  QtAndroid::androidActivity();
     if (activity.isValid()) {
         QJniObject window = activity.callObjectMethod("getWindow", "()Landroid/view/Window;");
 
@@ -101,7 +102,10 @@ int main(int argc, char *argv[])
             QJniObject decorView = window.callObjectMethod("getDecorView", "()Landroid/view/View;");
             decorView.callMethod<void>("setSystemUiVisibility", "(I)V", 0x00002000);
         }
-        QJniEnvironment env; if (env->ExceptionCheck()) { env->ExceptionClear(); } //Clear any possible pending exceptions.
+        QJniEnvironment env;
+        if (env->ExceptionCheck()) {
+            env->ExceptionClear();
+        } //Clear any possible pending exceptions.
     }
 
     // media session
@@ -116,15 +120,21 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef Q_OS_MACOS
-    QString pluginsPath = QGuiApplication::applicationDirPath() + "/../Frameworks/CsoundLib64.framework/Versions/6.0/Resources/Opcodes64";
-    qDebug()<<" Csound plugins in: " << pluginsPath;
-    setenv("OPCODE6DIR64", pluginsPath.toLocal8Bit() ,1);
+    QString pluginsPath = QGuiApplication::applicationDirPath()
+                          + "/../Frameworks/CsoundLib64.framework/Versions/6.0/Resources/Opcodes64";
+    qDebug() << " Csound plugins in: " << pluginsPath;
+    setenv("OPCODE6DIR64", pluginsPath.toLocal8Bit(), 1);
 #endif
 
-    CsEngine * cs = new CsEngine();
+#ifdef Q_OS_IOS
+    CsoundProxy *cs = new CsoundProxy();
+#else
+    CsEngine *cs = new CsEngine();
     cs->play();
+#endif
 
     QQmlApplicationEngine engine;
+
     engine.rootContext()->setContextProperty("csound", cs); // forward c++ object that can be reached form qml by object name "csound" NB! include <QQmlContext>
 
 #ifdef Q_OS_ANDROID
@@ -134,14 +144,18 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<FileIO>("MyApp.FileIO", 1, 0, "FileIO");
 
-    const QUrl url(QStringLiteral("qrc:/main.qml"));
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-                     &app, [url](QObject *obj, const QUrl &objUrl) {
-        if (!obj && url == objUrl)
-            QCoreApplication::exit(-1);
-    }, Qt::QueuedConnection);
-    engine.load(url);
 
+    const QUrl url(QStringLiteral("qrc:/main.qml"));
+    QObject::connect(
+        &engine,
+        &QQmlApplicationEngine::objectCreated,
+        &app,
+        [url](QObject *obj, const QUrl &objUrl) {
+            if (!obj && url == objUrl)
+                QCoreApplication::exit(-1);
+        },
+        Qt::QueuedConnection);
+    engine.load(url);
 
 
     // QObject *qmlApp = engine.rootObjects().first();
@@ -150,6 +164,9 @@ int main(int argc, char *argv[])
 //    QObject::connect(qmlApp, SIGNAL(setChannel(QString,double)), cs, SLOT(setChannel(QString,double)));
 //    QObject::connect(qmlApp, SIGNAL(readScore(QString)), cs, SLOT(readScore(QString)));
 
+
+    //    QObject::connect(qmlApp, SIGNAL(setChannel(QString,double)), cs, SLOT(setChannel(QString,double)));
+    //    QObject::connect(qmlApp, SIGNAL(readScore(QString)), cs, SLOT(readScore(QString)));
 
     return app.exec();
 }
