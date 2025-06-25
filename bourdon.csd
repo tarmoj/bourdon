@@ -166,10 +166,12 @@ instr Bourdon
 	
 	kFreq getFrequency iNoteIndex
 	
-	if (kType==1) then ; saw wave
+	if (kType==1 || kType==3) then ; saw wave or saw 2
    kamp = 0.2
 		aSaw vco2 kamp, kFreq ;, 10
-		aSaw butterlp aSaw, 6000	  
+		if (kType==1) then ; donät filter for Saw 2
+			aSaw butterlp aSaw, 6000	  
+		endif
 	  aOut = aSaw	
 
 	elseif (kType==2) then ; synthesized sound
@@ -306,6 +308,8 @@ endin
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -320,7 +324,7 @@ endin
   <g>237</g>
   <b>240</b>
  </bgcolor>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>button0</objectName>
   <x>360</x>
   <y>97</y>
@@ -342,7 +346,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>a4</objectName>
   <x>101</x>
   <y>46</y>
@@ -372,7 +376,7 @@ endin
   <randomizable group="0">false</randomizable>
   <value>440</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>16</x>
   <y>46</y>
@@ -403,7 +407,7 @@ endin
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonA</objectName>
   <x>425</x>
   <y>97</y>
@@ -425,7 +429,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonc</objectName>
   <x>25</x>
   <y>143</y>
@@ -447,7 +451,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttond</objectName>
   <x>92</x>
   <y>143</y>
@@ -469,7 +473,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttone</objectName>
   <x>159</x>
   <y>143</y>
@@ -491,7 +495,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttong</objectName>
   <x>359</x>
   <y>142</y>
@@ -513,7 +517,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttona</objectName>
   <x>427</x>
   <y>142</y>
@@ -535,7 +539,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonh</objectName>
   <x>495</x>
   <y>142</y>
@@ -557,7 +561,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonc1</objectName>
   <x>26</x>
   <y>189</y>
@@ -579,7 +583,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttond1</objectName>
   <x>93</x>
   <y>189</y>
@@ -601,7 +605,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttone1</objectName>
   <x>160</x>
   <y>189</y>
@@ -623,7 +627,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttong1</objectName>
   <x>360</x>
   <y>188</y>
@@ -645,7 +649,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttona1</objectName>
   <x>428</x>
   <y>188</y>
@@ -667,7 +671,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonh1</objectName>
   <x>496</x>
   <y>188</y>
@@ -689,7 +693,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject type="BSBGraph" version="2">
   <objectName/>
   <x>23</x>
   <y>314</y>
@@ -716,7 +720,7 @@ endin
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>type</objectName>
   <x>181</x>
   <y>269</y>
@@ -743,11 +747,16 @@ endin
     <value>2</value>
     <stringvalue/>
    </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name> saw2</name>
+    <value>3</value>
+    <stringvalue/>
+   </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonf</objectName>
   <x>225</x>
   <y>142</y>
@@ -769,7 +778,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonf1</objectName>
   <x>226</x>
   <y>188</y>
@@ -791,7 +800,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonfis</objectName>
   <x>292</x>
   <y>142</y>
@@ -813,7 +822,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>buttonfis1</objectName>
   <x>293</x>
   <y>188</y>
@@ -835,7 +844,7 @@ endin
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>tuning</objectName>
   <x>32</x>
   <y>268</y>

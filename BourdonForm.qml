@@ -202,7 +202,21 @@ Item {
                     id: soundTypeCombobox
                     currentIndex: 2
                     Layout.preferredWidth: 150
-                    model: [qsTr("Sample"), qsTr("Saw wave"), qsTr("Synthesized") ]
+                    model: [qsTr("Sample"), qsTr("Saw wave"), qsTr("Synthesized"), qsTr("Saw 2") ]
+
+
+                    delegate: ItemDelegate {
+                            width: soundTypeCombobox.width
+                            text: modelData
+                            enabled: index>0 || (index===0  && app.useSamples)
+
+                            onClicked: {
+                                if (enabled) {
+                                    soundTypeCombobox.currentIndex = index
+                                    soundTypeCombobox.popup.close()
+                                }
+                            }
+                        }
 
                     onCurrentIndexChanged: {
                       csound.setChannel("type", currentIndex)
