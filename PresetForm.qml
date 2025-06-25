@@ -98,16 +98,31 @@ Rectangle {
                 }
 
                 ComboBox {
+                    id: comboBox
                     background: Rectangle {
                         color: "transparent"
                     }
                     indicator: Item { width: 0; height: 0 }
 
-                    model: [qsTr("Sample"), qsTr("Saw"), qsTr("Synth")]
+                    model: [qsTr("Sample"), qsTr("Saw"), qsTr("Synth"), "Saw 2"]
                     Layout.preferredWidth: 70
                     Layout.preferredHeight: rowDelegate.height
 
                     currentIndex: parent.soundValue
+
+
+                    delegate: ItemDelegate {
+                            width: comboBox.width
+                            text: modelData
+                            enabled: index>0 || (index===0  && app.useSamples)
+
+                            onClicked: {
+                                if (enabled) {
+                                    comboBox.currentIndex = index
+                                    comboBox.popup.close()
+                                }
+                            }
+                        }
 
                     onCurrentIndexChanged: {
                         app.presetModel.set(index, { "sound": currentIndex })
