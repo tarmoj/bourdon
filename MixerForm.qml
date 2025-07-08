@@ -62,7 +62,7 @@ Rectangle {
                 id: bourdonViewButton
                 icon.source: "qrc:/images/arrow_back.svg"
                 onClicked: {
-                    app.mainView.currentIndex = 0
+                    app.mainView.currentIndex = 1
                 }
             }
 

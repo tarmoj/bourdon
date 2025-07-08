@@ -49,7 +49,7 @@ Rectangle {
         anchors.rightMargin: 5
         icon.source: "qrc:/images/equalizer.png"
         onClicked: {
-            app.mainView.currentIndex = 1
+            app.mainView.currentIndex = 2
         }
     }
 

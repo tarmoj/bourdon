@@ -16,7 +16,7 @@ SOURCES += main.cpp \
 
 HEADERS += \
     csengine.h \
-    fileio.h
+    fileio.h \
 
 ios {
     HEADERS += \
@@ -34,7 +34,10 @@ INCLUDEPATH += /usr/local/include/csound/
 android {
   QT += core-private
   INCLUDEPATH += /home/tarmo/src/csound/Android/CsoundAndroid/jni/	 #TODO: should have an extra varaible, not hardcoded personal library
-  HEADERS += AndroidCsound.hpp
+  HEADERS += AndroidCsound.hpp \
+            mediabuttonhandler.h
+  SOURCES += mediabuttonhandler.cpp
+
 
 #message(ANDROID_TARGET_ARCH: $$ANDROID_TARGET_ARCH)
 
