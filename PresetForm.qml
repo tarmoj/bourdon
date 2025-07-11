@@ -44,6 +44,17 @@ Rectangle {
     }
 
     ToolButton {
+        id: lockButton
+
+        anchors.right: mixerViewButton.left
+        anchors.rightMargin: 5
+        icon.source: "qrc:/images/lock.svg"
+        onClicked: {
+            app.mainView.setCurrentIndex(0) // switch to LockForm
+        }
+    }
+
+    ToolButton {
         id: mixerViewButton
         anchors.right: parent.right
         anchors.rightMargin: 5

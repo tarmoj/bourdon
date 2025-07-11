@@ -405,34 +405,7 @@ Built using Csound sound engine and Qt framework.
         anchors.topMargin:10
         currentIndex: 1
 
-        Page {
-            id: emptyPage
-
-            Rectangle {
-                anchors.fill: parent
-                color: Material.backgroundColor
-
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0
-                        color: Material.backgroundColor
-                    }
-                    GradientStop {
-                        position: 0.5
-                        color: Material.backgroundColor.darker(1.2)
-                    }
-
-                    GradientStop {
-                        position: 1.00
-                        color: "black"
-                    }
-                }
-            }
-            Label {
-                anchors.centerIn: parent
-                text: qsTr("Swipe right to return to main view")
-                font.pointSize: 16
-            }
+        LockForm {
         }
 
         BourdonForm {

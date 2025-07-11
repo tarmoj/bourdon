@@ -22,5 +22,7 @@
         <file>images/bmc-logo.svg</file>
         <file>images/backspace.svg</file>
         <file>FileDialogiOS.qml</file>
+        <file>LockForm.qml</file>
+        <file>images/lock.svg</file>
     </qresource>
 </RCC>
