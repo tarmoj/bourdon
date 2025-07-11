@@ -180,9 +180,11 @@ Rectangle {
                         }
                     }
 
+
                     RowLayout {
                         spacing: 5
                         height: parent.height
+                        width: parent.width
                         clip:true
                         property var notes: model.notes
 
@@ -204,6 +206,8 @@ Rectangle {
                                 }
                             }
                         }
+
+                        Item {Layout.fillWidth: true}
                     }
                 }
 
