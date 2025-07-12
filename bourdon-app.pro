@@ -21,9 +21,14 @@ HEADERS += \
 ios {
     HEADERS += \
         csoundproxy.h \
+        ios-screen.h
+
 
     SOURCES += \
-        csoundproxy.mm
+        csoundproxy.mm \
+        ios-screen.mm
+
+    LIBS += -framework UIKit
 }
 
 RESOURCES += qml.qrc
@@ -172,6 +177,7 @@ ios {
     LIBS += -framework AVFAudio
     LIBS += -framework CoreMidi
     LIBS += -framework CoreMotion
+
 
 }
 

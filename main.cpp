@@ -5,6 +5,7 @@
 #include "fileio.h"
 #ifdef Q_OS_IOS
 #include "csoundproxy.h"
+#include "ios-screen.h"
 #else
 #include "csengine.h"
 #endif
@@ -68,6 +69,7 @@ void initializeMediaSession()
 
 #endif
 
+
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
@@ -75,6 +77,12 @@ int main(int argc, char *argv[])
     app.setOrganizationName("Tarmo Johannes Events and Software");
     app.setOrganizationDomain("bourdon-app.org");
     app.setApplicationName("Bourdon App");
+
+#ifdef Q_OS_IOS
+    IosScreen screen;
+    screen.setTimerDisabled();
+#endif
+
 
 #ifdef Q_OS_ANDROID
 
