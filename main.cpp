@@ -6,6 +6,7 @@
 #ifdef Q_OS_IOS
 #include "csoundproxy.h"
 #include "ios-screen.h"
+#include "mediabuttonhandler-ios.h"
 #else
 #include "csengine.h"
 #endif
@@ -138,7 +139,8 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_IOS
     CsoundProxy *cs = new CsoundProxy();
-    cs->setupMediaButtonHandling(); // NB! temporary move it to other class later!
+    MediaButtonHandler mediaButtonHandler;
+    mediaButtonHandler.setupRemoteCommandCenter();
 #else
     CsEngine *cs = new CsEngine();
     cs->play();
@@ -146,17 +148,15 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    engine.rootContext()->setContextProperty(
-        "csound",
-        cs); // forward c++ object that can be reached form qml by object name "csound" NB! include <QQmlContext>
 
 #ifdef Q_OS_ANDROID
     MediaButtonHandler mediaButtonHandler;
-    engine.rootContext()->setContextProperty("MediaButtonHandler", &mediaButtonHandler);
 #endif
 
-#ifdef Q_OS_IOS
-    engine.rootContext()->setContextProperty("MediaButtonHandler", cs); // TEMPORARY! for testing!
+    engine.rootContext()->setContextProperty("csound", cs);
+
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+    engine.rootContext()->setContextProperty("MediaButtonHandler", &mediaButtonHandler);
 #endif
 
     qmlRegisterType<FileIO>("MyApp.FileIO", 1, 0, "FileIO");

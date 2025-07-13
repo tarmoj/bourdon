@@ -125,12 +125,14 @@ ios {
     SOURCES += \
         csoundproxy.mm \
         csound-iOS/classes/CsoundObj.m \
-         ios-screen.mm \
+        ios-screen.mm \
+        mediabuttonhandler-ios.mm
 
     HEADERS += \
         csound-iOS/classes/CsoundObj.h \
         csoundproxy.h \
         ios-screen.h \
+        mediabuttonhandler-ios.h
 
     SOURCES -= csengine.cpp
     HEADERS -= csengine.h

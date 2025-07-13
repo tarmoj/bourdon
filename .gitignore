@@ -3,3 +3,4 @@ samples/*.txt
 build/*
 screenshots/*
 google_play/*
+.DS_Store

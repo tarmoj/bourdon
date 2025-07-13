@@ -6,9 +6,6 @@
 #include <QThread>
 
 
-#import <MediaPlayer/MediaPlayer.h>
-
-
 extern "C" {
     void csoundMessageCallback(CSOUND *csound, int attr, const char *format, va_list args) {
         char buffer[1024];
@@ -94,91 +91,5 @@ void CsoundProxy::setChannel(QString channel, double value)
         qDebug() << "Csound is null";
     }
 }
-
-// Objective-C category for media button handling
-@interface MediaButtonHandler : NSObject
-{
-    CsoundProxy *_proxy;
-}
-- (instancetype)initWithProxy:(CsoundProxy *)proxy;
-- (void)setupRemoteCommandCenter;
-@end
-
-@implementation MediaButtonHandler
-
-- (instancetype)initWithProxy:(CsoundProxy *)proxy
-{
-    if ((self = [super init])) {
-        _proxy = proxy;
-    }
-    return self;
-}
-
-- (void)setupRemoteCommandCenter
-{
-    MPRemoteCommandCenter *commandCenter = [MPRemoteCommandCenter sharedCommandCenter];
-
-    [commandCenter.playCommand addTarget:self action:@selector(handlePlayCommand)];
-    [commandCenter.pauseCommand addTarget:self action:@selector(handlePauseCommand)];
-    [commandCenter.togglePlayPauseCommand addTarget:self action:@selector(handlePauseCommand)]; // treate it as pause buton (toggle)
-    [commandCenter.stopCommand addTarget:self action:@selector(handleStopCommand)];
-    [commandCenter.nextTrackCommand addTarget:self action:@selector(handleNextCommand)];
-    [commandCenter.previousTrackCommand addTarget:self action:@selector(handlePreviousCommand)];
-}
-
-- (MPRemoteCommandHandlerStatus)handlePlayCommand
-{
-    if (_proxy) {
-        QMetaObject::invokeMethod(_proxy, "playPressed", Qt::QueuedConnection);
-    }
-    return MPRemoteCommandHandlerStatusSuccess;
-}
-
-- (MPRemoteCommandHandlerStatus)handlePauseCommand
-{
-    if (_proxy) {
-        QMetaObject::invokeMethod(_proxy, "pausePressed", Qt::QueuedConnection);
-    }
-    return MPRemoteCommandHandlerStatusSuccess;
-}
-
-- (MPRemoteCommandHandlerStatus)handleStopCommand
-{
-    if (_proxy) {
-        QMetaObject::invokeMethod(_proxy, "stopPressed", Qt::QueuedConnection);
-    }
-    return MPRemoteCommandHandlerStatusSuccess;
-}
-
-- (MPRemoteCommandHandlerStatus)handleNextCommand
-{
-    if (_proxy) {
-        QMetaObject::invokeMethod(_proxy, "nextPressed", Qt::QueuedConnection);
-    }
-    return MPRemoteCommandHandlerStatusSuccess;
-}
-
-- (MPRemoteCommandHandlerStatus)handlePreviousCommand
-{
-    if (_proxy) {
-        QMetaObject::invokeMethod(_proxy, "previousPressed", Qt::QueuedConnection);
-    }
-    return MPRemoteCommandHandlerStatusSuccess;
-}
-
-@end
-
-// Static handler instance
-static MediaButtonHandler *g_mediaButtonHandler = nil;
-
-
-void CsoundProxy::setupMediaButtonHandling()
-{
-    if (!g_mediaButtonHandler) {
-        g_mediaButtonHandler = [[MediaButtonHandler alloc] initWithProxy:this];
-        [g_mediaButtonHandler setupRemoteCommandCenter];
-    }
-}
-
 
 
