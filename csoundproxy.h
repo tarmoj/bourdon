@@ -16,6 +16,16 @@ public:
     Q_INVOKABLE void setChannel(QString channel, double value);
 
     //CSOUND * getCsound();
+    
+    void setupMediaButtonHandling();
+    
+signals:
+    // Add signals if you want to notify QML/Qt of media button events
+    void playPressed();
+    void pausePressed();
+    void stopPressed();
+    void nextPressed();
+    void previousPressed();
 
 private:
     void *cs; // CsoundObj will be pointed here. Cannot import Objective C CsoundObj here
