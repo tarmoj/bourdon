@@ -16,6 +16,7 @@ public:
     Q_INVOKABLE void setChannel(QString channel, double value);
 
     //CSOUND * getCsound();
+    
 
 private:
     void *cs; // CsoundObj will be pointed here. Cannot import Objective C CsoundObj here

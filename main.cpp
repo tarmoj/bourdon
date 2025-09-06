@@ -5,6 +5,8 @@
 #include "fileio.h"
 #ifdef Q_OS_IOS
 #include "csoundproxy.h"
+#include "ios-screen.h"
+#include "mediabuttonhandler-ios.h"
 #else
 #include "csengine.h"
 #endif
@@ -68,6 +70,7 @@ void initializeMediaSession()
 
 #endif
 
+
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
@@ -75,6 +78,12 @@ int main(int argc, char *argv[])
     app.setOrganizationName("Tarmo Johannes Events and Software");
     app.setOrganizationDomain("bourdon-app.org");
     app.setApplicationName("Bourdon App");
+
+#ifdef Q_OS_IOS
+    IosScreen screen;
+    screen.setTimerDisabled();
+#endif
+
 
 #ifdef Q_OS_ANDROID
 
@@ -130,6 +139,8 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_IOS
     CsoundProxy *cs = new CsoundProxy();
+    MediaButtonHandler mediaButtonHandler;
+    mediaButtonHandler.setupRemoteCommandCenter();
 #else
     CsEngine *cs = new CsEngine();
     cs->play();
@@ -137,12 +148,14 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    engine.rootContext()->setContextProperty(
-        "csound",
-        cs); // forward c++ object that can be reached form qml by object name "csound" NB! include <QQmlContext>
 
 #ifdef Q_OS_ANDROID
     MediaButtonHandler mediaButtonHandler;
+#endif
+
+    engine.rootContext()->setContextProperty("csound", cs);
+
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
     engine.rootContext()->setContextProperty("MediaButtonHandler", &mediaButtonHandler);
 #endif
 

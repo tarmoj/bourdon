@@ -14,16 +14,14 @@ SOURCES += main.cpp \
 
 
 
+
 HEADERS += \
     csengine.h \
     fileio.h \
 
-ios {
-    HEADERS += \
-        csoundproxy.h \
 
-    SOURCES += \
-        csoundproxy.mm
+ios {
+
 }
 
 RESOURCES += qml.qrc
@@ -120,13 +118,21 @@ ios {
     QMAKE_IOS_LAUNCH_SCREEN = $$PWD/ios/LaunchScreen.storyboard
 
 
+
+
+
+
     SOURCES += \
         csoundproxy.mm \
-        csound-iOS/classes/CsoundObj.m
+        csound-iOS/classes/CsoundObj.m \
+        ios-screen.mm \
+        mediabuttonhandler-ios.mm
 
     HEADERS += \
         csound-iOS/classes/CsoundObj.h \
-        csoundproxy.h
+        csoundproxy.h \
+        ios-screen.h \
+        mediabuttonhandler-ios.h
 
     SOURCES -= csengine.cpp
     HEADERS -= csengine.h
@@ -172,6 +178,9 @@ ios {
     LIBS += -framework AVFAudio
     LIBS += -framework CoreMidi
     LIBS += -framework CoreMotion
+    LIBS += -framework UIKit
+    LIBS += -framework MediaPlayer
+
 
 }
 
