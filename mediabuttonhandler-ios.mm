@@ -25,7 +25,17 @@
     NSMutableDictionary *info = [NSMutableDictionary dictionary];
 
     info[MPMediaItemPropertyTitle] = @"Qt iOS App";
+
+
+    info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = @(0);
+    info[MPMediaItemPropertyPlaybackDuration] = @(0);
+
+
     info[MPNowPlayingInfoPropertyPlaybackRate] = @(_isPlaying ? 1.0 : 0.0);
+
+    infoCenter.nowPlayingInfo = info;
+
+    qDebug() << "NowPlaying updated. isPlaying=" << _isPlaying;
 
     infoCenter.nowPlayingInfo = info;
 }
@@ -44,14 +54,23 @@
         qDebug() << "Toggle → Pause pressed";
         _isPlaying = NO;
         [self updateNowPlayingInfo];
+[self updateNowPlayingInfo];
+qDebug() << "PlaybackRate now:"
+         << [[MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] doubleValue];
+
         if (self.handler) emit self.handler->pause();
     } else {
         qDebug() << "Toggle → Play pressed";
         _isPlaying = YES;
         [self updateNowPlayingInfo];
+[self updateNowPlayingInfo];
+qDebug() << "PlaybackRate now:"
+         << [[MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] doubleValue];
+
         if (self.handler) emit self.handler->play();
     }
     return MPRemoteCommandHandlerStatusSuccess;
+
 }
 
 - (MPRemoteCommandHandlerStatus)handleToggleCommand {
