@@ -117,11 +117,6 @@ ios {
 
     QMAKE_IOS_LAUNCH_SCREEN = $$PWD/ios/LaunchScreen.storyboard
 
-
-
-
-
-
     SOURCES += \
         csoundproxy.mm \
         csound-iOS/classes/CsoundObj.m \

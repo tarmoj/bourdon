@@ -5,11 +5,11 @@
     <name>BourdonForm</name>
     <message>
         <source>Sample</source>
-        <translation>Näidis</translation>
+        <translation type="unfinished">Sämpel</translation>
     </message>
     <message>
         <source>Saw wave</source>
-        <translation>Saag laine</translation>
+        <translation type="unfinished">Saehammas</translation>
     </message>
     <message>
         <source>Synthesized</source>
@@ -17,11 +17,11 @@
     </message>
     <message>
         <source>Saw 2</source>
-        <translation>Saag 2</translation>
+        <translation type="unfinished">Saehammas 2</translation>
     </message>
     <message>
         <source>Equal temp.</source>
-        <translation>Võrdne temp.</translation>
+        <translation type="unfinished">Võrdtemp.</translation>
     </message>
     <message>
         <source>Natural G</source>
@@ -45,7 +45,7 @@
     </message>
     <message>
         <source>Add to presets</source>
-        <translation>Lisa eelseadetesse</translation>
+        <translation type="unfinished">Lisa presettidesse</translation>
     </message>
     <message>
         <source>Next/Prev.</source>
@@ -71,11 +71,11 @@
     <name>FileDialogiOS</name>
     <message>
         <source>Open Preset File</source>
-        <translation>Ava eelseade fail</translation>
+        <translation type="unfinished">Ava presettide fail</translation>
     </message>
     <message>
         <source>Save Preset File As</source>
-        <translation>Salvesta eelseade fail kui</translation>
+        <translation type="unfinished">Salvesta presettide fail kui</translation>
     </message>
     <message>
         <source>Enter new file name</source>
@@ -109,11 +109,11 @@
     <name>MixerForm</name>
     <message>
         <source>Preset: </source>
-        <translation>Eelseade: </translation>
+        <translation type="unfinished">Presett: </translation>
     </message>
     <message>
         <source>Preset volume: </source>
-        <translation>Eelseade helitugevus: </translation>
+        <translation type="unfinished">Preseti helitugevus: </translation>
     </message>
     <message>
         <source>Reset</source>
@@ -144,26 +144,27 @@
     <name>PresetForm</name>
     <message>
         <source>Presets</source>
-        <translation>Eelseaded</translation>
+        <translation type="unfinished">Presetid</translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
         <source>Bourdon Player </source>
-        <translation>Bourdon mängija </translation>
+        <translatorcomment>ei tõlgi</translatorcomment>
+        <translation type="unfinished">Bourdon Player</translation>
     </message>
     <message>
         <source>Load Presets</source>
-        <translation>Lae eelseaded</translation>
+        <translation type="unfinished">Lae presetid</translation>
     </message>
     <message>
         <source>Save Presets</source>
-        <translation>Salvesta eelseaded</translation>
+        <translation type="unfinished">Salvesta presetid</translation>
     </message>
     <message>
         <source>Buy me a coffee</source>
-        <translation>Osta mulle kohvi</translation>
+        <translation type="unfinished">Osta mulle kohv</translation>
     </message>
     <message>
         <source>Info</source>
@@ -171,11 +172,11 @@
     </message>
     <message>
         <source>Save Presets to File</source>
-        <translation>Salvesta eelseaded faili</translation>
+        <translation type="unfinished">Salvesta presetid faili</translation>
     </message>
     <message>
         <source>Load Presets from File</source>
-        <translation>Lae eelseaded failist</translation>
+        <translation type="unfinished">Lae presetid failist</translation>
     </message>
     <message>
         <source>Bourdon Player
@@ -189,15 +190,15 @@ You can start/stop the sound from bluetooth speaker or pedal.
 Built using Csound sound engine and Qt framework.
 
 (c) Tarmo Johannes trmjhnns@gmail.com</source>
-        <translation>Bourdon mängija
+        <translation type="unfinished">Bourdon Player
 
-on rakendus torupillimängijatele (või miks mitte teistele muusikutele), kes soovivad mängida pikade dronide vastu.
+on rakendus torupillimängijatele (või miks mitte teistele muusikutele), kes soovivad mängida pikkade droonide peale.
 
-Ehita oma akorde antud bourdon-nootidest, määra häälestus, temperament ja heli tüüp.
-Saad määrata iga eelseade suhtelist helitugevust, samuti bourdon-nootide individuaalseid helitugevusi.
+Koosta akorde antud burdoon-nootidest, määra häälestus, tempereering ja heli tüüp.
+Saad määrata iga preseti suhtelist helitugevust, samuti burdoon-nootide individuaalseid helitugevusi.
 Saad heli käivitada/peatada Bluetooth-kõlari või pedaali kaudu.
 
-Ehitatud Csound heli mootori ja Qt raamistiku abil.
+Loodud Csound helimootori ja Qt raamistiku abil.
 
 (c) Tarmo Johannes trmjhnns@gmail.com</translation>
     </message>
