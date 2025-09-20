@@ -48,6 +48,7 @@ ApplicationWindow {
         id: appSettings
         property string presetsArray: ""
         property int a4: 440
+        property string language: "EN"
     }
 
 
@@ -243,13 +244,17 @@ Built using Csound sound engine and Qt framework.
 
             ComboBox {
                 id: languageComboBox
-                visible: false
+                visible: true
 
                 Layout.leftMargin: drawer.marginLeft
 
-                model: ["EST", "EN"]
+                model: ["EN", "EST"]
 
-                onActivated: console.log("Laguage: ", currentText)
+                onActivated: {
+                    console.log("Language: ", currentText)
+                    languageManager.switchLanguage(currentText)
+                    appSettings.language = currentText
+                }
             }
 
             MenuItem {
@@ -277,6 +282,15 @@ Built using Csound sound engine and Qt framework.
                     } else {
                         savePresetDialogIOs.open()
                     }
+                }
+            }
+
+            MenuItem {
+                text: qsTr("Restart Csound")
+                icon.source: "qrc:/images/restart.svg"  // Using existing icon for now
+                onTriggered: {
+                    drawer.close()
+                    csound.restartCsound()
                 }
             }
 
@@ -396,6 +410,13 @@ Built using Csound sound engine and Qt framework.
     Component.onCompleted: {
       if (appSettings.presetsArray) {
         loadPresets();
+      }
+      if (appSettings.language) {
+        languageComboBox.currentIndex = languageComboBox.model.indexOf(appSettings.language)
+        languageManager.switchLanguage(appSettings.language)
+      } else {
+        languageComboBox.currentIndex = 0
+        languageManager.switchLanguage("EN")
       }
     }
 
