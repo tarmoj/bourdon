@@ -243,13 +243,16 @@ Built using Csound sound engine and Qt framework.
 
             ComboBox {
                 id: languageComboBox
-                visible: false
+                visible: true
 
                 Layout.leftMargin: drawer.marginLeft
 
                 model: ["EST", "EN"]
 
-                onActivated: console.log("Laguage: ", currentText)
+                onActivated: {
+                    console.log("Language: ", currentText)
+                    languageManager.switchLanguage(currentText)
+                }
             }
 
             MenuItem {

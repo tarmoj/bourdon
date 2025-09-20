@@ -50,7 +50,7 @@ Rectangle {
     Button {
         id: unlockButton
         anchors.centerIn: parent
-        text: qsTr(`Unlock: ${4-lockForm.unlockAttempts}`)
+        text: qsTr("Unlock: %1").arg(4-lockForm.unlockAttempts)
         onClicked: {
             lockForm.unlockAttempts += 1
             if (lockForm.unlockAttempts >= 4) {

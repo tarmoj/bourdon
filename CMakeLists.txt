@@ -19,6 +19,8 @@ qt_add_executable(bourdon-app WIN32 MACOSX_BUNDLE
     bluetooth/deviceinfo.cpp bluetooth/deviceinfo.h
     bluetooth/serviceinfo.cpp bluetooth/serviceinfo.h
     csengine.cpp csengine.h
+    fileio.cpp fileio.h
+    languagemanager.cpp languagemanager.h
     main.cpp
 )
 target_include_directories(bourdon-app PRIVATE
@@ -36,11 +38,15 @@ target_link_libraries(bourdon-app PRIVATE
 # Resources:
 set(qml_resource_files
     "BourdonButton.qml"
-    "BourdonForm.ui.qml"
-    "PresetForm.ui.qml"
+    "BourdonForm.qml"
+    "PresetForm.qml"
     "bourdon.csd"
     "main.qml"
     "qtquickcontrols2.conf"
+    "MixerForm.qml"
+    "BourdonVolume.qml"
+    "FileDialogiOS.qml"
+    "LockForm.qml"
 )
 
 qt_add_resources(bourdon-app "qml"
@@ -48,6 +54,14 @@ qt_add_resources(bourdon-app "qml"
         "/"
     FILES
         ${qml_resource_files}
+)
+
+# Add translation resources
+qt_add_resources(bourdon-app "translations"
+    PREFIX
+        "/translations"
+    FILES
+        "translations/bourdon_et.qm"
 )
 
 if(ANDROID)
