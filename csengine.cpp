@@ -20,8 +20,6 @@ CsEngine::CsEngine(QObject *parent)
 
 void CsEngine::initializeCsound()
 {
-    // should be probably in main.cpp
-    //csoundInitialize(CSOUNDINIT_NO_ATEXIT | CSOUNDINIT_NO_SIGNAL_HANDLER); // not sure if necessary, but Steven Yi claims, it should be there
 
 #ifdef Q_OS_ANDROID
     cs = new AndroidCsound();
@@ -45,7 +43,7 @@ void CsEngine::initializeCsound()
     cs->SetOption("-+rtaudio=auhal");
 #else
     cs = new Csound();
-    cs->SetOption("--env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/");
+    cs->SetOption("--env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/"); // for local build only.
 #endif
     cs->SetOption("-odac");
     cs->SetOption("-d");
@@ -71,7 +69,7 @@ void CsEngine::play()
 
 int CsEngine::open(QString csd)
 {
-    QTemporaryFile *tempFile = QTemporaryFile::createNativeFile(csd); //TODO: checi if not 0
+    QTemporaryFile *tempFile = QTemporaryFile::createNativeFile(csd);
 
     //qDebug()<< "Csound file contents: " <<  tempFile->fileName() <<  tempFile->readAll();
 
@@ -135,7 +133,7 @@ void CsEngine::restartCsound()
     qDebug() << "Restarting Csound...";
     stopCsound();
     startCsound();
-    // Note: After restart, call play() if you want to resume audio playback
+    play();
     qDebug() << "Csound restarted successfully";
 }
 
@@ -169,6 +167,7 @@ void CsEngine::tableSet(int table, int index, double value)
     }
 }
 
+// not used, but keep it for future
 QVariant CsEngine::getAudioDevices()
 {
     QStringList deviceList; // mapped in pairs: device_name, device_id, device_name2, device_id2, ...

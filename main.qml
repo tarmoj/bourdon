@@ -282,7 +282,7 @@ Built using Csound sound engine and Qt framework.
 
             MenuItem {
                 text: qsTr("Restart Csound")
-                icon.source: "qrc:/images/menu.svg"  // Using existing icon for now
+                icon.source: "qrc:/images/restart.svg"  // Using existing icon for now
                 onTriggered: {
                     drawer.close()
                     csound.restartCsound()
