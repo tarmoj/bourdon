@@ -2,6 +2,7 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include <QTemporaryFile>
+#include <QFile>
 
 //#include <QDateTime>
 
@@ -134,6 +135,7 @@ void CsEngine::restartCsound()
     qDebug() << "Restarting Csound...";
     stopCsound();
     startCsound();
+    // Note: After restart, call play() if you want to resume audio playback
     qDebug() << "Csound restarted successfully";
 }
 
