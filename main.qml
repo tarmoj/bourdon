@@ -48,6 +48,7 @@ ApplicationWindow {
         id: appSettings
         property string presetsArray: ""
         property int a4: 440
+        property string language: "EN"
     }
 
 
@@ -247,11 +248,12 @@ Built using Csound sound engine and Qt framework.
 
                 Layout.leftMargin: drawer.marginLeft
 
-                model: ["EST", "EN"]
+                model: ["EN", "EST"]
 
                 onActivated: {
                     console.log("Language: ", currentText)
                     languageManager.switchLanguage(currentText)
+                    appSettings.language = currentText
                 }
             }
 
@@ -399,6 +401,13 @@ Built using Csound sound engine and Qt framework.
     Component.onCompleted: {
       if (appSettings.presetsArray) {
         loadPresets();
+      }
+      if (appSettings.language) {
+        languageComboBox.currentIndex = languageComboBox.model.indexOf(appSettings.language)
+        languageManager.switchLanguage(appSettings.language)
+      } else {
+        languageComboBox.currentIndex = 0
+        languageManager.switchLanguage("EN")
       }
     }
 
