@@ -10,6 +10,15 @@
 CsEngine::CsEngine(QObject *parent)
     : QObject(parent)
 {
+    perfThread = nullptr;
+    mStop = false;
+    cs = nullptr;
+    
+    initializeCsound();
+}
+
+void CsEngine::initializeCsound()
+{
     // should be probably in main.cpp
     //csoundInitialize(CSOUNDINIT_NO_ATEXIT | CSOUNDINIT_NO_SIGNAL_HANDLER); // not sure if necessary, but Steven Yi claims, it should be there
 
@@ -37,8 +46,6 @@ CsEngine::CsEngine(QObject *parent)
     cs = new Csound();
     cs->SetOption("--env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/");
 #endif
-    perfThread = nullptr;
-    mStop = false;
     cs->SetOption("-odac");
     cs->SetOption("-d");
 
@@ -49,9 +56,7 @@ CsEngine::CsEngine(QObject *parent)
 
 CsEngine::~CsEngine()
 {
-    stop();
-    delete perfThread;
-    delete cs;
+    stopCsound();
 }
 
 void CsEngine::play()
@@ -85,6 +90,51 @@ void CsEngine::stop()
         perfThread->Join();
         qDebug() << "Performance thread stopped and joined";
     }
+}
+
+void CsEngine::startCsound()
+{
+    qDebug() << "Starting Csound...";
+    if (cs) {
+        // If already running, stop first
+        stopCsound();
+    }
+    
+    initializeCsound();
+    qDebug() << "Csound started successfully";
+}
+
+void CsEngine::stopCsound()
+{
+    qDebug() << "Stopping Csound...";
+    
+    // Stop performance thread first
+    if (perfThread) {
+        perfThread->Stop();
+        perfThread->Join();
+        delete perfThread;
+        perfThread = nullptr;
+        qDebug() << "Performance thread stopped and cleaned up";
+    }
+    
+    // Cleanup and destroy Csound instance
+    if (cs) {
+        cs->Cleanup();
+        cs->Reset();
+        delete cs;
+        cs = nullptr;
+        qDebug() << "Csound instance cleaned up and destroyed";
+    }
+    
+    qDebug() << "Csound stopped successfully";
+}
+
+void CsEngine::restartCsound()
+{
+    qDebug() << "Restarting Csound...";
+    stopCsound();
+    startCsound();
+    qDebug() << "Csound restarted successfully";
 }
 
 void CsEngine::setChannel(const QString &channel, MYFLT value)
