@@ -16,7 +16,7 @@ void LanguageManager::switchLanguage(const QString &language)
     // Load new translation
     bool loaded = false;
     if (language == "EST") {
-        loaded = m_translator->load(":/translations/bourdon_et.qm");
+        loaded = m_translator->load(":/translations/translations/bourdon_et.qm");
     } else {
         // Default to English (no translation file needed)
         loaded = true;

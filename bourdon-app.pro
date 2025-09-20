@@ -14,8 +14,6 @@ SOURCES += main.cpp \
         languagemanager.cpp \
 
 
-
-
 HEADERS += \
     csengine.h \
     fileio.h \
@@ -102,7 +100,8 @@ DISTFILES += \
     android/res/mipmap-xxxhdpi/ic_launcher_round.png \
     android/res/values/ic_launcher_background.xml \
     android/res/values/libs.xml \
-    images/stop-button.png
+    images/stop-button.png \
+    translations/bourdon_et.qm
 
 
 
@@ -209,5 +208,9 @@ macx {
     INSTALLS += first  third  final #final don't forget second on first compile!!! (later makes sense to remove extra folders from Csound.Frameworks)
 
 }
+
+TRANSLATIONS += \
+    translations/bourdon_et.ts \
+    translations/bourdon_et.ts \
 
 
