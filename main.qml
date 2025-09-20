@@ -281,6 +281,15 @@ Built using Csound sound engine and Qt framework.
             }
 
             MenuItem {
+                text: qsTr("Restart Csound")
+                icon.source: "qrc:/images/restart.svg"  // Using existing icon for now
+                onTriggered: {
+                    drawer.close()
+                    csound.restartCsound()
+                }
+            }
+
+            MenuItem {
                 id: buyMeACoffeeItem
                 icon.source: "qrc:/images/bmc-logo.svg"
                 text: qsTr("Buy me a coffee")
