@@ -11,6 +11,7 @@ QT += quick core
 SOURCES += main.cpp \
         fileio.cpp \
         csengine.cpp \
+        languagemanager.cpp \
 
 
 
@@ -18,6 +19,7 @@ SOURCES += main.cpp \
 HEADERS += \
     csengine.h \
     fileio.h \
+    languagemanager.h \
 
 
 ios {
