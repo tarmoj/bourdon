@@ -1,105 +1,64 @@
-// mediabuttonhandler-ios.mm
+// code created by Github Copilot, slightly edited
 #include "mediabuttonhandler-ios.h"
 #import <MediaPlayer/MediaPlayer.h>
-#import <AVFoundation/AVFoundation.h>
 #import <objc/runtime.h>
 #include <QVariant>
-#include <QDebug>
 
 @interface MediaButtonHandlerObjC : NSObject
 @property (nonatomic, assign) MediaButtonHandler* handler;
-@property (nonatomic, assign) BOOL isPlaying;
 @end
 
 @implementation MediaButtonHandlerObjC
 
-- (instancetype)init {
-    if (self = [super init]) {
-        _isPlaying = NO;
-    }
-    return self;
+- (MPRemoteCommandHandlerStatus)handlePlayCommand:(MPRemoteCommandEvent *)event {
+    qDebug() << "[RC] Play pressed, thread is main?" << ([NSThread isMainThread] ? "yes" : "no");
+    bool ok = false;
+    if (self.handler) ok = QMetaObject::invokeMethod(self.handler, "play", Qt::QueuedConnection);
+    qDebug() << "[RC] invoke play ->" << ok;
+    return ok ? MPRemoteCommandHandlerStatusSuccess : MPRemoteCommandHandlerStatusCommandFailed;
 }
 
-- (void)updateNowPlayingInfo {
-    MPNowPlayingInfoCenter *infoCenter = [MPNowPlayingInfoCenter defaultCenter];
-    NSMutableDictionary *info = [NSMutableDictionary dictionary];
-
-    info[MPMediaItemPropertyTitle] = @"Qt iOS App";
-
-
-    info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = @(0);
-    info[MPMediaItemPropertyPlaybackDuration] = @(0);
-
-
-    info[MPNowPlayingInfoPropertyPlaybackRate] = @(_isPlaying ? 1.0 : 0.0);
-
-    infoCenter.nowPlayingInfo = info;
-
-    qDebug() << "NowPlaying updated. isPlaying=" << _isPlaying;
-
-    infoCenter.nowPlayingInfo = info;
+- (MPRemoteCommandHandlerStatus)handlePauseCommand:(MPRemoteCommandEvent *)event {
+    qDebug() << "[RC] Pause pressed, thread is main?" << ([NSThread isMainThread] ? "yes" : "no");
+    bool ok = false;
+    if (self.handler) ok = QMetaObject::invokeMethod(self.handler, "pause", Qt::QueuedConnection);
+    qDebug() << "[RC] invoke pause ->" << ok;
+    return ok ? MPRemoteCommandHandlerStatusSuccess : MPRemoteCommandHandlerStatusCommandFailed;
 }
 
-- (MPRemoteCommandHandlerStatus)handlePlayCommand {
-    qDebug() << "Play pressed";
-    _isPlaying = YES;
-    [self updateNowPlayingInfo];
-    if (self.handler) emit self.handler->play();
-    return MPRemoteCommandHandlerStatusSuccess;
+- (MPRemoteCommandHandlerStatus)handleNextCommand:(MPRemoteCommandEvent *)event {
+    qDebug() << "[RC] Next pressed";
+    bool ok = false;
+    if (self.handler) ok = QMetaObject::invokeMethod(self.handler, "next", Qt::QueuedConnection);
+    qDebug() << "[RC] invoke next ->" << ok;
+    return ok ? MPRemoteCommandHandlerStatusSuccess : MPRemoteCommandHandlerStatusCommandFailed;
 }
 
-- (MPRemoteCommandHandlerStatus)handlePauseCommand {
-    qDebug() << "Pause pressed";
-    if (_isPlaying) {
-        qDebug() << "Toggle → Pause pressed";
-        _isPlaying = NO;
-        [self updateNowPlayingInfo];
-[self updateNowPlayingInfo];
-qDebug() << "PlaybackRate now:"
-         << [[MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] doubleValue];
-
-        if (self.handler) emit self.handler->pause();
-    } else {
-        qDebug() << "Toggle → Play pressed";
-        _isPlaying = YES;
-        [self updateNowPlayingInfo];
-[self updateNowPlayingInfo];
-qDebug() << "PlaybackRate now:"
-         << [[MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] doubleValue];
-
-        if (self.handler) emit self.handler->play();
-    }
-    return MPRemoteCommandHandlerStatusSuccess;
-
+- (MPRemoteCommandHandlerStatus)handlePreviousCommand:(MPRemoteCommandEvent *)event {
+    qDebug() << "[RC] Previous pressed";
+    bool ok = false;
+    if (self.handler) ok = QMetaObject::invokeMethod(self.handler, "previous", Qt::QueuedConnection);
+    qDebug() << "[RC] invoke previous ->" << ok;
+    return ok ? MPRemoteCommandHandlerStatusSuccess : MPRemoteCommandHandlerStatusCommandFailed;
 }
 
-- (MPRemoteCommandHandlerStatus)handleToggleCommand {
-    if (_isPlaying) {
-        return [self handlePauseCommand];
-    } else {
-        return [self handlePlayCommand];
-    }
+- (MPRemoteCommandHandlerStatus)handleStopCommand:(MPRemoteCommandEvent *)event {
+    qDebug() << "[RC] Stop pressed";
+    bool ok = false;
+    if (self.handler) ok = QMetaObject::invokeMethod(self.handler, "stop", Qt::QueuedConnection);
+    qDebug() << "[RC] invoke stop ->" << ok;
+    return ok ? MPRemoteCommandHandlerStatusSuccess : MPRemoteCommandHandlerStatusCommandFailed;
 }
 
-
-- (MPRemoteCommandHandlerStatus)handleNextCommand {
-    qDebug() << "Next pressed";
-    if (self.handler) emit self.handler->next();
-    return MPRemoteCommandHandlerStatusSuccess;
-}
-
-- (MPRemoteCommandHandlerStatus)handlePreviousCommand {
-    qDebug() << "Previous pressed";
-    if (self.handler) emit self.handler->previous();
-    return MPRemoteCommandHandlerStatusSuccess;
-}
-
-- (MPRemoteCommandHandlerStatus)handleStopCommand {
-    qDebug() << "Stop pressed";
-    _isPlaying = NO;
-    [self updateNowPlayingInfo];
-    if (self.handler) emit self.handler->stop();
-    return MPRemoteCommandHandlerStatusSuccess;
+// Optional: handle toggle explicitly if you want to support single-button remotes reliably
+- (MPRemoteCommandHandlerStatus)handleToggleCommand:(MPRemoteCommandEvent *)event {
+    qDebug() << "[RC] Toggle Play/Pause pressed";
+    // Ideally route based on your own player state exposed by MediaButtonHandler.
+    // For initial debugging you can forward to pause or play explicitly.
+    bool ok = false;
+    if (self.handler) ok = QMetaObject::invokeMethod(self.handler, "pause", Qt::QueuedConnection);
+    qDebug() << "[RC] invoke (toggle->pause) ->" << ok;
+    return ok ? MPRemoteCommandHandlerStatusSuccess : MPRemoteCommandHandlerStatusCommandFailed;
 }
 
 @end
@@ -114,24 +73,21 @@ MediaButtonHandler::MediaButtonHandler(QObject* parent) : QObject(parent)
     d->objcHandler = [[MediaButtonHandlerObjC alloc] init];
     d->objcHandler.handler = this;
     setProperty("_mbh_dptr", QVariant::fromValue(reinterpret_cast<void*>(d)));
-
-    // Activate audio session
-    AVAudioSession *session = [AVAudioSession sharedInstance];
-    NSError *error = nil;
-    [session setCategory:AVAudioSessionCategoryPlayback error:&error];
-    if (error) {
-        qWarning() << "AVAudioSession setCategory error:" << error.localizedDescription.UTF8String;
-    }
-    [session setActive:YES error:&error];
-    if (error) {
-        qWarning() << "AVAudioSession setActive error:" << error.localizedDescription.UTF8String;
-    }
 }
 
 MediaButtonHandler::~MediaButtonHandler()
 {
     auto d = reinterpret_cast<MediaButtonHandlerPrivate*>(property("_mbh_dptr").value<void*>());
     if (d) {
+        // Best practice: remove targets to avoid dangling references
+        MPRemoteCommandCenter *cc = [MPRemoteCommandCenter sharedCommandCenter];
+        [cc.playCommand removeTarget:d->objcHandler];
+        [cc.pauseCommand removeTarget:d->objcHandler];
+        [cc.nextTrackCommand removeTarget:d->objcHandler];
+        [cc.previousTrackCommand removeTarget:d->objcHandler];
+        [cc.stopCommand removeTarget:d->objcHandler];
+        [cc.togglePlayPauseCommand removeTarget:d->objcHandler];
+
         [d->objcHandler release];
         delete d;
     }
@@ -144,16 +100,19 @@ void MediaButtonHandler::setupRemoteCommandCenter()
 
     MPRemoteCommandCenter *commandCenter = [MPRemoteCommandCenter sharedCommandCenter];
 
-    [commandCenter.playCommand addTarget:d->objcHandler action:@selector(handlePlayCommand)];
-    [commandCenter.pauseCommand addTarget:d->objcHandler action:@selector(handlePauseCommand)];
-    [commandCenter.togglePlayPauseCommand addTarget:d->objcHandler action:@selector(handleToggleCommand)];
-    [commandCenter.nextTrackCommand addTarget:d->objcHandler action:@selector(handleNextCommand)];
-    [commandCenter.previousTrackCommand addTarget:d->objcHandler action:@selector(handlePreviousCommand)];
-    [commandCenter.stopCommand addTarget:d->objcHandler action:@selector(handleStopCommand)];
+    // Ensure commands are explicitly enabled for debugging
+    commandCenter.playCommand.enabled = YES;
+    commandCenter.pauseCommand.enabled = YES;
+    commandCenter.nextTrackCommand.enabled = YES;
+    commandCenter.previousTrackCommand.enabled = YES;
+    commandCenter.stopCommand.enabled = YES;
+    commandCenter.togglePlayPauseCommand.enabled = YES;
 
-commandCenter.togglePlayPauseCommand.enabled = YES;
-commandCenter.playCommand.enabled = YES;
-commandCenter.pauseCommand.enabled = YES;
-
+    [commandCenter.playCommand addTarget:d->objcHandler action:@selector(handlePlayCommand:)];
+    [commandCenter.pauseCommand addTarget:d->objcHandler action:@selector(handlePauseCommand:)];
+    [commandCenter.nextTrackCommand addTarget:d->objcHandler action:@selector(handleNextCommand:)];
+    [commandCenter.previousTrackCommand addTarget:d->objcHandler action:@selector(handlePreviousCommand:)];
+    [commandCenter.stopCommand addTarget:d->objcHandler action:@selector(handleStopCommand:)];
+    // Either implement toggle properly, or comment this out while debugging:
+    [commandCenter.togglePlayPauseCommand addTarget:d->objcHandler action:@selector(handleToggleCommand:)];
 }
-
