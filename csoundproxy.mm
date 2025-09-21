@@ -102,7 +102,7 @@ void CsoundProxy::stopCsound()
     qDebug() << "Csound stopped successfully";
 }
 
-void CsoundProxy::restart()
+void CsoundProxy::restartCsound()
 {
     qDebug() << "Restarting Csound...";
     stopCsound();
@@ -119,6 +119,14 @@ void CsoundProxy::play() // just for testing at the moment
         NSLog(@"Csound is null");
     }
        
+}
+
+void CsoundProxy::stop()
+{
+    if (cs) {
+        [(CsoundObj *)cs stop];
+        qDebug() << "Csound playback stopped";
+    }
 }
 
 void CsoundProxy::readScore(const QString &scoreLine)
