@@ -24,5 +24,9 @@
         <file>FileDialogiOS.qml</file>
         <file>LockForm.qml</file>
         <file>images/lock.svg</file>
+        <file>images/restart.svg</file>
+    </qresource>
+    <qresource prefix="/translations">
+        <file>translations/bourdon_et.qm</file>
     </qresource>
 </RCC>

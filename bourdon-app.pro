@@ -11,13 +11,13 @@ QT += quick core
 SOURCES += main.cpp \
         fileio.cpp \
         csengine.cpp \
-
-
+        languagemanager.cpp \
 
 
 HEADERS += \
     csengine.h \
     fileio.h \
+    languagemanager.h \
 
 
 ios {
@@ -100,7 +100,8 @@ DISTFILES += \
     android/res/mipmap-xxxhdpi/ic_launcher_round.png \
     android/res/values/ic_launcher_background.xml \
     android/res/values/libs.xml \
-    images/stop-button.png
+    images/stop-button.png \
+    translations/bourdon_et.qm
 
 
 
@@ -116,11 +117,6 @@ ios {
     QMAKE_ASSET_CATALOGS_APP_ICON = AppIcon
 
     QMAKE_IOS_LAUNCH_SCREEN = $$PWD/ios/LaunchScreen.storyboard
-
-
-
-
-
 
     SOURCES += \
         csoundproxy.mm \
@@ -212,5 +208,9 @@ macx {
     INSTALLS += first  third  final #final don't forget second on first compile!!! (later makes sense to remove extra folders from Csound.Frameworks)
 
 }
+
+TRANSLATIONS += \
+    translations/bourdon_et.ts \
+    translations/bourdon_et.ts \
 
 

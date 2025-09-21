@@ -2,7 +2,10 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QThread>
+#include <QTranslator>
+#include <QLocale>
 #include "fileio.h"
+#include "languagemanager.h"
 #ifdef Q_OS_IOS
 #include "csoundproxy.h"
 #include "ios-screen.h"
@@ -148,12 +151,15 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
+    // Set up language manager
+    LanguageManager languageManager(&app, &engine);
 
 #ifdef Q_OS_ANDROID
     MediaButtonHandler mediaButtonHandler;
 #endif
 
     engine.rootContext()->setContextProperty("csound", cs);
+    engine.rootContext()->setContextProperty("languageManager", &languageManager);
 
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
     engine.rootContext()->setContextProperty("MediaButtonHandler", &mediaButtonHandler);

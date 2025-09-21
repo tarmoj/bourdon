@@ -2,6 +2,7 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include <QTemporaryFile>
+#include <QFile>
 
 //#include <QDateTime>
 
@@ -10,8 +11,15 @@
 CsEngine::CsEngine(QObject *parent)
     : QObject(parent)
 {
-    // should be probably in main.cpp
-    //csoundInitialize(CSOUNDINIT_NO_ATEXIT | CSOUNDINIT_NO_SIGNAL_HANDLER); // not sure if necessary, but Steven Yi claims, it should be there
+    perfThread = nullptr;
+    mStop = false;
+    cs = nullptr;
+    
+    initializeCsound();
+}
+
+void CsEngine::initializeCsound()
+{
 
 #ifdef Q_OS_ANDROID
     cs = new AndroidCsound();
@@ -35,10 +43,8 @@ CsEngine::CsEngine(QObject *parent)
     cs->SetOption("-+rtaudio=auhal");
 #else
     cs = new Csound();
-    cs->SetOption("--env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/");
+    cs->SetOption("--env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/"); // for local build only.
 #endif
-    perfThread = nullptr;
-    mStop = false;
     cs->SetOption("-odac");
     cs->SetOption("-d");
 
@@ -49,9 +55,7 @@ CsEngine::CsEngine(QObject *parent)
 
 CsEngine::~CsEngine()
 {
-    stop();
-    delete perfThread;
-    delete cs;
+    stopCsound();
 }
 
 void CsEngine::play()
@@ -65,7 +69,7 @@ void CsEngine::play()
 
 int CsEngine::open(QString csd)
 {
-    QTemporaryFile *tempFile = QTemporaryFile::createNativeFile(csd); //TODO: checi if not 0
+    QTemporaryFile *tempFile = QTemporaryFile::createNativeFile(csd);
 
     //qDebug()<< "Csound file contents: " <<  tempFile->fileName() <<  tempFile->readAll();
 
@@ -85,6 +89,52 @@ void CsEngine::stop()
         perfThread->Join();
         qDebug() << "Performance thread stopped and joined";
     }
+}
+
+void CsEngine::startCsound()
+{
+    qDebug() << "Starting Csound...";
+    if (cs) {
+        // If already running, stop first
+        stopCsound();
+    }
+    
+    initializeCsound();
+    qDebug() << "Csound started successfully";
+}
+
+void CsEngine::stopCsound()
+{
+    qDebug() << "Stopping Csound...";
+    
+    // Stop performance thread first
+    if (perfThread) {
+        perfThread->Stop();
+        perfThread->Join();
+        delete perfThread;
+        perfThread = nullptr;
+        qDebug() << "Performance thread stopped and cleaned up";
+    }
+    
+    // Cleanup and destroy Csound instance
+    if (cs) {
+        cs->Cleanup();
+        cs->Reset();
+        delete cs;
+        cs = nullptr;
+        qDebug() << "Csound instance cleaned up and destroyed";
+    }
+    
+    qDebug() << "Csound stopped successfully";
+}
+
+void CsEngine::restartCsound()
+{
+    qDebug() << "Restarting Csound...";
+    stopCsound();
+    startCsound();
+    play();
+    qDebug() << "Csound restarted successfully";
 }
 
 void CsEngine::setChannel(const QString &channel, MYFLT value)
@@ -117,6 +167,7 @@ void CsEngine::tableSet(int table, int index, double value)
     }
 }
 
+// not used, but keep it for future
 QVariant CsEngine::getAudioDevices()
 {
     QStringList deviceList; // mapped in pairs: device_name, device_id, device_name2, device_id2, ...
