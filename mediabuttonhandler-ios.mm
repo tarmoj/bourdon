@@ -50,16 +50,22 @@
     return ok ? MPRemoteCommandHandlerStatusSuccess : MPRemoteCommandHandlerStatusCommandFailed;
 }
 
-// Optional: handle toggle explicitly if you want to support single-button remotes reliably
 - (MPRemoteCommandHandlerStatus)handleToggleCommand:(MPRemoteCommandEvent *)event {
-    qDebug() << "[RC] Toggle Play/Pause pressed";
-    // Ideally route based on your own player state exposed by MediaButtonHandler.
-    // For initial debugging you can forward to pause or play explicitly.
-    bool ok = false;
-    if (self.handler) ok = QMetaObject::invokeMethod(self.handler, "pause", Qt::QueuedConnection);
-    qDebug() << "[RC] invoke (toggle->pause) ->" << ok;
-    return ok ? MPRemoteCommandHandlerStatusSuccess : MPRemoteCommandHandlerStatusCommandFailed;
+    static bool isPlaying = false;
+
+    if (isPlaying) {
+        qDebug() << "[RC] Toggle → Pause";
+        isPlaying = false;
+        if (self.handler) QMetaObject::invokeMethod(self.handler, "pause", Qt::QueuedConnection);
+    } else {
+        qDebug() << "[RC] Toggle → Play";
+        isPlaying = true;
+        if (self.handler) QMetaObject::invokeMethod(self.handler, "play", Qt::QueuedConnection);
+    }
+
+    return MPRemoteCommandHandlerStatusSuccess;
 }
+
 
 @end
 
@@ -101,15 +107,15 @@ void MediaButtonHandler::setupRemoteCommandCenter()
     MPRemoteCommandCenter *commandCenter = [MPRemoteCommandCenter sharedCommandCenter];
 
     // Ensure commands are explicitly enabled for debugging
-    commandCenter.playCommand.enabled = YES;
-    commandCenter.pauseCommand.enabled = YES;
+    commandCenter.playCommand.enabled = NO;
+    commandCenter.pauseCommand.enabled = NO;
     commandCenter.nextTrackCommand.enabled = YES;
     commandCenter.previousTrackCommand.enabled = YES;
     commandCenter.stopCommand.enabled = YES;
     commandCenter.togglePlayPauseCommand.enabled = YES;
 
-    [commandCenter.playCommand addTarget:d->objcHandler action:@selector(handlePlayCommand:)];
-    [commandCenter.pauseCommand addTarget:d->objcHandler action:@selector(handlePauseCommand:)];
+    [commandCenter.playCommand addTarget:d->objcHandler action:@selector(handleToggleCommand:)];
+    [commandCenter.pauseCommand addTarget:d->objcHandler action:@selector(handleToggleCommand:)];
     [commandCenter.nextTrackCommand addTarget:d->objcHandler action:@selector(handleNextCommand:)];
     [commandCenter.previousTrackCommand addTarget:d->objcHandler action:@selector(handlePreviousCommand:)];
     [commandCenter.stopCommand addTarget:d->objcHandler action:@selector(handleStopCommand:)];
