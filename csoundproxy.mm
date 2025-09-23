@@ -26,7 +26,12 @@ CsoundProxy::CsoundProxy(QObject *parent)
 
 CsoundProxy::~CsoundProxy()
 {
-    stopCsound();
+    if (cs) {
+        [(CsoundObj *)cs stop];
+    }
+    // Let ARC handle cleanup
+    cs = nullptr;
+    csound = nullptr;
 }
 
 void CsoundProxy::initializeCsound()
@@ -88,16 +93,14 @@ void CsoundProxy::stopCsound()
     qDebug() << "Stopping Csound...";
     
     if (cs) {
+        // Stop the CsoundObj
         [(CsoundObj *)cs stop];
-        // Clean up the CsoundObj
-        cs = nullptr;
+        qDebug() << "CsoundObj stop called";
     }
     
-    if (csound) {
-        csoundCleanup(csound);
-        csoundDestroy(csound);
-        csound = nullptr;
-    }
+    // Clear our reference to the CSOUND instance
+    // The CsoundObj will handle its own cleanup
+    csound = nullptr;
     
     qDebug() << "Csound stopped successfully";
 }
@@ -105,8 +108,22 @@ void CsoundProxy::stopCsound()
 void CsoundProxy::restartCsound()
 {
     qDebug() << "Restarting Csound...";
-    stopCsound();
+    
+    // Simply stop current instance and create a fresh one
+    if (cs) {
+        [(CsoundObj *)cs stop];
+    }
+    
+    // Clear references
+    csound = nullptr;
+    cs = nullptr;
+    
+    // Wait a bit for the background thread to finish
+    QThread::msleep(200);
+    
+    // Create fresh instance
     initializeCsound();
+    
     qDebug() << "Csound restarted successfully";
 }
 
