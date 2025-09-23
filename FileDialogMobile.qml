@@ -62,7 +62,7 @@ Dialog {
                             nameField.text = modelData
                         }
                     }
-                    onDoubleClicked: {
+                    onPressAndHold: {
                         fileView.editingIndex = index
                         editField.text = modelData
                         editField.forceActiveFocus()
@@ -83,7 +83,7 @@ Dialog {
                         
                         // File name display/edit
                         Item {
-                            width: parent.width - deleteButton.width - parent.spacing
+                            width: parent.width - editButton.width - deleteButton.width - (parent.spacing * 2)
                             height: parent.height
                             
                             Label {
@@ -121,10 +121,24 @@ Dialog {
                                         fileView.editingIndex = -1
                                     }
                                 }
-                                
-                                Keys.onEscapePressed: {
-                                    fileView.editingIndex = -1
-                                }
+                            }
+                        }
+                        
+                        // Edit button
+                        ToolButton {
+                            id: editButton
+                            width: 32
+                            height: 32
+                            anchors.verticalCenter: parent.verticalCenter
+                            icon.source: "qrc:/images/edit.svg"
+                            icon.width: 16
+                            icon.height: 16
+                            
+                            onClicked: {
+                                fileView.editingIndex = index
+                                editField.text = modelData
+                                editField.forceActiveFocus()
+                                editField.selectAll()
                             }
                         }
                         
