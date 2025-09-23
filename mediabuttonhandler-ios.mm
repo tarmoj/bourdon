@@ -32,18 +32,18 @@
     info[MPNowPlayingInfoPropertyDefaultPlaybackRate] = @(1.0);
     
     infoCenter.nowPlayingInfo = info;
-    qDebug() << "NowPlaying updated. isPlaying=" << _isPlaying << "playbackRate=" << (_isPlaying ? 1.0 : 0.0);
+    qDebug() << "DBG NowPlaying updated. isPlaying=" << _isPlaying << "playbackRate=" << (_isPlaying ? 1.0 : 0.0);
     
     NSDictionary *currentInfo = infoCenter.nowPlayingInfo;
         for (id key in currentInfo) {
             id value = currentInfo[key];
             // NSString -> const char*
-            qDebug() << [key UTF8String] << ":" << QString::fromNSString([value description]);
+            qDebug() << "DGB" << [key UTF8String] << ":" << QString::fromNSString([value description]);
         }
 }
 
 - (MPRemoteCommandHandlerStatus)handlePlayCommand {
-    qDebug() << "Play command pressed";
+    qDebug() << " DBG Play command pressed";
     if (!_isPlaying) {
         _isPlaying = YES;
         [self updateNowPlayingInfo];
@@ -54,7 +54,7 @@
 }
 
 - (MPRemoteCommandHandlerStatus)handlePauseCommand {
-    qDebug() << "Pause command pressed";
+    qDebug() << "DBG Pause command pressed";
     if (_isPlaying) {
         _isPlaying = NO;
         [self updateNowPlayingInfo];
@@ -65,7 +65,7 @@
 }
 
 - (MPRemoteCommandHandlerStatus)handleToggleCommand {
-    qDebug() << "Toggle command pressed, current state: isPlaying =" << _isPlaying;
+    qDebug() << "DBG Toggle command pressed, current state: isPlaying =" << _isPlaying;
     if (_isPlaying) {
         _isPlaying = NO;
         [self updateNowPlayingInfo];
@@ -86,13 +86,13 @@
 }
 
 - (MPRemoteCommandHandlerStatus)handlePreviousCommand {
-    qDebug() << "Previous pressed";
+    qDebug() << "DBG Previous pressed";
     if (self.handler) emit self.handler->previous();
     return MPRemoteCommandHandlerStatusSuccess;
 }
 
 - (MPRemoteCommandHandlerStatus)handleStopCommand {
-    qDebug() << "Stop pressed";
+    qDebug() << "DBG Stop pressed";
     _isPlaying = NO;
     [self updateNowPlayingInfo];
     if (self.handler) emit self.handler->stop();
@@ -152,7 +152,7 @@ void MediaButtonHandler::setPlayingState(bool isPlaying)
     if (d && d->objcHandler) {
         d->objcHandler.isPlaying = isPlaying;
         [d->objcHandler updateNowPlayingInfo];
-        qDebug() << "Playing state updated to:" << isPlaying;
+        qDebug() << "DBG Playing state updated to:" << isPlaying;
     }
 }
 
