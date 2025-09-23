@@ -25,60 +25,48 @@
     NSMutableDictionary *info = [NSMutableDictionary dictionary];
 
     info[MPMediaItemPropertyTitle] = @"Qt iOS App";
-
-
     info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = @(0);
     info[MPMediaItemPropertyPlaybackDuration] = @(0);
-
-
     info[MPNowPlayingInfoPropertyPlaybackRate] = @(_isPlaying ? 1.0 : 0.0);
     
     infoCenter.nowPlayingInfo = info;
-
     qDebug() << "NowPlaying updated. isPlaying=" << _isPlaying;
-
-    infoCenter.nowPlayingInfo = info;
 }
 
 - (MPRemoteCommandHandlerStatus)handlePlayCommand {
-    qDebug() << "Play pressed";
-    _isPlaying = YES;
-    [self updateNowPlayingInfo];
-    if (self.handler) emit self.handler->play();
+    qDebug() << "Play command pressed";
+    if (!_isPlaying) {
+        _isPlaying = YES;
+        [self updateNowPlayingInfo];
+        if (self.handler) emit self.handler->play();
+    }
+    // If already playing, do nothing - this is the correct behavior for a play command
     return MPRemoteCommandHandlerStatusSuccess;
 }
 
 - (MPRemoteCommandHandlerStatus)handlePauseCommand {
-    qDebug() << "Pause pressed";
+    qDebug() << "Pause command pressed";
     if (_isPlaying) {
-        qDebug() << "Toggle → Pause pressed";
         _isPlaying = NO;
         [self updateNowPlayingInfo];
-[self updateNowPlayingInfo];
-qDebug() << "PlaybackRate now:"
-         << [[MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] doubleValue];
-
         if (self.handler) emit self.handler->pause();
-    } else {
-        qDebug() << "Toggle → Play pressed";
-        _isPlaying = YES;
-        [self updateNowPlayingInfo];
-[self updateNowPlayingInfo];
-qDebug() << "PlaybackRate now:"
-         << [[MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] doubleValue];
-
-        if (self.handler) emit self.handler->play();
     }
+    // If already paused, do nothing - this is the correct behavior for a pause command
     return MPRemoteCommandHandlerStatusSuccess;
-
 }
 
 - (MPRemoteCommandHandlerStatus)handleToggleCommand {
+    qDebug() << "Toggle command pressed, current state: isPlaying =" << _isPlaying;
     if (_isPlaying) {
-        return [self handlePauseCommand];
+        _isPlaying = NO;
+        [self updateNowPlayingInfo];
+        if (self.handler) emit self.handler->pause();
     } else {
-        return [self handlePlayCommand];
+        _isPlaying = YES;
+        [self updateNowPlayingInfo];
+        if (self.handler) emit self.handler->play();
     }
+    return MPRemoteCommandHandlerStatusSuccess;
 }
 
 
@@ -126,14 +114,36 @@ MediaButtonHandler::MediaButtonHandler(QObject* parent) : QObject(parent)
     if (error) {
         qWarning() << "AVAudioSession setActive error:" << error.localizedDescription.UTF8String;
     }
+    
+    // Initialize Now Playing info to ensure external devices know our state
+    [d->objcHandler updateNowPlayingInfo];
 }
 
 MediaButtonHandler::~MediaButtonHandler()
 {
     auto d = reinterpret_cast<MediaButtonHandlerPrivate*>(property("_mbh_dptr").value<void*>());
     if (d) {
+        // Clean up remote command center
+        MPRemoteCommandCenter *commandCenter = [MPRemoteCommandCenter sharedCommandCenter];
+        [commandCenter.playCommand removeTarget:d->objcHandler];
+        [commandCenter.pauseCommand removeTarget:d->objcHandler];
+        [commandCenter.togglePlayPauseCommand removeTarget:d->objcHandler];
+        [commandCenter.nextTrackCommand removeTarget:d->objcHandler];
+        [commandCenter.previousTrackCommand removeTarget:d->objcHandler];
+        [commandCenter.stopCommand removeTarget:d->objcHandler];
+        
         [d->objcHandler release];
         delete d;
+    }
+}
+
+void MediaButtonHandler::setPlayingState(bool isPlaying)
+{
+    auto d = reinterpret_cast<MediaButtonHandlerPrivate*>(property("_mbh_dptr").value<void*>());
+    if (d && d->objcHandler) {
+        d->objcHandler.isPlaying = isPlaying;
+        [d->objcHandler updateNowPlayingInfo];
+        qDebug() << "Playing state updated to:" << isPlaying;
     }
 }
 
@@ -144,6 +154,15 @@ void MediaButtonHandler::setupRemoteCommandCenter()
 
     MPRemoteCommandCenter *commandCenter = [MPRemoteCommandCenter sharedCommandCenter];
 
+    // Remove any existing targets first to avoid conflicts
+    [commandCenter.playCommand removeTarget:nil];
+    [commandCenter.pauseCommand removeTarget:nil];
+    [commandCenter.togglePlayPauseCommand removeTarget:nil];
+    [commandCenter.nextTrackCommand removeTarget:nil];
+    [commandCenter.previousTrackCommand removeTarget:nil];
+    [commandCenter.stopCommand removeTarget:nil];
+
+    // Add our targets
     [commandCenter.playCommand addTarget:d->objcHandler action:@selector(handlePlayCommand)];
     [commandCenter.pauseCommand addTarget:d->objcHandler action:@selector(handlePauseCommand)];
     [commandCenter.togglePlayPauseCommand addTarget:d->objcHandler action:@selector(handleToggleCommand)];
@@ -151,9 +170,12 @@ void MediaButtonHandler::setupRemoteCommandCenter()
     [commandCenter.previousTrackCommand addTarget:d->objcHandler action:@selector(handlePreviousCommand)];
     [commandCenter.stopCommand addTarget:d->objcHandler action:@selector(handleStopCommand)];
 
-commandCenter.togglePlayPauseCommand.enabled = YES;
-commandCenter.playCommand.enabled = YES;
-commandCenter.pauseCommand.enabled = YES;
-
+    // Enable the commands
+    commandCenter.togglePlayPauseCommand.enabled = YES;
+    commandCenter.playCommand.enabled = YES;
+    commandCenter.pauseCommand.enabled = YES;
+    commandCenter.nextTrackCommand.enabled = YES;
+    commandCenter.previousTrackCommand.enabled = YES;
+    commandCenter.stopCommand.enabled = YES;
 }
 
