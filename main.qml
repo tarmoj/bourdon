@@ -16,7 +16,7 @@ ApplicationWindow {
     height: 720
     minimumWidth: 350
     visible: true
-    property string version: "0.7.5"
+    property string version: "0.7.6"
     title: qsTr("Bourdon Player "+ version)
 
     property color backgroundColor: Material.background // expose to C++
@@ -262,12 +262,11 @@ Built using Csound sound engine and Qt framework.
                 icon.source: "qrc:/images/open.svg"
                 onTriggered: {
                     drawer.close()
-                    if (Qt.platform.os !== "ios") {
-                        loadDialog.open();
+                    loadDialogMobile.open()
+                    if (Qt.platform.os === "ios" || Qt.platform.os === "android")  {
+                        loadDialogMobile.open()
                     } else {
-                        // fileio.listPresets()
-                        //loadPresetDialog.open()
-                        loadDialogIOs.open()
+                        loadDialog.open();
                     }
                 }
             }
@@ -277,10 +276,11 @@ Built using Csound sound engine and Qt framework.
                 icon.source: "qrc:/images/save.svg"
                 onTriggered: {
                     drawer.close()
-                    if (Qt.platform.os !== "ios") {
-                        saveDialog.open();
+                    savePresetDialogMobile.open()
+                    if (Qt.platform.os === "ios" || Qt.platform.os === "android")  {
+                        savePresetDialogMobile.open()
                     } else {
-                        savePresetDialogIOs.open()
+                        saveDialog.open();
                     }
                 }
             }
@@ -331,14 +331,10 @@ Built using Csound sound engine and Qt framework.
 
         nameFilters: ["JSON files (*.json)", "All files (*)"]
         onAccepted: {
-            // if (selectedFile.indexOf("content://") === 0) {
-            //     console.warn("Cannot save to content URI directly in QML. Please choose a local path.");
-            //     return
-            // }
             let path = selectedFile.toString();
-            if (!path.endsWith(".json")) {
-                path += ".json";
-            }
+            // if (!path.endsWith(".json")) {
+            //     path += ".json";
+            // }
             savePresetsToFile(path)
         }
     }
@@ -347,15 +343,15 @@ Built using Csound sound engine and Qt framework.
         id: loadDialog
         title: qsTr("Load Presets from File")
         fileMode: FileDialog.OpenFile
-        nameFilters: ["JSON files (*.json)", "All files (*)"]
+        nameFilters: ["All files (*)"]
         onAccepted: {
             loadPresetsFromFile(selectedFile)
         }
     }
 
     // for iOS
-    FileDialogiOS {
-        id: loadDialogIOs
+    FileDialogMobile {
+        id: loadDialogMobile
 
 
         fileMode: "open"
@@ -367,8 +363,8 @@ Built using Csound sound engine and Qt framework.
 
     }
 
-    FileDialogiOS {
-        id: savePresetDialogIOs
+    FileDialogMobile {
+        id: savePresetDialogMobile
         fileMode: "save"
 
         onFileSelected: function(fileUrl) {

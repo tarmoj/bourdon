@@ -203,7 +203,7 @@ Item {
                 ComboBox {
                     id: soundTypeCombobox
                     currentIndex: 2
-                    Layout.preferredWidth: 150
+                    Layout.preferredWidth: 160
                     model: [qsTr("Sample"), qsTr("Saw wave"), qsTr("Synthesized"), qsTr("Saw 2") ]
 
 
@@ -266,7 +266,7 @@ Item {
                     id: tuningCombobox
                     enabled: soundTypeCombobox.currentIndex>0 // only when not samples
                     currentIndex: 0
-                    Layout.preferredWidth: 150
+                    Layout.preferredWidth: 160
                     model: [qsTr("Equal temp."), qsTr("Natural G"), qsTr("Natural D"), qsTr("Natural A"), qsTr("Natural C")]
 
                     onCurrentIndexChanged: {
