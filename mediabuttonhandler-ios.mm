@@ -33,6 +33,13 @@
     
     infoCenter.nowPlayingInfo = info;
     qDebug() << "NowPlaying updated. isPlaying=" << _isPlaying << "playbackRate=" << (_isPlaying ? 1.0 : 0.0);
+    
+    NSDictionary *currentInfo = infoCenter.nowPlayingInfo;
+        for (id key in currentInfo) {
+            id value = currentInfo[key];
+            // NSString -> const char*
+            qDebug() << [key UTF8String] << ":" << QString::fromNSString([value description]);
+        }
 }
 
 - (MPRemoteCommandHandlerStatus)handlePlayCommand {
@@ -62,7 +69,7 @@
     if (_isPlaying) {
         _isPlaying = NO;
         [self updateNowPlayingInfo];
-        if (self.handler) emit self.handler->pause();
+        if (self.handler) emit self.handler->stop();
     } else {
         _isPlaying = YES;
         [self updateNowPlayingInfo];

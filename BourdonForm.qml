@@ -481,18 +481,23 @@ Item {
                             if (preset.length>0) {
                                 // console.log("Starting: ", currentPreset, )
                                 stopAll();
+
                             } else {
                                 playButton.checked = false;
                             }
                             playFromPreset(preset );
+                            if (Qt.platform.os === "ios") {
+                                MediaButtonHandler.setPlayingState(true);
+                            }
                         } else {
                             stopAll();
+                            if (Qt.platform.os === "ios") {
+                                MediaButtonHandler.setPlayingState(false);
+                            }
                         }
                         
                         // Update MediaButtonHandler state for external devices
-                        if (Qt.platform.os === "android" || Qt.platform.os === "ios") {
-                            MediaButtonHandler.setPlayingState(playButton.checked);
-                        }
+
                         
                         handlingStateChange = false;
                     }
