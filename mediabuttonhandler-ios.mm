@@ -2,6 +2,7 @@
 #include "mediabuttonhandler-ios.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVFoundation/AVFoundation.h>
+#import <UIKit/UIKit.h>
 #import <objc/runtime.h>
 #include <QVariant>
 #include <QDebug>
@@ -124,6 +125,9 @@ MediaButtonHandler::MediaButtonHandler(QObject* parent) : QObject(parent)
         qWarning() << "AVAudioSession setActive error:" << error.localizedDescription.UTF8String;
     }
     
+    // Enable background app refresh for remote control
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    
     // Initialize Now Playing info to ensure external devices know our state
     [d->objcHandler updateNowPlayingInfo];
 }
@@ -152,6 +156,15 @@ void MediaButtonHandler::setPlayingState(bool isPlaying)
     if (d && d->objcHandler) {
         d->objcHandler.isPlaying = isPlaying;
         [d->objcHandler updateNowPlayingInfo];
+        
+        // Ensure audio session remains active for remote control
+        AVAudioSession *session = [AVAudioSession sharedInstance];
+        NSError *error = nil;
+        [session setActive:YES error:&error];
+        if (error) {
+            qWarning() << "AVAudioSession setActive error in setPlayingState:" << error.localizedDescription.UTF8String;
+        }
+        
         qDebug() << "DBG Playing state updated to:" << isPlaying;
     }
 }
@@ -186,5 +199,10 @@ void MediaButtonHandler::setupRemoteCommandCenter()
     commandCenter.nextTrackCommand.enabled = YES;
     commandCenter.previousTrackCommand.enabled = YES;
     commandCenter.stopCommand.enabled = YES;
+    
+    // Ensure we're set up to receive remote control events
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    
+    qDebug() << "DBG Remote command center setup completed";
 }
 
