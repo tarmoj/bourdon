@@ -395,7 +395,7 @@ Built using Csound sound engine and Qt framework.
             function onPlay() { console.log("Play received in QML"); bourdonForm.playButton.checked = true; }
             function onPause() {
                 console.log("Pause received in QML");
-                bourdonForm.playButton.checked = !bourdonForm.playButton.checked;
+                bourdonForm.playButton.checked = false;
             }
             function onStop() {
                 console.log("Stop received in QML");

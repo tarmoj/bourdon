@@ -483,7 +483,11 @@ Item {
                         } else {
                             stopAll();
                         }
-
+                        
+                        // Update MediaButtonHandler state for external devices
+                        if (Qt.platform.os === "android" || Qt.platform.os === "ios") {
+                            MediaButtonHandler.setPlayingState(playButton.checked);
+                        }
                     }
                 }
             }          
