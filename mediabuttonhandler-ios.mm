@@ -24,13 +24,15 @@
     MPNowPlayingInfoCenter *infoCenter = [MPNowPlayingInfoCenter defaultCenter];
     NSMutableDictionary *info = [NSMutableDictionary dictionary];
 
-    info[MPMediaItemPropertyTitle] = @"Qt iOS App";
+    info[MPMediaItemPropertyTitle] = @"Bourdon App";
+    info[MPMediaItemPropertyArtist] = @"Tarmo Johannes";
     info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = @(0);
-    info[MPMediaItemPropertyPlaybackDuration] = @(0);
+    info[MPMediaItemPropertyPlaybackDuration] = @(NSTimeIntervalSince1970); // Use large duration
     info[MPNowPlayingInfoPropertyPlaybackRate] = @(_isPlaying ? 1.0 : 0.0);
+    info[MPNowPlayingInfoPropertyDefaultPlaybackRate] = @(1.0);
     
     infoCenter.nowPlayingInfo = info;
-    qDebug() << "NowPlaying updated. isPlaying=" << _isPlaying;
+    qDebug() << "NowPlaying updated. isPlaying=" << _isPlaying << "playbackRate=" << (_isPlaying ? 1.0 : 0.0);
 }
 
 - (MPRemoteCommandHandlerStatus)handlePlayCommand {
@@ -162,9 +164,9 @@ void MediaButtonHandler::setupRemoteCommandCenter()
     [commandCenter.previousTrackCommand removeTarget:nil];
     [commandCenter.stopCommand removeTarget:nil];
 
-    // Add our targets
-    [commandCenter.playCommand addTarget:d->objcHandler action:@selector(handlePlayCommand)];
-    [commandCenter.pauseCommand addTarget:d->objcHandler action:@selector(handlePauseCommand)];
+    // Add our targets - route play and pause to toggle for BT compatibility
+    [commandCenter.playCommand addTarget:d->objcHandler action:@selector(handleToggleCommand)];
+    [commandCenter.pauseCommand addTarget:d->objcHandler action:@selector(handleToggleCommand)];
     [commandCenter.togglePlayPauseCommand addTarget:d->objcHandler action:@selector(handleToggleCommand)];
     [commandCenter.nextTrackCommand addTarget:d->objcHandler action:@selector(handleNextCommand)];
     [commandCenter.previousTrackCommand addTarget:d->objcHandler action:@selector(handlePreviousCommand)];

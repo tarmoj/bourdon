@@ -10,6 +10,8 @@ public:
     ~MediaButtonHandler();
 
     void setupRemoteCommandCenter();
+
+public slots:
     void setPlayingState(bool isPlaying);
 
 signals:
