@@ -68,7 +68,7 @@
     </message>
 </context>
 <context>
-    <name>FileDialogiOS</name>
+    <name>FileDialogMobile</name>
     <message>
         <source>Open Preset File</source>
         <translation>Ava presettide fail</translation>
@@ -92,6 +92,33 @@
     <message>
         <source>File does not exist.</source>
         <translation>Fail ei eksisteeri.</translation>
+    </message>
+</context>
+<context>
+    <name>FileDialogiOS</name>
+    <message>
+        <source>Open Preset File</source>
+        <translation type="vanished">Ava presettide fail</translation>
+    </message>
+    <message>
+        <source>Save Preset File As</source>
+        <translation type="vanished">Salvesta presettide fail kui</translation>
+    </message>
+    <message>
+        <source>Enter new file name</source>
+        <translation type="vanished">Sisesta uus faili nimi</translation>
+    </message>
+    <message>
+        <source>Choose file</source>
+        <translation type="vanished">Vali fail</translation>
+    </message>
+    <message>
+        <source>Filename cannot be empty.</source>
+        <translation type="vanished">Failinimi ei saa olla tühi.</translation>
+    </message>
+    <message>
+        <source>File does not exist.</source>
+        <translation type="vanished">Fail ei eksisteeri.</translation>
     </message>
 </context>
 <context>
@@ -137,7 +164,7 @@
     </message>
     <message>
         <source>Center</source>
-        <translation>Keskel</translation>
+        <translation type="unfinished">Keskele</translation>
     </message>
 </context>
 <context>
@@ -146,13 +173,29 @@
         <source>Presets</source>
         <translation>Presetid</translation>
     </message>
+    <message>
+        <source>Sample</source>
+        <translation>Sämpel</translation>
+    </message>
+    <message>
+        <source>Saw</source>
+        <translation>Saeh.</translation>
+    </message>
+    <message>
+        <source>Synth</source>
+        <translation>Sünt.</translation>
+    </message>
+    <message>
+        <source>Saw 2</source>
+        <translation>Saeh. 2</translation>
+    </message>
 </context>
 <context>
     <name>main</name>
     <message>
         <source>Bourdon Player </source>
         <translatorcomment>ei tõlgi</translatorcomment>
-        <translation>Bourdon Player</translation>
+        <translation type="vanished">Bourdon Player</translation>
     </message>
     <message>
         <source>Load Presets</source>
@@ -190,17 +233,22 @@ You can start/stop the sound from bluetooth speaker or pedal.
 Built using Csound sound engine and Qt framework.
 
 (c) Tarmo Johannes trmjhnns@gmail.com</source>
-        <translation>Bourdon Player
+        <translation type="vanished">Bourdon Player
 
-on rakendus torupillimängijatele (või miks mitte teistele muusikutele), kes soovivad mängida pikkade droonide peale.
+on rakendus torupillimängijatele (või miks mitte teistele muusikutele), kes soovivad mängida pikkade burdoon-nootide peale.
 
-Koosta akorde antud burdoon-nootidest, määra häälestus, tempereering ja heli tüüp.
-Saad määrata iga preseti suhtelist helitugevust, samuti burdoon-nootide individuaalseid helitugevusi.
-Saad heli käivitada/peatada Bluetooth-kõlari või pedaali kaudu.
+Saate koosta akorde antud burdoon-nootidest, 
+määrata häälestust, tempereering ja heli tüüpi.
+Saate seada iga preseti suhtelist helitugevust, samuti burdoon-nootide individuaalseid helitugevusi ja panoraami.
+Heli võib käivitada/peatada ka Bluetooth-kõlari või pedaali abil.
 
 Loodud Csound helimootori ja Qt raamistiku abil.
 
 (c) Tarmo Johannes trmjhnns@gmail.com</translation>
+    </message>
+    <message>
+        <source>Restart Sound Engine</source>
+        <translation>Taaskäivita helimootor</translation>
     </message>
 </context>
 </TS>
