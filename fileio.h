@@ -16,6 +16,8 @@ public:
     Q_INVOKABLE QStringList listPresets();
     Q_INVOKABLE QString documentsPath() const;
     Q_INVOKABLE bool fileExists(const QString &path) const;
+    Q_INVOKABLE bool deleteFile(const QString &fileName);
+    Q_INVOKABLE bool renameFile(const QString &oldFileName, const QString &newFileName);
 };
 
 #endif // FILEIO_H
