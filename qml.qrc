@@ -25,6 +25,8 @@
         <file>LockForm.qml</file>
         <file>images/lock.svg</file>
         <file>images/restart.svg</file>
+        <file>images/edit.svg</file>
+        <file>images/check.svg</file>
     </qresource>
     <qresource prefix="/translations">
         <file>translations/bourdon_et.qm</file>
