@@ -17,12 +17,17 @@ void LanguageManager::switchLanguage(const QString &language)
     bool loaded = false;
     if (language == "EST") {
         loaded = m_translator->load(":/translations/translations/bourdon_et.qm");
+    }  else if
+        (language == "SCO") {
+        loaded = m_translator->load(":/translations/translations/bourdon_gd.qm");
+    } else if (language == "IRE") {
+        loaded = m_translator->load(":/translations/translations/bourdon_ga.qm");
     } else {
         // Default to English (no translation file needed)
         loaded = true;
     }
     
-    if (loaded && language == "EST") {
+    if (loaded && language != "ENG") {
         m_app->installTranslator(m_translator);
     }
     

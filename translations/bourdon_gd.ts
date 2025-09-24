@@ -1,72 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="et_EE">
+<TS version="2.1" language="gd">
 <context>
     <name>BourdonForm</name>
     <message>
         <location filename="../BourdonForm.qml" line="207"/>
         <source>Sample</source>
-        <translation>Sämpel</translation>
+        <translation>Eisimpleir</translation>
     </message>
     <message>
         <location filename="../BourdonForm.qml" line="207"/>
         <source>Saw wave</source>
-        <translation>Saehammas</translation>
+        <translation>Tonn-sàibh</translation>
     </message>
     <message>
         <location filename="../BourdonForm.qml" line="207"/>
         <source>Synthesized</source>
-        <translation>Sünteseeritud</translation>
+        <translation>Co-chur</translation>
     </message>
     <message>
         <location filename="../BourdonForm.qml" line="207"/>
         <source>Saw 2</source>
-        <translation>Saehammas 2</translation>
+        <translation>Tonn-sàibh 2</translation>
     </message>
     <message>
         <location filename="../BourdonForm.qml" line="270"/>
         <source>Equal temp.</source>
-        <translation>Võrdtemp.</translation>
+        <translation>Gleusadh co-ionann</translation>
     </message>
     <message>
         <location filename="../BourdonForm.qml" line="270"/>
         <source>Natural G</source>
-        <translation>Naturaalne G</translation>
+        <translation>G nàdarra</translation>
     </message>
     <message>
         <location filename="../BourdonForm.qml" line="270"/>
         <source>Natural D</source>
-        <translation>Naturaalne D</translation>
+        <translation>D nàdarra</translation>
     </message>
     <message>
         <location filename="../BourdonForm.qml" line="270"/>
         <source>Natural A</source>
-        <translation>Naturaalne A</translation>
+        <translation>A nàdarra</translation>
     </message>
     <message>
         <location filename="../BourdonForm.qml" line="270"/>
         <source>Natural C</source>
-        <translation>Naturaalne C</translation>
+        <translation>C nàdarra</translation>
     </message>
     <message>
         <location filename="../BourdonForm.qml" line="300"/>
         <source>Sandbox</source>
-        <translation>Liivakast</translation>
+        <translation>Bogsa-gainmhich</translation>
     </message>
     <message>
         <location filename="../BourdonForm.qml" line="356"/>
         <source>Add to presets</source>
-        <translation>Lisa presettidesse</translation>
+        <translation>Cuir ri ro-shuidheachaidhean</translation>
     </message>
     <message>
         <location filename="../BourdonForm.qml" line="452"/>
         <source>Next/Prev.</source>
-        <translation>Järgmine/Eelmine</translation>
+        <translation>Air adhart/Air ais</translation>
     </message>
     <message>
         <location filename="../BourdonForm.qml" line="464"/>
         <source>Play/Stop</source>
-        <translation>Mängi/Peata</translation>
+        <translation>Cluich/Stad</translation>
     </message>
 </context>
 <context>
@@ -74,12 +74,12 @@
     <message>
         <location filename="../BourdonVolume.qml" line="143"/>
         <source>L</source>
-        <translation>V</translation>
+        <translation>Clì</translation>
     </message>
     <message>
         <location filename="../BourdonVolume.qml" line="171"/>
         <source>R</source>
-        <translation>P</translation>
+        <translation>Deas</translation>
     </message>
 </context>
 <context>
@@ -87,46 +87,46 @@
     <message>
         <location filename="../FileDialogMobile.qml" line="12"/>
         <source>Open Preset File</source>
-        <translation>Ava presettide fail</translation>
+        <translation>Fosgail faidhle ro-shuidheachaidh</translation>
     </message>
     <message>
         <location filename="../FileDialogMobile.qml" line="12"/>
         <source>Save Preset File As</source>
-        <translation>Salvesta presettide fail kui</translation>
+        <translation>Sàbhail faidhle ro-shuidheachaidh mar</translation>
     </message>
     <message>
         <location filename="../FileDialogMobile.qml" line="40"/>
         <source>Failed to rename file.</source>
-        <translation>Faili ümbernimetamine ebaõnnestus.</translation>
+        <translation>Dh’fhàillig ath-ainmeachadh an fhaidhle.</translation>
     </message>
     <message>
         <location filename="../FileDialogMobile.qml" line="192"/>
         <source>Failed to delete file.</source>
-        <translation>Faili kustutamine ebaõnnestus.</translation>
+        <translation>Dh’fhàillig dubhadh às an fhaidhle.</translation>
     </message>
     <message>
         <location filename="../FileDialogMobile.qml" line="204"/>
         <source>Enter new file name</source>
-        <translation>Sisesta uus faili nimi</translation>
+        <translation>Cuir a-steach ainm faidhle ùr</translation>
     </message>
     <message>
         <location filename="../FileDialogMobile.qml" line="204"/>
         <source>Choose file</source>
-        <translation>Vali fail</translation>
+        <translation>Tagh faidhle</translation>
     </message>
     <message>
         <location filename="../FileDialogMobile.qml" line="217"/>
         <source>Filename cannot be empty.</source>
-        <translation>Failinimi ei saa olla tühi.</translation>
+        <translation>Chan fhaod ainm an fhaidhle a bhith falamh.</translation>
     </message>
     <message>
         <location filename="../FileDialogMobile.qml" line="227"/>
         <source>File does not exist.</source>
-        <translation>Fail ei eksisteeri.</translation>
+        <translation>Chan eil am faidhle ann.</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Tühista</translation>
+        <translation>Cuir dheth</translation>
     </message>
 </context>
 <context>
@@ -134,12 +134,12 @@
     <message>
         <location filename="../LockForm.qml" line="47"/>
         <source>Press the button below 4 times to go back to main view.</source>
-        <translation>Vajuta allolevat nuppu 4 korda, et minna tagasi peavaatele.</translation>
+        <translation>Brùth am putan gu h-ìosal 4 tursan gus tilleadh chun a' phrìomh-shealladh.</translation>
     </message>
     <message>
         <location filename="../LockForm.qml" line="53"/>
         <source>Unlock: %1</source>
-        <translation>Ava lukk: %1</translation>
+        <translation>Fuasgail: %1</translation>
     </message>
 </context>
 <context>
@@ -147,22 +147,22 @@
     <message>
         <location filename="../MixerForm.qml" line="72"/>
         <source>Preset: </source>
-        <translation>Presett: </translation>
+        <translation>Ro-shuidheachadh: </translation>
     </message>
     <message>
         <location filename="../MixerForm.qml" line="93"/>
         <source>Preset volume: </source>
-        <translation>Preseti helitugevus: </translation>
+        <translation>Meud ro-shuidheachaidh: </translation>
     </message>
     <message>
         <location filename="../MixerForm.qml" line="122"/>
         <source>Reset</source>
-        <translation>Lähtesta</translation>
+        <translation>Ath-shuidhich</translation>
     </message>
     <message>
         <location filename="../MixerForm.qml" line="134"/>
         <source>Adjust individually:</source>
-        <translation>Reguleeri eraldi:</translation>
+        <translation>Atharraich leotha fhèin:</translation>
     </message>
     <message>
         <location filename="../MixerForm.qml" line="147"/>
@@ -172,17 +172,17 @@
     <message>
         <location filename="../MixerForm.qml" line="148"/>
         <source>All volumes to 0dB</source>
-        <translation>Kõik helitugevused 0dB-le</translation>
+        <translation>Gach meud gu 0dB</translation>
     </message>
     <message>
         <location filename="../MixerForm.qml" line="164"/>
         <source>All pans to center</source>
-        <translation>Kõik panoraamid keskele</translation>
+        <translation>Gach pan chun a’ mheadhain.</translation>
     </message>
     <message>
         <location filename="../MixerForm.qml" line="163"/>
         <source>Center</source>
-        <translation>Keskele</translation>
+        <translation>Meadhan</translation>
     </message>
 </context>
 <context>
@@ -190,27 +190,27 @@
     <message>
         <location filename="../PresetForm.qml" line="35"/>
         <source>Presets</source>
-        <translation>Presetid</translation>
+        <translation>Ro-shuidheachaidhean</translation>
     </message>
     <message>
         <location filename="../PresetForm.qml" line="118"/>
         <source>Sample</source>
-        <translation>Sämpel</translation>
+        <translation>Eisimpleir</translation>
     </message>
     <message>
         <location filename="../PresetForm.qml" line="118"/>
         <source>Saw</source>
-        <translation>Saeh.</translation>
+        <translation>Sàbh</translation>
     </message>
     <message>
         <location filename="../PresetForm.qml" line="118"/>
         <source>Synth</source>
-        <translation>Sünt.</translation>
+        <translation>Co-chur</translation>
     </message>
     <message>
         <location filename="../PresetForm.qml" line="118"/>
         <source>Saw 2</source>
-        <translation>Saeh. 2</translation>
+        <translation>Sàbh 2</translation>
     </message>
 </context>
 <context>
@@ -223,32 +223,32 @@
     <message>
         <location filename="../main.qml" line="261"/>
         <source>Load Presets</source>
-        <translation>Lae presetid</translation>
+        <translation>Luchdaich ro-shuidheachaidhean</translation>
     </message>
     <message>
         <location filename="../main.qml" line="275"/>
         <source>Save Presets</source>
-        <translation>Salvesta presetid</translation>
+        <translation>Sàbhail ro-shuidheachaidhean</translation>
     </message>
     <message>
         <location filename="../main.qml" line="300"/>
         <source>Buy me a coffee</source>
-        <translation>Osta mulle kohvi</translation>
+        <translation>Ceannaich cofaidh dhomh</translation>
     </message>
     <message>
         <location filename="../main.qml" line="305"/>
         <source>Info</source>
-        <translation>Info</translation>
+        <translation>Fiosrachadh</translation>
     </message>
     <message>
         <location filename="../main.qml" line="327"/>
         <source>Save Presets to File</source>
-        <translation>Salvesta presetid faili</translation>
+        <translation>Sàbhail ro-shuidheachaidhean gu faidhle</translation>
     </message>
     <message>
         <location filename="../main.qml" line="344"/>
         <source>Load Presets from File</source>
-        <translation>Lae presetid failist</translation>
+        <translation>Luchdaich ro-shuidheachaidhean bho fhaidhle</translation>
     </message>
     <message>
         <source>Bourdon Player
@@ -262,23 +262,22 @@ You can start/stop the sound from bluetooth speaker or pedal.
 Built using Csound sound engine and Qt framework.
 
 (c) Tarmo Johannes trmjhnns@gmail.com</source>
-        <translation>Bourdon Player
+        <translation>Cluicheadair Bourdonn
 
-on rakendus torupillimängijatele (või miks mitte teistele muusikutele), kes soovivad mängida pikkade burdoon-nootide peale.
+'S e app a th' ann do luchd-ciùil pìob-mhòire (no ciùil eile) a tha airson cluich le notaichean drone fada.
 
-Saate koosta akorde antud burdoon-nootidest, 
-määrata häälestust, tempereering ja heli tüüpi.
-Saate seada iga preseti suhtelist helitugevust, samuti burdoon-nootide individuaalseid helitugevusi ja panoraami.
-Heli võib käivitada/peatada ka Bluetooth-kõlari või pedaali abil.
+Cruthaich na cordaichean agad bho na notaichean bourdon a tha air an toirt seachad, suidhich an gleusadh, an gleusadh agus an seòrsa fuaime.
+Faodaidh tu meud co-cheangailte gach ro-shuidheachadh, a bharrachd air na meudan fa leth de na notaichean bourdon, a shuidheachadh.
+Faodaidh tu am fuaim a thòiseachadh/stad le neach-labhairt Bluetooth no peadal.
 
-Loodud Csound helimootori ja Qt raamistiku abil.
+Air a thogail a' cleachdadh Csound agus frèam Qt.
 
 (c) Tarmo Johannes trmjhnns@gmail.com</translation>
     </message>
     <message>
         <location filename="../main.qml" line="289"/>
         <source>Restart Sound Engine</source>
-        <translation>Taaskäivita helimootor</translation>
+        <translation>Ath-thòisich an Einnsean Fuaime</translation>
     </message>
 </context>
 </TS>

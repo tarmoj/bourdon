@@ -30,5 +30,7 @@
     </qresource>
     <qresource prefix="/translations">
         <file>translations/bourdon_et.qm</file>
+        <file>translations/bourdon_ga.qm</file>
+        <file>translations/bourdon_gd.qm</file>
     </qresource>
 </RCC>

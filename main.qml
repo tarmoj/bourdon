@@ -248,7 +248,7 @@ Built using Csound sound engine and Qt framework.
 
                 Layout.leftMargin: drawer.marginLeft
 
-                model: ["EN", "EST"]
+                model: ["ENG", "EST", "SCO", "IRE"]
 
                 onActivated: {
                     console.log("Language: ", currentText)

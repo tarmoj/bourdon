@@ -101,7 +101,7 @@ DISTFILES += \
     android/res/values/ic_launcher_background.xml \
     android/res/values/libs.xml \
     images/stop-button.png \
-    translations/bourdon_et.qm
+
 
 
 
@@ -212,5 +212,7 @@ macx {
 TRANSLATIONS += \
     translations/bourdon_et.ts \
     translations/bourdon_et.ts \
+    translations/bourdon_ga.ts \
+    translations/bourdon_gd.ts
 
 
