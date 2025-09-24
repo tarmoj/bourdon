@@ -267,7 +267,8 @@ Item {
                     enabled: soundTypeCombobox.currentIndex>0 // only when not samples
                     currentIndex: 0
                     Layout.preferredWidth: 160
-                    model: [qsTr("Equal temp."), qsTr("Natural G"), qsTr("Natural D"), qsTr("Natural A"), qsTr("Natural C")]
+                    model: [qsTr("Equal temp."), qsTr("Natural G"), qsTr("Natural D"), qsTr("Natural A"),
+                        qsTr("Natural C"), qsTr("Natural E")]
 
                     onCurrentIndexChanged: {
                       csound.setChannel("tuning", currentIndex)

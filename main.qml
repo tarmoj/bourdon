@@ -16,7 +16,7 @@ ApplicationWindow {
     height: 720
     minimumWidth: 350
     visible: true
-    property string version: "0.7.6"
+    property string version: "0.7.7"
     title: qsTr("Bourdon Player "+ version)
 
     property color backgroundColor: Material.background // expose to C++
@@ -29,7 +29,7 @@ ApplicationWindow {
 
     property var bourdonNotes: ["G", "A", "c", "d", "e", "f", "fis", "g", "a", "h", "c1", "d1", "e1", "f1", "fis1", "g1", "a1", "h1"] // make sure the notes are loaded to tables in Csound with according numbers (index+1)
     property double lastPressTime: 0
-    property var tunings: ["EQ","G", "D", "A", "C"] // make sure that this is aligned with the widget and the logic in Csound
+    property var tunings: ["EQ","G", "D", "A", "C", "E"] // make sure that this is aligned with the widget and the logic in Csound
     property var soundTypes: ["sample", "saw", "synthesized", "saw2"] // same - check the widget and Csound, when changed
     property int volumeTable: 303 // NB! make sure that it is the same in Csound code!
 

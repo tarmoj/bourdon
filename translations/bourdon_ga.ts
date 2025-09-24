@@ -44,27 +44,32 @@
         <translation>A nádúrtha</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="270"/>
+        <location filename="../BourdonForm.qml" line="271"/>
         <source>Natural C</source>
         <translation>C nádúrtha</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="300"/>
+        <location filename="../BourdonForm.qml" line="271"/>
+        <source>Natural E</source>
+        <translation>E nádúrtha</translation>
+    </message>
+    <message>
+        <location filename="../BourdonForm.qml" line="301"/>
         <source>Sandbox</source>
         <translation>Bosca-ghainimh</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="356"/>
+        <location filename="../BourdonForm.qml" line="357"/>
         <source>Add to presets</source>
         <translation>Cuir le réamhshocruithe</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="452"/>
+        <location filename="../BourdonForm.qml" line="453"/>
         <source>Next/Prev.</source>
         <translation>Ar Aghaidh/Ar Ais</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="464"/>
+        <location filename="../BourdonForm.qml" line="465"/>
         <source>Play/Stop</source>
         <translation>Seinn/Stad</translation>
     </message>
@@ -126,7 +131,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cealaigh</translation>
+        <translation type="vanished">Cealaigh</translation>
     </message>
 </context>
 <context>
@@ -262,7 +267,7 @@ You can start/stop the sound from bluetooth speaker or pedal.
 Built using Csound sound engine and Qt framework.
 
 (c) Tarmo Johannes trmjhnns@gmail.com</source>
-        <translation>Bourdon Player
+        <translation type="vanished">Bourdon Player
 
 is feidhmchlár é do phíobairí (nó ceoltóirí eile) atá ag iarraidh imirt le nótaí drone fada.
 
@@ -280,4 +285,4 @@ Cruthaithe ag úsáid inneall fuaime Csound agus creatlach Qt.
         <translation>Atosaigh Inneall na Fuaime</translation>
     </message>
 </context>
-</TS> 
+</TS>

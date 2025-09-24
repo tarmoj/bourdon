@@ -44,27 +44,32 @@
         <translation>A nàdarra</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="270"/>
+        <location filename="../BourdonForm.qml" line="271"/>
         <source>Natural C</source>
         <translation>C nàdarra</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="300"/>
+        <location filename="../BourdonForm.qml" line="271"/>
+        <source>Natural E</source>
+        <translation>E nàdarra</translation>
+    </message>
+    <message>
+        <location filename="../BourdonForm.qml" line="301"/>
         <source>Sandbox</source>
         <translation>Bogsa-gainmhich</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="356"/>
+        <location filename="../BourdonForm.qml" line="357"/>
         <source>Add to presets</source>
         <translation>Cuir ri ro-shuidheachaidhean</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="452"/>
+        <location filename="../BourdonForm.qml" line="453"/>
         <source>Next/Prev.</source>
         <translation>Air adhart/Air ais</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="464"/>
+        <location filename="../BourdonForm.qml" line="465"/>
         <source>Play/Stop</source>
         <translation>Cluich/Stad</translation>
     </message>
@@ -126,7 +131,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cuir dheth</translation>
+        <translation type="vanished">Cuir dheth</translation>
     </message>
 </context>
 <context>
@@ -134,7 +139,7 @@
     <message>
         <location filename="../LockForm.qml" line="47"/>
         <source>Press the button below 4 times to go back to main view.</source>
-        <translation>Brùth am putan gu h-ìosal 4 tursan gus tilleadh chun a' phrìomh-shealladh.</translation>
+        <translation>Brùth am putan gu h-ìosal 4 tursan gus tilleadh chun a&apos; phrìomh-shealladh.</translation>
     </message>
     <message>
         <location filename="../LockForm.qml" line="53"/>
@@ -262,15 +267,15 @@ You can start/stop the sound from bluetooth speaker or pedal.
 Built using Csound sound engine and Qt framework.
 
 (c) Tarmo Johannes trmjhnns@gmail.com</source>
-        <translation>Cluicheadair Bourdonn
+        <translation type="vanished">Cluicheadair Bourdonn
 
-'S e app a th' ann do luchd-ciùil pìob-mhòire (no ciùil eile) a tha airson cluich le notaichean drone fada.
+&apos;S e app a th&apos; ann do luchd-ciùil pìob-mhòire (no ciùil eile) a tha airson cluich le notaichean drone fada.
 
 Cruthaich na cordaichean agad bho na notaichean bourdon a tha air an toirt seachad, suidhich an gleusadh, an gleusadh agus an seòrsa fuaime.
 Faodaidh tu meud co-cheangailte gach ro-shuidheachadh, a bharrachd air na meudan fa leth de na notaichean bourdon, a shuidheachadh.
 Faodaidh tu am fuaim a thòiseachadh/stad le neach-labhairt Bluetooth no peadal.
 
-Air a thogail a' cleachdadh Csound agus frèam Qt.
+Air a thogail a&apos; cleachdadh Csound agus frèam Qt.
 
 (c) Tarmo Johannes trmjhnns@gmail.com</translation>
     </message>

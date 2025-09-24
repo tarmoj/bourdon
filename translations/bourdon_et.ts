@@ -44,27 +44,32 @@
         <translation>Naturaalne A</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="270"/>
+        <location filename="../BourdonForm.qml" line="271"/>
         <source>Natural C</source>
         <translation>Naturaalne C</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="300"/>
+        <location filename="../BourdonForm.qml" line="271"/>
+        <source>Natural E</source>
+        <translation>Naturaalne E</translation>
+    </message>
+    <message>
+        <location filename="../BourdonForm.qml" line="301"/>
         <source>Sandbox</source>
         <translation>Liivakast</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="356"/>
+        <location filename="../BourdonForm.qml" line="357"/>
         <source>Add to presets</source>
         <translation>Lisa presettidesse</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="452"/>
+        <location filename="../BourdonForm.qml" line="453"/>
         <source>Next/Prev.</source>
         <translation>Järgmine/Eelmine</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="464"/>
+        <location filename="../BourdonForm.qml" line="465"/>
         <source>Play/Stop</source>
         <translation>Mängi/Peata</translation>
     </message>
@@ -126,7 +131,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Tühista</translation>
+        <translation type="vanished">Tühista</translation>
     </message>
 </context>
 <context>
@@ -262,7 +267,7 @@ You can start/stop the sound from bluetooth speaker or pedal.
 Built using Csound sound engine and Qt framework.
 
 (c) Tarmo Johannes trmjhnns@gmail.com</source>
-        <translation>Bourdon Player
+        <translation type="vanished">Bourdon Player
 
 on rakendus torupillimängijatele (või miks mitte teistele muusikutele), kes soovivad mängida pikkade burdoon-nootide peale.
 
