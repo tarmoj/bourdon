@@ -29,6 +29,22 @@ Dialog {
         }
     }
 
+    function setNewFileName(currentName, newName) {
+        console.log("Renaming file: ", currentName, currentName);
+        if (newName.trim() !== "" && newName !== currentName) {
+            if (fileio.renameFile(currentName, newName.trim())) {
+                // Refresh file list
+                fileList = fileio.listPresets()
+                nameField.text = newName.trim()
+            } else {
+                errorLabel.text = qsTr("Failed to rename file.")
+                errorLabel.visible = true
+            }
+        }
+        fileView.editingIndex = -1
+    }
+
+
     ColumnLayout {
         spacing: 10
         anchors.fill: parent
@@ -66,7 +82,7 @@ Dialog {
                         fileView.editingIndex = index
                         editField.text = modelData
                         editField.forceActiveFocus()
-                        editField.selectAll()
+                        //editField.selectAll()
                     }
                 }
                 
@@ -75,6 +91,8 @@ Dialog {
                     anchors.margins: 2
                     color: "transparent"
                     
+
+
                     Row {
                         anchors.fill: parent
                         anchors.leftMargin: 5
@@ -102,17 +120,7 @@ Dialog {
                                 visible: itemRect.isEditing
                                 
                                 onAccepted: {
-                                    if (text.trim() !== "" && text !== modelData) {
-                                        if (fileio.renameFile(modelData, text.trim())) {
-                                            // Refresh file list
-                                            fileList = fileio.listPresets()
-                                            nameField.text = text.trim()
-                                        } else {
-                                            errorLabel.text = qsTr("Failed to rename file.")
-                                            errorLabel.visible = true
-                                        }
-                                    }
-                                    fileView.editingIndex = -1
+                                    setNewFileName(modelData, text)
                                 }
                                 
                                 onFocusChanged: {
@@ -124,21 +132,40 @@ Dialog {
                             }
                         }
                         
-                        // Edit button
-                        ToolButton {
-                            id: editButton
+                        // Edit/Apply  button
+                        Item {
                             width: 32
                             height: 32
-                            anchors.verticalCenter: parent.verticalCenter
-                            icon.source: "qrc:/images/edit.svg"
-                            icon.width: 16
-                            icon.height: 16
-                            
-                            onClicked: {
-                                fileView.editingIndex = index
-                                editField.text = modelData
-                                editField.forceActiveFocus()
-                                editField.selectAll()
+
+                            ToolButton {
+                                id: editButton
+                                anchors.fill: parent
+                                anchors.verticalCenter: parent.verticalCenter
+                                icon.source: "qrc:/images/edit.svg"
+                                icon.width: width/2
+                                icon.height: height/2
+                                visible:  !itemRect.isEditing
+
+                                onClicked: {
+                                    fileView.editingIndex = index
+                                    editField.text = modelData
+                                    editField.forceActiveFocus()
+                                    //editField.selectAll()
+                                }
+                            }
+
+                            ToolButton {
+                                id: applyButton
+                                anchors.fill: parent
+                                anchors.verticalCenter: parent.verticalCenter
+                                icon.source: "qrc:/images/check.svg"
+                                icon.width: width/2
+                                icon.height: height/2
+                                visible:  itemRect.isEditing
+
+                                onClicked: {
+                                    setNewFileName(modelData, editField.text)
+                                }
                             }
                         }
                         
