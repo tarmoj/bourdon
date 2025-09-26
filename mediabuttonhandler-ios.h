@@ -6,7 +6,7 @@ class MediaButtonHandler : public QObject
 {
     Q_OBJECT
 public:
-    explicit MediaButtonHandler(QObject* parent = nullptr);
+    explicit MediaButtonHandler(QObject *parent = nullptr);
     ~MediaButtonHandler();
 
     void setupRemoteCommandCenter();

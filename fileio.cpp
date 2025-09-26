@@ -66,12 +66,12 @@ bool FileIO::deleteFile(const QString &fileName)
 {
     const QString basePath = documentsPath();
     const QString fullPath = basePath + "/" + fileName;
-    
+
     if (!QFile::exists(fullPath)) {
         qDebug() << "File does not exist: " << fullPath;
         return false;
     }
-    
+
     bool success = QFile::remove(fullPath);
     if (!success) {
         qDebug() << "Failed to delete file: " << fullPath;
@@ -86,17 +86,17 @@ bool FileIO::renameFile(const QString &oldFileName, const QString &newFileName)
     const QString basePath = documentsPath();
     const QString oldPath = basePath + "/" + oldFileName;
     const QString newPath = basePath + "/" + newFileName;
-    
+
     if (!QFile::exists(oldPath)) {
         qDebug() << "Source file does not exist: " << oldPath;
         return false;
     }
-    
+
     if (QFile::exists(newPath)) {
         qDebug() << "Target file already exists: " << newPath;
         return false;
     }
-    
+
     bool success = QFile::rename(oldPath, newPath);
     if (!success) {
         qDebug() << "Failed to rename file from" << oldPath << "to" << newPath;
