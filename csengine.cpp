@@ -43,7 +43,7 @@ void CsEngine::initializeCsound()
     cs->SetOption("-+rtaudio=auhal");
 #else
     cs = new Csound();
-    cs->SetOption("--env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/"); // for local build only.
+    cs->SetOption("--env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/ogg/"); // for local build only.
 #endif
     cs->SetOption("-odac");
     cs->SetOption("-d");

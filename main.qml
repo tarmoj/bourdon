@@ -33,7 +33,7 @@ ApplicationWindow {
     property var soundTypes: ["sample", "saw", "synthesized", "saw2"] // same - check the widget and Csound, when changed
     property int volumeTable: 303 // NB! make sure that it is the same in Csound code!
 
-    property bool useSamples: false // enable samples in sound comboboxes
+    property bool useSamples: true // enable samples in sound comboboxes
 
     ListModel {
         id: presetModel

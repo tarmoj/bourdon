@@ -3,7 +3,7 @@
 -odac 
 ; -d
 ; -b 256 -B 1024 ; et äkki see mõjutab Androidi, aga vist mitte....;; 
-; --env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/samples/
+; --env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/ogg/
 </CsOptions>
 <CsInstruments>
 
@@ -23,6 +23,93 @@ chn_k "volumeCorrection", 3
 chnset 440, "a4"
 chnset 2, "type"
 chnset 0, "volumeCorrection"
+
+;sample data (ogg) -----------------------
+
+giLoopPoints[][] init 20, 2
+
+; definition of samples
+
+giSound1 ftgen 1, 0, 0, 1, "G0.ogg", 0, 0, 1
+giLoopPoints[1][0]=223926 
+giLoopPoints[1][1]=596559
+
+
+giSound2 ftgen 2, 0, 0, 1, "A0.ogg", 0, 0, 1
+giLoopPoints[2][0]=438969 
+giLoopPoints[2][1]=595254
+
+giSound3 ftgen 3, 0, 0, 1, "c.ogg", 0, 0, 1
+giLoopPoints[3][0]= 52279
+giLoopPoints[3][1]= 145497
+
+
+	giSound4 ftgen 4, 0, 0, 1, "d.ogg", 0, 0, 1
+giLoopPoints[4][0]= 91488
+giLoopPoints[4][1]= 921388
+
+
+	giSound5 ftgen 5, 0, 0, 1, "e.ogg", 0, 0, 1
+giLoopPoints[5][0] = 343606
+giLoopPoints[5][1] = 739687
+	
+	giSound6 ftgen 6, 0, 0, 1, "f.ogg", 0, 0, 1 ; f
+giLoopPoints[6][0] = 363949
+giLoopPoints[6][1] = 1198777
+	
+	giSound7 ftgen 7, 0, 0, 1, "fis.ogg", 0, 0, 1 ; fis
+giLoopPoints[7][0] = 788621
+giLoopPoints[7][1] = 1485189	
+	
+	
+	giSound8 ftgen 8, 0, 0, 1, "g.ogg", 0, 0, 1
+giLoopPoints[8][0] = 191368
+giLoopPoints[8][1] = 871622
+	
+	
+	giSound9 ftgen 9, 0, 0, 1, "a.ogg", 0, 0, 1
+giLoopPoints[9][0] = 352173
+giLoopPoints[9][1] = 875722
+	
+	giSound10 ftgen 10, 0, 0, 1, "h.ogg", 0, 0, 1
+giLoopPoints[10][0] = 764175
+giLoopPoints[10][1] = 1059722	
+	
+	giSound11 ftgen 11, 0, 0, 1, "c1.ogg", 0, 0, 1
+giLoopPoints[11][0] = 147145
+giLoopPoints[11][1] = 285339	
+	
+	giSound12 ftgen 12, 0, 0, 1, "d1.ogg", 0, 0, 1
+giLoopPoints[12][0] = 404900
+giLoopPoints[12][1] =	606115
+	
+	giSound13 ftgen 13, 0, 0, 1, "e1.ogg", 0, 0, 1
+giLoopPoints[13][0] = 113771
+giLoopPoints[13][1] = 187850
+	
+	giSound14 ftgen 14, 0, 0, 1, "f1.ogg", 0, 0, 1 ; f
+giLoopPoints[14][0] = 104999
+giLoopPoints[14][1] = 156894 
+	
+	
+	giSound15 ftgen 15, 0, 0, 1, "fis1.ogg", 0, 0, 1 ; fis
+giLoopPoints[15][0] = 112656
+giLoopPoints[15][1] = 161512 
+	
+	giSound16 ftgen 16, 0, 0, 1, "g1.ogg", 0, 0, 1
+giLoopPoints[16][0] = 31416
+giLoopPoints[16][1] = 95460	
+	
+	giSound17 ftgen 17, 0, 0, 1, "a1.ogg", 0, 0, 1
+giLoopPoints[17][0] = 151807
+giLoopPoints[17][1] = 943548
+
+	giSound18 ftgen 18, 0, 0, 1, "h1.ogg", 0, 0, 1
+giLoopPoints[18][0] = 198640
+giLoopPoints[18][1] =	268507
+
+; ---------------------------
+
 
 ; indexes of the notes in giFrequencies[] and giRatiosX[] arrays
 #define G #0#
@@ -195,7 +282,7 @@ instr Bourdon
 	
 	elseif (kType==0) then
 		if ftexists:i(iTable)>0 then
-			aSound loscil3 0.7, 1, iTable, 1 ; kõrguse muutmine Androidi peal ei toimi sel moel...
+			aSound loscil3 0.7, 1, iTable, 1, 1, giLoopPoints[iTable][0], giLoopPoints[iTable][1]  ; kõrguse muutmine Androidi peal ei toimi sel moel...
 		else
 			aSound = 0
 		endif
@@ -231,37 +318,7 @@ instr Bourdon
 endin
 
 
-; make sure, it can be optional!
-schedule "LoadSamples", 0, 0
-instr LoadSamples
 
-;if fileexists("G0.wav")== 1 then ; fileexist does not seem to exist on Android
-	giSound1 ftgen 1, 0, 0, 1, "G0.wav", 0, 0, 1
-	giSound2 ftgen 2, 0, 0, 1, "A0.wav", 0, 0, 1
-	giSound3 ftgen 3, 0, 0, 1, "c.wav", 0, 0, 1
-	giSound4 ftgen 4, 0, 0, 1, "d.wav", 0, 0, 1
-	giSound5 ftgen 5, 0, 0, 1, "e.wav", 0, 0, 1
-	giSound6 ftgen 6, 0, 0, 1, "f.wav", 0, 0, 1 ; f
-	giSound7 ftgen 7, 0, 0, 1, "fis.wav", 0, 0, 1 ; fis
-	
-	giSound8 ftgen 8, 0, 0, 1, "g.wav", 0, 0, 1
-	giSound9 ftgen 9, 0, 0, 1, "a.wav", 0, 0, 1
-	giSound10 ftgen 10, 0, 0, 1, "h.wav", 0, 0, 1
-	
-	giSound11 ftgen 11, 0, 0, 1, "c1.wav", 0, 0, 1
-	giSound12 ftgen 12, 0, 0, 1, "d1.wav", 0, 0, 1
-	giSound13 ftgen 13, 0, 0, 1, "e1.wav", 0, 0, 1
-	giSound14 ftgen 14, 0, 0, 1, "f1.wav", 0, 0, 1 ; f
-	giSound15 ftgen 15, 0, 0, 1, "fis1.wav", 0, 0, 1 ; fis
-	
-	giSound16 ftgen 16, 0, 0, 1, "g1.wav", 0, 0, 1
-	giSound17 ftgen 17, 0, 0, 1, "a1.wav", 0, 0, 1
-	giSound18 ftgen 18, 0, 0, 1, "h1.wav", 0, 0, 1
-;else
-;	prints "File G0.wav not found\n";
-;endif
-
-endin
 
 ; schedule "Reset", 0, 0
 instr Reset ; set volumeCorrection and individual volumes to 0 (dB)
@@ -277,6 +334,8 @@ endin
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 
@@ -380,7 +439,7 @@ endin
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -719,7 +778,7 @@ endin
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <value>0</value>
+  <value>8</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -768,7 +827,7 @@ endin
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>1</selectedIndex>
+  <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
@@ -902,7 +961,7 @@ endin
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>2</selectedIndex>
+  <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
 </bsbPanel>
