@@ -6,6 +6,7 @@
 
 #include <QDebug>
 #include <QThread>
+#include <cstdlib>
 
 
 extern "C" {
@@ -49,6 +50,15 @@ void CsoundProxy::initializeCsound()
         qDebug() << "Failed to copy .ogg files to samples directory";
     } else {
         qDebug() << "Successfully copied .ogg files to samples directory";
+        
+        // Verify a couple of key files exist
+        QString testFile1 = samplesDir + "/G0.ogg";
+        QString testFile2 = samplesDir + "/A0.ogg";
+        if (QFile::exists(testFile1) && QFile::exists(testFile2)) {
+            qDebug() << "Verification successful: Key .ogg files found in" << samplesDir;
+        } else {
+            qDebug() << "Warning: Some .ogg files may not have been copied correctly";
+        }
     }
     
     // Create CsoundObj
@@ -74,6 +84,12 @@ void CsoundProxy::startCsound()
         return;
     }
     
+    // Set SSDIR environment variable at process level for iOS
+    FileIO fileIO;
+    QString samplesDir = fileIO.getWritableSamplesPath();
+    qDebug() << "Setting SSDIR environment variable for iOS:" << samplesDir;
+    setenv("SSDIR", samplesDir.toLocal8Bit().data(), 1);
+    
     NSString *csdFile = [[NSBundle mainBundle] pathForResource:@"bourdon" ofType:@"csd"];
     NSLog(@"Csound FILE PATH: %@", csdFile);
     
@@ -87,14 +103,6 @@ void CsoundProxy::startCsound()
         csound = [(CsoundObj *)cs getCsound];
         if (csound != nullptr) {
             csoundSetMessageCallback(csound, csoundMessageCallback);
-            
-            // Set SSDIR environment variable for iOS
-            FileIO fileIO;
-            QString samplesDir = fileIO.getWritableSamplesPath();
-            QString ssdirOption = "--env:SSDIR=" + samplesDir + "/";
-            qDebug() << "Setting SSDIR for iOS:" << ssdirOption;
-            csoundSetOption(csound, ssdirOption.toLocal8Bit().data());
-            
             break;
         }
         QThread::msleep(10);

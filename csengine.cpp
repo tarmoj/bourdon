@@ -34,6 +34,15 @@ void CsEngine::initializeCsound()
         qDebug() << "Failed to copy .ogg files to samples directory";
     } else {
         qDebug() << "Successfully copied .ogg files to samples directory";
+        
+        // Verify a couple of key files exist
+        QString testFile1 = samplesDir + "/G0.ogg";
+        QString testFile2 = samplesDir + "/A0.ogg";
+        if (QFile::exists(testFile1) && QFile::exists(testFile2)) {
+            qDebug() << "Verification successful: Key .ogg files found in" << samplesDir;
+        } else {
+            qDebug() << "Warning: Some .ogg files may not have been copied correctly";
+        }
     }
 
     // Set SSDIR environment variable to the writable samples directory

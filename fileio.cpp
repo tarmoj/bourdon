@@ -146,8 +146,24 @@ bool FileIO::copyOggFilesToWritableLocation(const QString &targetDir)
         if (QFile::copy(resourcePath, targetPath)) {
             qDebug() << "Successfully copied:" << fileName;
             copiedCount++;
+            
+            // Verify the copied file exists and has a reasonable size
+            QFileInfo copiedFile(targetPath);
+            if (copiedFile.exists() && copiedFile.size() > 0) {
+                qDebug() << "Verified copied file:" << fileName << "size:" << copiedFile.size() << "bytes";
+            } else {
+                qDebug() << "Warning: Copied file appears to be empty or corrupted:" << fileName;
+            }
         } else {
-            qDebug() << "Failed to copy:" << fileName;
+            qDebug() << "Failed to copy:" << fileName << "from" << resourcePath << "to" << targetPath;
+            
+            // Check if the source resource exists
+            QFileInfo sourceFile(resourcePath);
+            if (!sourceFile.exists()) {
+                qDebug() << "Source resource file does not exist:" << resourcePath;
+            } else {
+                qDebug() << "Source resource exists but copy failed. Target dir writable?";
+            }
             return false;
         }
     }
