@@ -6,10 +6,13 @@ class MediaButtonHandler : public QObject
 {
     Q_OBJECT
 public:
-    explicit MediaButtonHandler(QObject* parent = nullptr);
+    explicit MediaButtonHandler(QObject *parent = nullptr);
     ~MediaButtonHandler();
 
     void setupRemoteCommandCenter();
+
+public slots:
+    void setPlayingState(bool isPlaying);
 
 signals:
     void play();

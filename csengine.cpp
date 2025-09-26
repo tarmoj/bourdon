@@ -1,8 +1,8 @@
 #include "csengine.h"
 #include <QCoreApplication>
 #include <QDebug>
-#include <QTemporaryFile>
 #include <QFile>
+#include <QTemporaryFile>
 
 //#include <QDateTime>
 
@@ -14,13 +14,12 @@ CsEngine::CsEngine(QObject *parent)
     perfThread = nullptr;
     mStop = false;
     cs = nullptr;
-    
+
     initializeCsound();
 }
 
 void CsEngine::initializeCsound()
 {
-
 #ifdef Q_OS_ANDROID
     cs = new AndroidCsound();
     cs->setOpenSlCallbacks(); // for android audio to work
@@ -98,7 +97,7 @@ void CsEngine::startCsound()
         // If already running, stop first
         stopCsound();
     }
-    
+
     initializeCsound();
     qDebug() << "Csound started successfully";
 }
@@ -106,7 +105,7 @@ void CsEngine::startCsound()
 void CsEngine::stopCsound()
 {
     qDebug() << "Stopping Csound...";
-    
+
     // Stop performance thread first
     if (perfThread) {
         perfThread->Stop();
@@ -115,7 +114,7 @@ void CsEngine::stopCsound()
         perfThread = nullptr;
         qDebug() << "Performance thread stopped and cleaned up";
     }
-    
+
     // Cleanup and destroy Csound instance
     if (cs) {
         cs->Cleanup();
@@ -124,7 +123,7 @@ void CsEngine::stopCsound()
         cs = nullptr;
         qDebug() << "Csound instance cleaned up and destroyed";
     }
-    
+
     qDebug() << "Csound stopped successfully";
 }
 

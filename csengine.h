@@ -45,7 +45,7 @@ private:
 #endif
 
     CsoundPerformanceThread *perfThread;
-    
+
     void initializeCsound();
 };
 

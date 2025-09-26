@@ -1,9 +1,9 @@
 #include <QGuiApplication>
+#include <QLocale>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QThread>
 #include <QTranslator>
-#include <QLocale>
 #include "fileio.h"
 #include "languagemanager.h"
 #ifdef Q_OS_IOS
@@ -73,7 +73,6 @@ void initializeMediaSession()
 
 #endif
 
-
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
@@ -86,7 +85,6 @@ int main(int argc, char *argv[])
     IosScreen screen;
     screen.setTimerDisabled();
 #endif
-
 
 #ifdef Q_OS_ANDROID
 

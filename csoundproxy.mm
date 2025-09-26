@@ -19,24 +19,55 @@ extern "C" {
 CsoundProxy::CsoundProxy(QObject *parent)
 : QObject(parent)
 {
-  
-   //cs = [[CsoundObj alloc] init ];
-   CsoundObj *csObj = [[CsoundObj alloc] init];
-   cs = (void *)csObj;
+    cs = nullptr;
+    csound = nullptr;
+    initializeCsound();
+}
+
+CsoundProxy::~CsoundProxy()
+{
+    if (cs) {
+        [(CsoundObj *)cs stop];
+    }
+    // Let ARC handle cleanup
+    cs = nullptr;
+    csound = nullptr;
+}
+
+void CsoundProxy::initializeCsound()
+{
+    qDebug() << "Initializing Csound...";
+    
+    // Create CsoundObj
+    CsoundObj *csObj = [[CsoundObj alloc] init];
+    cs = (void *)csObj;
     
     if (!cs) {
         NSLog(@"Failed to initialize CsoundObj");
+        return;
     } else {
         NSLog(@"CsoundObj initialized: %@", cs);
     }
     
-    NSString *csdFile = [[NSBundle mainBundle] pathForResource:@"bourdon" ofType:@"csd"];
-        NSLog(@"Csound FILE PATH: %@", csdFile);    
+    startCsound();
+}
 
+void CsoundProxy::startCsound()
+{
+    qDebug() << "Starting Csound...";
+    
+    if (!cs) {
+        qWarning() << "CsoundObj not initialized";
+        return;
+    }
+    
+    NSString *csdFile = [[NSBundle mainBundle] pathForResource:@"bourdon" ofType:@"csd"];
+    NSLog(@"Csound FILE PATH: %@", csdFile);
+    
     [(CsoundObj *)cs play:csdFile];
     
     csound = nullptr;
-
+    
     const int maxAttempts = 100; // 100 × 10ms = 1 second
     int attempts = 0;
     while (attempts++ < maxAttempts) {
@@ -47,20 +78,53 @@ CsoundProxy::CsoundProxy(QObject *parent)
         }
         QThread::msleep(10);
     }
-
+    
     if (csound) {
         qDebug() << "Csound is ready:" << csound << "in " << attempts*10 << " ms";
     } else {
         qWarning() << "Timeout: Csound did not initialize in time.";
     }
+    
+    qDebug() << "Csound started successfully";
 }
 
-CsoundProxy::~CsoundProxy()
+void CsoundProxy::stopCsound()
 {
-  csoundCleanup(csound); // not sure if needed
-  csoundDestroy(csound);
-  cs = nullptr;
+    qDebug() << "Stopping Csound...";
+    
+    if (cs) {
+        // Stop the CsoundObj
+        [(CsoundObj *)cs stop];
+        qDebug() << "CsoundObj stop called";
+    }
+    
+    // Clear our reference to the CSOUND instance
+    // The CsoundObj will handle its own cleanup
+    csound = nullptr;
+    
+    qDebug() << "Csound stopped successfully";
+}
 
+void CsoundProxy::restartCsound()
+{
+    qDebug() << "Restarting Csound...";
+    
+    // Simply stop current instance and create a fresh one
+    if (cs) {
+        [(CsoundObj *)cs stop];
+    }
+    
+    // Clear references
+    csound = nullptr;
+    cs = nullptr;
+    
+    // Wait a bit for the background thread to finish
+    QThread::msleep(200);
+    
+    // Create fresh instance
+    initializeCsound();
+    
+    qDebug() << "Csound restarted successfully";
 }
 
 
@@ -72,6 +136,14 @@ void CsoundProxy::play() // just for testing at the moment
         NSLog(@"Csound is null");
     }
        
+}
+
+void CsoundProxy::stop()
+{
+    if (cs) {
+        [(CsoundObj *)cs stop];
+        qDebug() << "Csound playback stopped";
+    }
 }
 
 void CsoundProxy::readScore(const QString &scoreLine)
