@@ -48,6 +48,7 @@
         <file>images/add.svg</file>
         <file>images/play.svg</file>
         <file>images/previous_next.svg</file>
+        <file>images/stop.svg</file>
     </qresource>
     <qresource prefix="/translations">
         <file>translations/bourdon_et.qm</file>

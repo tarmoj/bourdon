@@ -448,10 +448,13 @@ Item {
 
                 Button {
                     id: nextButton
+                    //Layout.preferredWidth:  controlArea.width * 0.45
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     text: qsTr("Next/Prev.")
                     //icon.source: "qrc:/images/previous_next.svg"
+                    //icon.width: 92
+                    //icon.height: 20
                     Material.roundedScale: roundedScale
 
                     onClicked: {
@@ -462,9 +465,12 @@ Item {
                 Button {
                     id: playButton
                     Layout.fillWidth: true
+                    //Layout.preferredWidth: controlArea.width * 0.45
                     Layout.fillHeight: true
                     text: qsTr("Play/Stop")
-                    //icon.source: isPlaying() ? "qrc:/images/stop.svg" : "qrc:/images/play.svg"
+                    //icon.source: checked ? "qrc:/images/play.svg" : "qrc:/images/stop.svg"
+                    icon.width: 32
+                    icon.height: 32
                     checkable: true
                     checked: false
                     Material.roundedScale: roundedScale
