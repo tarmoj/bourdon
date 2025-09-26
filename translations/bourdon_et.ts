@@ -131,7 +131,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="vanished">Tühista</translation>
+        <translation>Tühista</translation>
     </message>
 </context>
 <context>
@@ -267,7 +267,7 @@ You can start/stop the sound from bluetooth speaker or pedal.
 Built using Csound sound engine and Qt framework.
 
 (c) Tarmo Johannes trmjhnns@gmail.com</source>
-        <translation type="vanished">Bourdon Player
+        <translation>Bourdon Player
 
 on rakendus torupillimängijatele (või miks mitte teistele muusikutele), kes soovivad mängida pikkade burdoon-nootide peale.
 

@@ -45,6 +45,9 @@
         <file>ogg/g1.ogg</file>
         <file>ogg/h.ogg</file>
         <file>ogg/h1.ogg</file>
+        <file>images/add.svg</file>
+        <file>images/play.svg</file>
+        <file>images/previous_next.svg</file>
     </qresource>
     <qresource prefix="/translations">
         <file>translations/bourdon_et.qm</file>

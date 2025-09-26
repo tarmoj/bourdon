@@ -131,7 +131,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="vanished">Cealaigh</translation>
+        <translation>Cealaigh</translation>
     </message>
 </context>
 <context>
@@ -223,7 +223,7 @@
     <message>
         <source>Bourdon Player </source>
         <translatorcomment>ei tõlgi</translatorcomment>
-        <translation type="vanished">Bourdon Player</translation>
+        <translation>Bourdon Player</translation>
     </message>
     <message>
         <location filename="../main.qml" line="261"/>
@@ -267,7 +267,7 @@ You can start/stop the sound from bluetooth speaker or pedal.
 Built using Csound sound engine and Qt framework.
 
 (c) Tarmo Johannes trmjhnns@gmail.com</source>
-        <translation type="vanished">Bourdon Player
+        <translation>Bourdon Player
 
 is feidhmchlár é do phíobairí (nó ceoltóirí eile) atá ag iarraidh imirt le nótaí drone fada.
 

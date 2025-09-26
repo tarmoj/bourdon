@@ -353,8 +353,8 @@ Item {
 
                 ToolButton {
                     id: addButton
-                    //icon.source: "qrc:/images/add.png"
-                    text: qsTr("Add to presets")
+                    icon.source: "qrc:/images/add.svg"
+                    //text: qsTr("Add to presets")
                     //Material.roundedScale: roundedScale
 
                     onClicked: {
@@ -451,6 +451,7 @@ Item {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     text: qsTr("Next/Prev.")
+                    //icon.source: "qrc:/images/previous_next.svg"
                     Material.roundedScale: roundedScale
 
                     onClicked: {
@@ -463,6 +464,7 @@ Item {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     text: qsTr("Play/Stop")
+                    //icon.source: isPlaying() ? "qrc:/images/stop.svg" : "qrc:/images/play.svg"
                     checkable: true
                     checked: false
                     Material.roundedScale: roundedScale

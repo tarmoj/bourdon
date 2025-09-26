@@ -131,7 +131,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="vanished">Cuir dheth</translation>
+        <translation>Cuir dheth</translation>
     </message>
 </context>
 <context>
@@ -223,7 +223,7 @@
     <message>
         <source>Bourdon Player </source>
         <translatorcomment>ei tõlgi</translatorcomment>
-        <translation type="vanished">Bourdon Player</translation>
+        <translation>Bourdon Player</translation>
     </message>
     <message>
         <location filename="../main.qml" line="261"/>
@@ -267,7 +267,7 @@ You can start/stop the sound from bluetooth speaker or pedal.
 Built using Csound sound engine and Qt framework.
 
 (c) Tarmo Johannes trmjhnns@gmail.com</source>
-        <translation type="vanished">Cluicheadair Bourdonn
+        <translation>Cluicheadair Bourdonn
 
 &apos;S e app a th&apos; ann do luchd-ciùil pìob-mhòire (no ciùil eile) a tha airson cluich le notaichean drone fada.
 
