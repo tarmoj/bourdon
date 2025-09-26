@@ -1,4 +1,5 @@
 #include "csengine.h"
+#include "fileio.h"
 #include <QCoreApplication>
 #include <QDebug>
 #include <QFile>
@@ -20,29 +21,45 @@ CsEngine::CsEngine(QObject *parent)
 
 void CsEngine::initializeCsound()
 {
+    // Copy .ogg files from resources to writable location before setting SSDIR
+    FileIO fileIO;
+    QString samplesDir = fileIO.getWritableSamplesPath();
+
+    qDebug() << "Copying .ogg files to samples directory:" << samplesDir;
+    if (!fileIO.copyOggFilesToWritableLocation(samplesDir)) {
+        qDebug() << "Failed to copy .ogg files to samples directory";
+    } else {
+        qDebug() << "Successfully copied .ogg files to samples directory";
+
+        // Verify a couple of key files exist
+        QString testFile1 = samplesDir + "/G0.ogg";
+        QString testFile2 = samplesDir + "/A0.ogg";
+        if (QFile::exists(testFile1) && QFile::exists(testFile2)) {
+            qDebug() << "Verification successful: Key .ogg files found in" << samplesDir;
+        } else {
+            qDebug() << "Warning: Some .ogg files may not have been copied correctly";
+        }
+    }
 #ifdef Q_OS_ANDROID
     cs = new AndroidCsound();
     cs->setOpenSlCallbacks(); // for android audio to work
 
-    // test
-    if (QFile::exists("/sdcard/Music/Bourdon/samples/G0.wav")) {
-        qDebug() << "G0.wav found";
-    } else {
-        qDebug() << "G0.wav not found";
-    }
-
-    // add code that checks check if file G0.wav exist in dir
-    cs->SetOption("--env:SSDIR=/sdcard/Music/Bourdon/samples/");
+    // Set SSDIR environment variable to the writable samples directory
+    QString ssdirOption = "--env:SSDIR=" + samplesDir + "/";
+    qDebug() << "Setting SSDIR:" << ssdirOption;
+    cs->SetOption(ssdirOption.toLocal8Bit().data());
 #elif defined(Q_OS_MACOS)
     cs = new Csound();
-    QString SSDirOption = "--env:SSDIR=" + QCoreApplication::applicationDirPath()
+    //QString SSDirOption = "--env:SSDIR=" + QCoreApplication::applicationDirPath()
                           + "/../Resources/samples";
-    qDebug() << "MacOS samples path: " << SSDirOption;
-    cs->SetOption(SSDirOption.toLocal8Bit().data());
+    //qDebug() << "MacOS samples path: " << SSDirOption;
+    //cs->SetOption(SSDirOption.toLocal8Bit().data());
+    cs->SetOption(QString("--env:SSDIR=%1/").arg(samplesDir).toLocal8Bit().data());
     cs->SetOption("-+rtaudio=auhal");
 #else
     cs = new Csound();
-    cs->SetOption("--env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/ogg/"); // for local build only.
+    //cs->SetOption("--env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/ogg/"); // for local build only.
+    cs->SetOption(QString("--env:SSDIR=%1/").arg(samplesDir).toLocal8Bit().data());
 #endif
     cs->SetOption("-odac");
     cs->SetOption("-d");

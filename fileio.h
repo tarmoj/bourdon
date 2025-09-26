@@ -18,6 +18,8 @@ public:
     Q_INVOKABLE bool fileExists(const QString &path) const;
     Q_INVOKABLE bool deleteFile(const QString &fileName);
     Q_INVOKABLE bool renameFile(const QString &oldFileName, const QString &newFileName);
+    Q_INVOKABLE bool copyOggFilesToWritableLocation(const QString &targetDir);
+    Q_INVOKABLE QString getWritableSamplesPath() const;
 };
 
 #endif // FILEIO_H
