@@ -1,4 +1,5 @@
 #include "csengine.h"
+#include "fileio.h"
 #include <QCoreApplication>
 #include <QDebug>
 #include <QFile>
@@ -24,15 +25,21 @@ void CsEngine::initializeCsound()
     cs = new AndroidCsound();
     cs->setOpenSlCallbacks(); // for android audio to work
 
-    // test
-    if (QFile::exists("/sdcard/Music/Bourdon/samples/G0.wav")) {
-        qDebug() << "G0.wav found";
+    // Copy .ogg files from resources to writable location before setting SSDIR
+    FileIO fileIO;
+    QString samplesDir = fileIO.getWritableSamplesPath();
+    
+    qDebug() << "Copying .ogg files to samples directory:" << samplesDir;
+    if (!fileIO.copyOggFilesToWritableLocation(samplesDir)) {
+        qDebug() << "Failed to copy .ogg files to samples directory";
     } else {
-        qDebug() << "G0.wav not found";
+        qDebug() << "Successfully copied .ogg files to samples directory";
     }
 
-    // add code that checks check if file G0.wav exist in dir
-    cs->SetOption("--env:SSDIR=/sdcard/Music/Bourdon/samples/");
+    // Set SSDIR environment variable to the writable samples directory
+    QString ssdirOption = "--env:SSDIR=" + samplesDir + "/";
+    qDebug() << "Setting SSDIR:" << ssdirOption;
+    cs->SetOption(ssdirOption.toLocal8Bit().data());
 #elif defined(Q_OS_MACOS)
     cs = new Csound();
     QString SSDirOption = "--env:SSDIR=" + QCoreApplication::applicationDirPath()

@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QStandardPaths>
+#include <QDirIterator>
 
 FileIO::FileIO(QObject *parent)
     : QObject(parent)
@@ -104,4 +105,64 @@ bool FileIO::renameFile(const QString &oldFileName, const QString &newFileName)
         qDebug() << "Successfully renamed file from" << oldPath << "to" << newPath;
     }
     return success;
+}
+
+bool FileIO::copyOggFilesToWritableLocation(const QString &targetDir)
+{
+    qDebug() << "Starting to copy .ogg files to" << targetDir;
+    
+    // Create target directory if it doesn't exist
+    QDir dir;
+    if (!dir.exists(targetDir)) {
+        if (!dir.mkpath(targetDir)) {
+            qDebug() << "Failed to create target directory:" << targetDir;
+            return false;
+        }
+        qDebug() << "Created target directory:" << targetDir;
+    }
+    
+    // List of all .ogg files in the resource
+    QStringList oggFiles = {
+        "A0.ogg", "G0.ogg", "a.ogg", "a1.ogg", "c.ogg", "c1.ogg", 
+        "d.ogg", "d1.ogg", "e.ogg", "e1.ogg", "f.ogg", "f1.ogg",
+        "fis.ogg", "fis1.ogg", "g.ogg", "g1.ogg", "h.ogg", "h1.ogg"
+    };
+    
+    int copiedCount = 0;
+    int skippedCount = 0;
+    
+    for (const QString &fileName : oggFiles) {
+        QString resourcePath = ":/ogg/" + fileName;
+        QString targetPath = targetDir + "/" + fileName;
+        
+        // Check if file already exists in target location
+        if (QFile::exists(targetPath)) {
+            qDebug() << "File already exists, skipping:" << fileName;
+            skippedCount++;
+            continue;
+        }
+        
+        // Copy file from resource to target location
+        if (QFile::copy(resourcePath, targetPath)) {
+            qDebug() << "Successfully copied:" << fileName;
+            copiedCount++;
+        } else {
+            qDebug() << "Failed to copy:" << fileName;
+            return false;
+        }
+    }
+    
+    qDebug() << "Copy operation completed. Copied:" << copiedCount << "Skipped:" << skippedCount;
+    return true;
+}
+
+QString FileIO::getWritableSamplesPath() const
+{
+#ifdef Q_OS_ANDROID
+    return "/sdcard/Music/Bourdon/samples";
+#elif defined(Q_OS_IOS)
+    return QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/samples";
+#else
+    return QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/samples";
+#endif
 }

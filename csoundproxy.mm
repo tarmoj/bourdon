@@ -1,6 +1,8 @@
 #import "csoundproxy.h"
 
 #import "csound-iOS/classes/CsoundObj.h"
+#import "csound-iOS/headers/csound.h"
+#include "fileio.h"
 
 #include <QDebug>
 #include <QThread>
@@ -38,6 +40,17 @@ void CsoundProxy::initializeCsound()
 {
     qDebug() << "Initializing Csound...";
     
+    // Copy .ogg files from resources to writable location before initializing Csound
+    FileIO fileIO;
+    QString samplesDir = fileIO.getWritableSamplesPath();
+    
+    qDebug() << "Copying .ogg files to samples directory:" << samplesDir;
+    if (!fileIO.copyOggFilesToWritableLocation(samplesDir)) {
+        qDebug() << "Failed to copy .ogg files to samples directory";
+    } else {
+        qDebug() << "Successfully copied .ogg files to samples directory";
+    }
+    
     // Create CsoundObj
     CsoundObj *csObj = [[CsoundObj alloc] init];
     cs = (void *)csObj;
@@ -74,6 +87,14 @@ void CsoundProxy::startCsound()
         csound = [(CsoundObj *)cs getCsound];
         if (csound != nullptr) {
             csoundSetMessageCallback(csound, csoundMessageCallback);
+            
+            // Set SSDIR environment variable for iOS
+            FileIO fileIO;
+            QString samplesDir = fileIO.getWritableSamplesPath();
+            QString ssdirOption = "--env:SSDIR=" + samplesDir + "/";
+            qDebug() << "Setting SSDIR for iOS:" << ssdirOption;
+            csoundSetOption(csound, ssdirOption.toLocal8Bit().data());
+            
             break;
         }
         QThread::msleep(10);
