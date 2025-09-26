@@ -174,11 +174,14 @@ bool FileIO::copyOggFilesToWritableLocation(const QString &targetDir)
 
 QString FileIO::getWritableSamplesPath() const
 {
-#ifdef Q_OS_ANDROID
-    return "/sdcard/Music/Bourdon/samples";
-#elif defined(Q_OS_IOS)
-    return QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/samples";
-#else
-    return QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/samples";
-#endif
+// #ifdef Q_OS_ANDROID
+//     return "/sdcard/Music/Bourdon/samples";
+// #elif defined(Q_OS_IOS)
+//     return QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/samples";
+// #else
+//     return QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/samples";
+// #endif
+    // use a writable location for any OS, do not bundle OGG files separately
+    return QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/bourdon-samples";
+
 }
