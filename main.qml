@@ -48,7 +48,7 @@ ApplicationWindow {
         id: appSettings
         property string presetsArray: ""
         property int a4: 440
-        property string language: "EN"
+        property string language: "ENG"
     }
 
 
