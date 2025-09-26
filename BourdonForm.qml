@@ -466,7 +466,12 @@ Item {
                     checked: false
                     Material.roundedScale: roundedScale
 
+                    property bool handlingStateChange: false
+                    
                     onCheckedChanged:  {
+                        if (handlingStateChange) return;
+                        handlingStateChange = true;
+                        
                         if ( bourdonForm.isPlaying() ) {
                             playButton.checked = false; // stop will happen below
                         }
@@ -476,14 +481,25 @@ Item {
                             if (preset.length>0) {
                                 // console.log("Starting: ", currentPreset, )
                                 stopAll();
+
                             } else {
                                 playButton.checked = false;
                             }
                             playFromPreset(preset );
+                            if (Qt.platform.os === "ios") {
+                                MediaButtonHandler.setPlayingState(true);
+                            }
                         } else {
                             stopAll();
+                            if (Qt.platform.os === "ios") {
+                                MediaButtonHandler.setPlayingState(false);
+                            }
                         }
+                        
+                        // Update MediaButtonHandler state for external devices
 
+                        
+                        handlingStateChange = false;
                     }
                 }
             }          

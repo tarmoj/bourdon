@@ -11,6 +11,9 @@ public:
 
     void setupRemoteCommandCenter();
 
+public slots:
+    void setPlayingState(bool isPlaying);
+
 signals:
     void play();
     void pause();
