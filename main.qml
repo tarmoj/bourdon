@@ -390,8 +390,8 @@ Built using Csound sound engine and Qt framework.
             target: Qt.platform.os === "android" || Qt.platform.os === "ios" ? MediaButtonHandler : null
             function onPlay() { console.log("Play received in QML"); bourdonForm.playButton.checked = true; }
             function onPause() {
-                console.log("Pause received in QML");
-                bourdonForm.playButton.checked = false;
+                console.log("Pause received in QML"); // acts as toggle pause
+                bourdonForm.playButton.checked = !bourdonForm.playButton.checked;
             }
             function onStop() {
                 console.log("Stop received in QML");
