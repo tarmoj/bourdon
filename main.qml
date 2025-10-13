@@ -171,7 +171,7 @@ ApplicationWindow {
     header: ToolBar {
         id: toolBar
         width: parent.width
-        height: titleLabel.height + 10
+        height: titleLabel.height + 20
         visible: mainView.currentIndex !== 0 // hide when LockForm is visible
 
         background: Rectangle {color: "transparent" }

@@ -44,7 +44,6 @@ android {
     ANDROID_EXTRA_LIBS = \
         $$PWD/../../../../src/csound-android-6.18.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/$$ANDROID_TARGET_ARCH/libsndfile.so \
         $$PWD/../../../../src/csound-android-6.18.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/$$ANDROID_TARGET_ARCH/libcsoundandroid.so \
-        $$PWD/../../../../src/csound-android-6.18.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/$$ANDROID_TARGET_ARCH/libc++_shared.so
 
     ANDROID_PACKAGE_SOURCE_DIR = \
         $$PWD/android
@@ -214,5 +213,11 @@ TRANSLATIONS += \
     translations/bourdon_et.ts \
     translations/bourdon_ga.ts \
     translations/bourdon_gd.ts
+
+contains(ANDROID_TARGET_ARCH,arm64-v8a) {
+    ANDROID_EXTRA_LIBS = \
+        /home/tarmo/tarmo/programm/bourdon/bourdon-app2/../../../../src/csound-android-6.18.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/arm64-v8a/libsndfile.so \
+        /home/tarmo/tarmo/programm/bourdon/bourdon-app2/../../../../src/csound-android-6.18.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/arm64-v8a/libcsoundandroid.so
+}
 
 
