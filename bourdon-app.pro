@@ -47,6 +47,10 @@ android {
 
     ANDROID_PACKAGE_SOURCE_DIR = \
         $$PWD/android
+
+    # build with 16 kB pagesize to comply with Google Play requirements
+    QMAKE_LFLAGS += -Wl,-z,max-page-size=65536
+
 }
 
 linux:!android {
