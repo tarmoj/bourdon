@@ -38,8 +38,6 @@ giFrequencies[] fillarray cpspch(6.07), cpspch(6.09),
  cpspch(8.00), cpspch(8.02), cpspch(8.04), cpspch(8.05), cpspch(8.06), cpspch(8.07), cpspch(8.09), cpspch(8.11)
 
 
-
-
 giRatiosG[] fillarray 1, 9/8,    
 4/3, 3/2, 5/3, 7/4, 15/8, 2,  9/4, 5/2,
 8/3, 3, 10/3, 7/2, 15/4, 4,  9/2, 5
@@ -148,7 +146,10 @@ opcode getFrequency,k, i; in args: base note by index in giFrequencies (negative
 		kRatio = giRatiosC[iNoteIndex]
 	elseif kTuning==5 then
 		kBaseFrequency = giFrequencies[$e]
-		kRatio = giRatiosE[iNoteIndex]	
+		kRatio = giRatiosE[iNoteIndex]
+	elseif kTuning==6 then
+		; surprise!!	
+	  ; add random deviation below	
 	else 
 		kTuning = 0 ; reset to equal temperament			
 	endif
@@ -158,6 +159,8 @@ opcode getFrequency,k, i; in args: base note by index in giFrequencies (negative
 		
 	if (kTuning==0) then ; equal temperament
 		kFrequency = giFrequencies[iNoteIndex]
+	elseif kTuning==6 then ; surprize tuning -  out of tune
+		kFrequency = giFrequencies[iNoteIndex]* cent(random(-33, 33))
 	else   
 		kFrequency = kBaseFrequency * kRatio      
 	endif
@@ -169,13 +172,10 @@ endop
 
 instr Bourdon
 	iTable =  p4
+	iSlowFade = p5 ; set nonzero if 2 second fadein-fadeout	
 	iNoteIndex = iTable-1
-	kSpeed init 1
 	
-
 	kType chnget "type"
-	; võibolla vaja iType 
-	
 	
 	kFreq getFrequency iNoteIndex
 	
@@ -188,7 +188,7 @@ instr Bourdon
 	  aOut = aSaw	
 	elseif (kType==3) then	
 		kTimbre port chnget:k("timbre"), 0.02, chnget:i("timbre")
-		kamp = 0.2
+		kamp = 0.4
 		; Clip . squareness; Skew - symmetry (1=saw)
 		; timbre: 0 -  sine, 0.5 -  saw, 1 -  square
 		if kTimbre<=0.5 then 
@@ -214,8 +214,11 @@ instr Bourdon
 	endif 
 	
 	;dispfft aOut, 0.1, 2048
+	
+	iFade = iSlowFade==0 ? 0.1 : 2
 		
-	aEnv linenr 1, 0.1, 0.5, 0.001
+	;aEnv linenr 1, iFade, iFade, 0.01
+	aEnv madsr iFade, 0, 1, iFade
   kBourdonVolume chnget sprintf("volume%d", iNoteIndex) 
   kPan chnget sprintf("pan%d", iNoteIndex) // comes in in scale -1...1, 0 gives center
   kPan = kPan/2 + 0.5 
@@ -329,7 +332,7 @@ endin
   <stringvalue/>
   <text>G</text>
   <image>/</image>
-  <eventLine>i1.1 0 -1 1</eventLine>
+  <eventLine>i1.1 0 -1 1 1</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
@@ -415,7 +418,7 @@ endin
   <eventLine>i1.2 0 -1 2</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -437,7 +440,7 @@ endin
   <eventLine>i1.3 0 -1 3</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -459,7 +462,7 @@ endin
   <eventLine>i1.4 0 -1 4</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -481,7 +484,7 @@ endin
   <eventLine>i1.5 0 -1 5</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -525,7 +528,7 @@ endin
   <eventLine>i1.9 0 -1 9</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -591,7 +594,7 @@ endin
   <eventLine>i1.12 0 -1 12</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -635,7 +638,7 @@ endin
   <eventLine>i1.16 0 -1 16</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -657,7 +660,7 @@ endin
   <eventLine>i1.17 0 -1 17</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -742,7 +745,7 @@ endin
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>3</selectedIndex>
+  <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -875,8 +878,13 @@ endin
     <value>5</value>
     <stringvalue/>
    </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>Surprize</name>
+    <value>6</value>
+    <stringvalue/>
+   </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>2</selectedIndex>
+  <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
@@ -892,7 +900,7 @@ endin
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>1.00000000</value>
+  <value>0.37500000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
