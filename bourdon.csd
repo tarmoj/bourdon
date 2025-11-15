@@ -23,7 +23,7 @@ chn_k "volumeCorrection", 3
 chnset 440, "a4"
 chnset 2, "type"
 chnset 0, "volumeCorrection"
-chnset 2, "timbre" ; square by defult
+chnset 1, "timbre" ; square by defult
 
 
 ; indexes of the notes in giFrequencies[] and giRatiosX[] arrays
@@ -252,6 +252,8 @@ endin
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 

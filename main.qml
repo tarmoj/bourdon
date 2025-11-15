@@ -37,8 +37,8 @@ ApplicationWindow {
 
     ListModel {
         id: presetModel
-        ListElement { tuning: "G"; sound: 0; notes: "G,g,c1"; volumeCorrection: 0 }
-        ListElement { tuning: "C"; sound: 2; notes: "c,e,g"; volumeCorrection: 0 }
+        ListElement { tuning: "G"; sound: 0; notes: "G,g,c1"; volumeCorrection: 0; timbre: 0 }
+        ListElement { tuning: "C"; sound: 2; notes: "c,e,g"; volumeCorrection: 0 ; timbre: 0 }
     }
 
     //onWidthChanged: console.log("window width: ", width)
@@ -84,7 +84,7 @@ ApplicationWindow {
         for (var i = 0; i < arr.length; i++) {
           var preset = arr[i];
 
-          // ✅ Convert notes array to a comma-separated string if needed
+          // Convert notes array to a comma-separated string if needed
           if (Array.isArray(preset.notes)) {
             preset.notes = preset.notes.join(",");
           }

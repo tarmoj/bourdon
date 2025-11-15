@@ -129,6 +129,36 @@ Rectangle {
 
         RowLayout {
             spacing: 5
+            width: parent.width
+            // TODO: prestModel.soundType somehow...
+            visible: presetModel.get(bourdonForm.currentPreset).soundType === "custom"
+
+
+            Label {
+                text: qsTr("Timbre: sine-saw-square:")
+            }
+
+            Slider {
+                id: timbreSlider
+                from: 0
+                to: 1
+                value: 1 // square
+                Layout.preferredWidth: 80
+                Layout.fillWidth: true
+
+                onValueChanged: {
+                    csound.setChannel("timbre", timbreSlider.value)
+                    if (bourdonForm.currentPreset>=0) {
+                        presetModel.set(bourdonForm.currentPreset, {"timbre": timbreSlider.value})
+                    } else {
+                        app.sandBoxData.timbre = timbreSlider.value
+                    }
+                }
+            }
+        }
+
+        RowLayout {
+            spacing: 5
 
             Label {
                 text: qsTr("Adjust individually:" )
