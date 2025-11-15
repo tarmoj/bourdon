@@ -184,8 +184,6 @@ Item {
         }
 
 
-
-
         Column {
             id: bourdonFormColumn
             width: parent.width-20
@@ -268,7 +266,7 @@ Item {
                     currentIndex: 0
                     Layout.preferredWidth: 160
                     model: [qsTr("Equal temp."), qsTr("Natural G"), qsTr("Natural D"), qsTr("Natural A"),
-                        qsTr("Natural C"), qsTr("Natural E")]
+                        qsTr("Natural C"), qsTr("Natural E"), qsTr("Surprise!")]
 
                     onCurrentIndexChanged: {
                       csound.setChannel("tuning", currentIndex)
