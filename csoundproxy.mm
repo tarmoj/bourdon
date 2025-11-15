@@ -41,7 +41,8 @@ void CsoundProxy::initializeCsound()
 {
     qDebug() << "Initializing Csound...";
     
-    // Copy .ogg files from resources to writable location before initializing Csound
+/*
+// Copy .ogg files from resources to writable location before initializing Csound
     FileIO fileIO;
     QString samplesDir = fileIO.getWritableSamplesPath();
     
@@ -61,6 +62,7 @@ void CsoundProxy::initializeCsound()
         }
     }
     
+*/
     // Create CsoundObj
     CsoundObj *csObj = [[CsoundObj alloc] init];
     cs = (void *)csObj;
@@ -85,10 +87,10 @@ void CsoundProxy::startCsound()
     }
     
     // Set SSDIR environment variable at process level for iOS
-    FileIO fileIO;
-    QString samplesDir = fileIO.getWritableSamplesPath();
-    qDebug() << "Setting SSDIR environment variable for iOS:" << samplesDir;
-    setenv("SSDIR", samplesDir.toLocal8Bit().data(), 1);
+    // FileIO fileIO;
+    // QString samplesDir = fileIO.getWritableSamplesPath();
+    // qDebug() << "Setting SSDIR environment variable for iOS:" << samplesDir;
+    // setenv("SSDIR", samplesDir.toLocal8Bit().data(), 1);
     
     NSString *csdFile = [[NSBundle mainBundle] pathForResource:@"bourdon" ofType:@"csd"];
     NSLog(@"Csound FILE PATH: %@", csdFile);

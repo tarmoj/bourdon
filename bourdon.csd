@@ -23,7 +23,7 @@ chn_k "volumeCorrection", 3
 chnset 440, "a4"
 chnset 2, "type"
 chnset 0, "volumeCorrection"
-chnset 0, "timbre" ; sine
+chnset 2, "timbre" ; square by defult
 
 
 ; indexes of the notes in giFrequencies[] and giRatiosX[] arrays
@@ -32,6 +32,10 @@ chnset 0, "timbre" ; sine
 #define A #1#
 #define c #2#
 #define e #4#
+
+#define SAW #0#
+#define SYNTH #1#
+#define CUSTOM #2#
 
 giFrequencies[] fillarray cpspch(6.07), cpspch(6.09),
  cpspch(7.00), cpspch(7.02), cpspch(7.04), cpspch(7.05), cpspch(7.06), cpspch(7.07), cpspch(7.09),cpspch(7.11),
@@ -179,14 +183,14 @@ instr Bourdon
 	
 	kFreq getFrequency iNoteIndex
 	
-	if (kType==1) then ; saw wave
+	if (kType==$SAW) then ; saw wave
    kamp = 0.2
 		aSaw vco2 kamp, kFreq ;, 10
 		if (kType==1) then ; donät filter for Saw 2
 			aSaw butterlp aSaw, 4000	  
 		endif
 	  aOut = aSaw	
-	elseif (kType==3) then	
+	elseif (kType==$CUSTOM) then	
 		kTimbre port chnget:k("timbre"), 0.02, chnget:i("timbre")
 		kamp = 0.4
 		; Clip . squareness; Skew - symmetry (1=saw)
@@ -204,7 +208,9 @@ instr Bourdon
 		endif
 	  aOut squinewave a(kFreq), a(kClip), a(kSkew) 
 	  aOut *= kamp
-	else ; default is synthesized sound, type 2
+	  
+	  
+	else ; default is synthesized sound, type 1
 		kamp = 0.2
 		
 		aWave adsynt kamp, kFreq, -1, giPartials1 , giAmps1 , 64
@@ -246,6 +252,8 @@ endin
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 
@@ -440,7 +448,7 @@ endin
   <eventLine>i1.3 0 -1 3</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -462,7 +470,7 @@ endin
   <eventLine>i1.4 0 -1 4</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -484,7 +492,7 @@ endin
   <eventLine>i1.5 0 -1 5</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -594,7 +602,7 @@ endin
   <eventLine>i1.12 0 -1 12</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -638,7 +646,7 @@ endin
   <eventLine>i1.16 0 -1 16</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">

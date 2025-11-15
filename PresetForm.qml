@@ -115,7 +115,7 @@ Rectangle {
                     }
                     indicator: Item { width: 0; height: 0 }
 
-                    model: [qsTr("---"), qsTr("Saw"), qsTr("Synth"), qsTr("Custom")]
+                    model: [qsTr("Saw"), qsTr("Synth"), qsTr("Custom")]
                     Layout.preferredWidth: 70
                     Layout.preferredHeight: rowDelegate.height
 

@@ -21,6 +21,7 @@ CsEngine::CsEngine(QObject *parent)
 
 void CsEngine::initializeCsound()
 {
+    /*
     // Copy .ogg files from resources to writable location before setting SSDIR
     FileIO fileIO;
     QString samplesDir = fileIO.getWritableSamplesPath();
@@ -40,6 +41,7 @@ void CsEngine::initializeCsound()
             qDebug() << "Warning: Some .ogg files may not have been copied correctly";
         }
     }
+*/
 #ifdef Q_OS_ANDROID
     cs = new AndroidCsound();
     cs->setOpenSlCallbacks(); // for android audio to work
@@ -59,7 +61,7 @@ void CsEngine::initializeCsound()
 #else
     cs = new Csound();
     //cs->SetOption("--env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/ogg/"); // for local build only.
-    cs->SetOption(QString("--env:SSDIR=%1/").arg(samplesDir).toLocal8Bit().data());
+    // cs->SetOption(QString("--env:SSDIR=%1/").arg(samplesDir).toLocal8Bit().data());
 #endif
     cs->SetOption("-odac");
     cs->SetOption("-d");
