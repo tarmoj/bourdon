@@ -204,7 +204,7 @@ Item {
                     id: soundTypeCombobox
                     currentIndex: 2
                     Layout.preferredWidth: 160
-                    model: [qsTr("Sample"), qsTr("Saw wave"), qsTr("Synthesized"), qsTr("Saw 2") ]
+                    model: [qsTr("---"), qsTr("Saw wave"), qsTr("Synthesized"), qsTr("Flex") ]
 
 
                     delegate: ItemDelegate {
