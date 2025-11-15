@@ -23,94 +23,7 @@ chn_k "volumeCorrection", 3
 chnset 440, "a4"
 chnset 2, "type"
 chnset 0, "volumeCorrection"
-
-;sample data (ogg) -----------------------
-
-giLoopPoints[][] init 20, 2
-
-; definition of samples
-/*
-giSound1 ftgen 1, 0, 0, 1, "G0.ogg", 0, 0, 1
-giLoopPoints[1][0]=223926 
-giLoopPoints[1][1]=596559
-
-
-giSound2 ftgen 2, 0, 0, 1, "A0.ogg", 0, 0, 1
-giLoopPoints[2][0]=438969 
-giLoopPoints[2][1]=595254
-
-giSound3 ftgen 3, 0, 0, 1, "c.ogg", 0, 0, 1
-giLoopPoints[3][0]= 52279
-giLoopPoints[3][1]= 145497
-
-
-	giSound4 ftgen 4, 0, 0, 1, "d.ogg", 0, 0, 1
-giLoopPoints[4][0]= 91488
-giLoopPoints[4][1]= 921388
-
-
-	giSound5 ftgen 5, 0, 0, 1, "e.ogg", 0, 0, 1
-giLoopPoints[5][0] = 343606
-giLoopPoints[5][1] = 739687
-	
-	giSound6 ftgen 6, 0, 0, 1, "f.ogg", 0, 0, 1 ; f
-giLoopPoints[6][0] = 363949
-giLoopPoints[6][1] = 1198777
-	
-	giSound7 ftgen 7, 0, 0, 1, "fis.ogg", 0, 0, 1 ; fis
-giLoopPoints[7][0] = 788621
-giLoopPoints[7][1] = 1485189	
-	
-	
-	giSound8 ftgen 8, 0, 0, 1, "g.ogg", 0, 0, 1
-giLoopPoints[8][0] = 191368
-giLoopPoints[8][1] = 871622
-	
-	
-	giSound9 ftgen 9, 0, 0, 1, "a.ogg", 0, 0, 1
-giLoopPoints[9][0] = 352173
-giLoopPoints[9][1] = 875722
-	
-	giSound10 ftgen 10, 0, 0, 1, "h.ogg", 0, 0, 1
-giLoopPoints[10][0] = 764175
-giLoopPoints[10][1] = 1059722	
-	
-	giSound11 ftgen 11, 0, 0, 1, "c1.ogg", 0, 0, 1
-giLoopPoints[11][0] = 147145
-giLoopPoints[11][1] = 285339	
-	
-	giSound12 ftgen 12, 0, 0, 1, "d1.ogg", 0, 0, 1
-giLoopPoints[12][0] = 404900
-giLoopPoints[12][1] =	606115
-	
-	giSound13 ftgen 13, 0, 0, 1, "e1.ogg", 0, 0, 1
-giLoopPoints[13][0] = 113771
-giLoopPoints[13][1] = 187850
-	
-	giSound14 ftgen 14, 0, 0, 1, "f1.ogg", 0, 0, 1 ; f
-giLoopPoints[14][0] = 104999
-giLoopPoints[14][1] = 156894 
-	
-	
-	giSound15 ftgen 15, 0, 0, 1, "fis1.ogg", 0, 0, 1 ; fis
-giLoopPoints[15][0] = 112656
-giLoopPoints[15][1] = 161512 
-	
-	giSound16 ftgen 16, 0, 0, 1, "g1.ogg", 0, 0, 1
-giLoopPoints[16][0] = 31416
-giLoopPoints[16][1] = 95460	
-	
-	giSound17 ftgen 17, 0, 0, 1, "a1.ogg", 0, 0, 1
-giLoopPoints[17][0] = 151807
-giLoopPoints[17][1] = 943548
-
-	giSound18 ftgen 18, 0, 0, 1, "h1.ogg", 0, 0, 1
-giLoopPoints[18][0] = 198640
-giLoopPoints[18][1] =	268507
-*/ 
-
-
-; ---------------------------
+chnset 0, "timbre" ; sine
 
 
 ; indexes of the notes in giFrequencies[] and giRatiosX[] arrays
@@ -266,43 +179,38 @@ instr Bourdon
 	
 	kFreq getFrequency iNoteIndex
 	
-	if (kType==1 || kType==3) then ; saw wave or saw 2
+	if (kType==1) then ; saw wave
    kamp = 0.2
 		aSaw vco2 kamp, kFreq ;, 10
 		if (kType==1) then ; donät filter for Saw 2
 			aSaw butterlp aSaw, 4000	  
 		endif
 	  aOut = aSaw	
-
-	elseif (kType==2) then ; synthesized sound
-   kamp = 0.2
+	elseif (kType==3) then	
+		kTimbre port chnget:k("timbre"), 0.02, chnget:i("timbre")
+		kamp = 0.2
+		; Clip . squareness; Skew - symmetry (1=saw)
+		; timbre: 0 -  sine, 0.5 -  saw, 1 -  square
+		if kTimbre<=0.5 then 
+		  
+			kClip = 0
+			kSkew = kTimbre * 2
+		elseif kTimbre>0.5 && kTimbre<=1.0 then
+			kClip = (kTimbre-0.5) * 2
+			kSkew = 1-kClip
+		else 
+			kClip = 0
+			kSkew = 0
+		endif
+	  aOut squinewave a(kFreq), a(kClip), a(kSkew) 
+	  aOut *= kamp
+	else ; default is synthesized sound, type 2
+		kamp = 0.2
 		
 		aWave adsynt kamp, kFreq, -1, giPartials1 , giAmps1 , 64
 		aBuzz buzz 0.1*(1+jspline(0.1, 1/4, 1/2)), kFreq, 256, -1
 		aOut = aWave+aBuzz
 		aOut butterlp aOut, 8000
-	
-	elseif (kType==0) then
-		if ftexists:i(iTable)>0 then
-			aSound loscil3 0.7, 1, iTable, 1, 1, giLoopPoints[iTable][0], giLoopPoints[iTable][1]  ; kõrguse muutmine Androidi peal ei toimi sel moel...
-		else
-			aSound = 0
-		endif
-		
-		iSize = 2048
-		
-		kA4 = chnget:k("a4")
-	
-		if (kA4==440) then
-			aOut = aSound
-		else 
-			
-			kScale = kA4/440
-			f1 pvsanal aSound, iSize, iSize/4, iSize, 1
-			f2 pvscale f1, kScale
-			aF pvsynth f2
-			aOut = aF
-		endif	
 	endif 
 	
 	;dispfft aOut, 0.1, 2048
@@ -321,7 +229,6 @@ endin
 
 
 
-
 ; schedule "Reset", 0, 0
 instr Reset ; set volumeCorrection and individual volumes to 0 (dB)
 	chnset 0, "volumeCorrection"
@@ -336,6 +243,10 @@ endin
 
 </CsScore>
 </CsoundSynthesizer>
+
+
+
+
 
 
 
@@ -504,7 +415,7 @@ endin
   <eventLine>i1.2 0 -1 2</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -614,7 +525,7 @@ endin
   <eventLine>i1.9 0 -1 9</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -746,7 +657,7 @@ endin
   <eventLine>i1.17 0 -1 17</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -811,7 +722,7 @@ endin
   <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
-    <name>sample</name>
+    <name>---</name>
     <value>0</value>
     <stringvalue/>
    </bsbDropdownItem>
@@ -826,12 +737,12 @@ endin
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name> saw2</name>
+    <name> squine</name>
     <value>3</value>
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>1</selectedIndex>
+  <selectedIndex>3</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -965,8 +876,69 @@ endin
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>5</selectedIndex>
+  <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBKnob" version="2">
+  <objectName>timbre</objectName>
+  <x>204</x>
+  <y>26</y>
+  <width>59</width>
+  <height>80</height>
+  <uuid>{35897466-0742-416a-8322-157e87dd9b0e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="">continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#ff8921</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>185</x>
+  <y>107</y>
+  <width>112</width>
+  <height>23</height>
+  <uuid>{98afd6ec-4fcb-4734-9725-4f02aeeb63b0}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Siinus-Saag-Nelinurk</label>
+  <alignment>left</alignment>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
