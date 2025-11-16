@@ -111,7 +111,7 @@ Item {
             id: volumeSlider
             Layout.preferredWidth: 80
             Layout.fillWidth: true
-            from: -48
+            from: -24 // was 48
             to: 12
             stepSize: 0.1
             value: 0

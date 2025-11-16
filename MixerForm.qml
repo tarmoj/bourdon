@@ -95,7 +95,7 @@ Rectangle {
 
             Slider {
                 id: presetVolume
-                from: -48
+                from: -24 // was 48
                 to: 12
                 stepSize: 0.1
                 value: 0
@@ -131,8 +131,8 @@ Rectangle {
             spacing: 5
             width: parent.width
             // TODO: prestModel.soundType somehow...
-            visible: presetModel.get(bourdonForm.currentPreset).soundType === "custom"
-
+            visible: bourdonForm.soundTypeCombobox.currentIndex === 2 ||
+                     bourdonForm.soundTypeCombobox.currentText === "Custom"
 
             Label {
                 text: qsTr("Timbre: sine-saw-square:")
