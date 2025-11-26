@@ -20,11 +20,13 @@ chn_k "a4",3
 chn_k "volumeCorrection", 3
 ; volume0, volume1 etc for volumes of bourdon notes in dB
 
+
 chnset 440, "a4"
 chnset 2, "type"
 chnset 0, "volumeCorrection"
 chnset 1, "timbre" ; square by defult
 
+gkFade chnexport "fadeTime", 3
 
 ; indexes of the notes in giFrequencies[] and giRatiosX[] arrays
 #define G #0#
@@ -36,6 +38,11 @@ chnset 1, "timbre" ; square by defult
 #define SAW #0#
 #define SYNTH #1#
 #define CUSTOM #2#
+
+#define IN #0#
+#define OUT #1#
+
+gkFade init 1
 
 giFrequencies[] fillarray cpspch(6.07), cpspch(6.09),
  cpspch(7.00), cpspch(7.02), cpspch(7.04), cpspch(7.05), cpspch(7.06), cpspch(7.07), cpspch(7.09),cpspch(7.11),
@@ -176,7 +183,6 @@ endop
 
 instr Bourdon
 	iTable =  p4
-	iSlowFade = p5 ; set nonzero if 2 second fadein-fadeout	
 	iNoteIndex = iTable-1
 	
 	kType chnget "type"
@@ -221,7 +227,7 @@ instr Bourdon
 	
 	;dispfft aOut, 0.1, 2048
 	
-	iFade = iSlowFade==0 ? 0.1 : 2
+	iFade = 0.1
 		
 	;aEnv linenr 1, iFade, iFade, 0.01
 	aEnv madsr iFade, 0, 1, iFade
@@ -231,7 +237,7 @@ instr Bourdon
 	kVolume = 0.2 * ampdbfs(chnget:k("volumeCorrection")) *
 		ampdbfs(kBourdonVolume)
 	kVolume port kVolume, 0.01  
-	aOut *= aEnv * kVolume
+	aOut *= aEnv * kVolume *gkFade ; 
 	aL, aR pan2 aOut, kPan
 	out aL, aR	
 endin
@@ -247,11 +253,24 @@ label:
 	loop_lt index, 1, lenarray(giFrequencies), label 
 endin
 
+
+
+instr SlowFade
+	iInOut = p4	
+	if iInOut==$IN then
+		gkFade line 0, p3, 1
+	else
+		gkFade line 1, p3, 0
+  endif  	
+endin
+
 </CsInstruments>
 <CsScore>
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 
@@ -894,7 +913,7 @@ endin
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>0</selectedIndex>
+  <selectedIndex>6</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
@@ -957,6 +976,50 @@ endin
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>button25</objectName>
+  <x>305</x>
+  <y>267</y>
+  <width>100</width>
+  <height>30</height>
+  <uuid>{7c353fdc-5024-4013-9732-0936e8bd12e7}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <type>event</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Test IN</text>
+  <image>/</image>
+  <eventLine>i "SlowFade" 0 2 0</eventLine>
+  <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>button26</objectName>
+  <x>413</x>
+  <y>268</y>
+  <width>100</width>
+  <height>30</height>
+  <uuid>{e487701d-bae7-4cf0-add4-ac2c31e23366}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <type>event</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Test OUT</text>
+  <image>/</image>
+  <eventLine>i "SlowFade" 0 2 1</eventLine>
+  <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

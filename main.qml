@@ -33,6 +33,9 @@ ApplicationWindow {
     property var soundTypes: [ "--", "saw", "synthesized", "custom"] // same - check the widget and Csound, when changed
     property int volumeTable: 303 // NB! make sure that it is the same in Csound code!
 
+
+    property double slowFadeTime: 2.0  // this is set to true when a slow fade-in/fade-out is needed, for example when BT play/stop is pessed
+
     // property bool useSamples: false // enable samples in sound comboboxes
 
 
@@ -62,6 +65,22 @@ ApplicationWindow {
             bourdonForm.advancePreset(1)
         }
         repeat: false
+    }
+
+
+    Timer {
+        id: btSoundsOffTimer
+        interval: (slowFadeTime + 0.1)*1000
+        onTriggered: {
+            console.log("Turning faded out notes off")
+            bourdonForm.stopAll()
+            bourdonForm.playButton.checked = false;
+            csound.compileOrc("gkFade init 1")
+            //csound.setChannel("fade", 1) // se it back to 1 - a manual press may follow
+        }
+        running: false
+        repeat: false
+
     }
 
     function checkDoublePress() {
@@ -154,8 +173,16 @@ ApplicationWindow {
         }
     }
 
-    function play(fadeOutTime=0.1) {
+    function fadeStart() {
+        console.log("Test PLAY");
+        csound.readScore(`i "SlowFade" 0 ${slowFadeTime} 0`)
+        bourdonForm.playButton.checked = true;
+    }
 
+    function fadeStop() {
+        console.log("Test STOP");
+        csound.readScore(`i "SlowFade" 0 ${slowFadeTime} 1`)
+        btSoundsOffTimer.start()
     }
 
 
@@ -316,6 +343,23 @@ Built using Csound sound engine and Qt framework.
                 }
             }
 
+
+            MenuItem {
+                text: qsTr("TEST PLAY")
+                onTriggered: {
+                    drawer.close()
+                    fadeStart()
+                }
+            }
+
+            MenuItem {
+                text: qsTr("TEST STOP")
+                onTriggered: {
+                    drawer.close()
+                    fadeStop()
+                }
+            }
+
             Item {Layout.fillHeight: true}
 
         }
@@ -394,15 +438,19 @@ Built using Csound sound engine and Qt framework.
 
     Connections {
             target: Qt.platform.os === "android" || Qt.platform.os === "ios" ? MediaButtonHandler : null
-            function onPlay() { console.log("Play received in QML"); bourdonForm.playButton.checked = true; }
+            function onPlay() {
+                console.log("Play received in QML");
+                fadeStart()
+            }
             function onPause() {
                 console.log("Pause received in QML"); // acts as toggle pause
+                // TODO: start or stop?
                 bourdonForm.playButton.checked = !bourdonForm.playButton.checked;
             }
             function onStop() {
                 console.log("Stop received in QML");
-                bourdonForm.playButton.checked = false;
-                bourdonForm.stopAll()
+                fadeStop()
+
             }
             function onNext() {console.log("Next received in QML");  bourdonForm.advancePreset(1); }
             function onPrevious() {console.log("Previous received in QML"); bourdonForm.advancePreset(-1); }
