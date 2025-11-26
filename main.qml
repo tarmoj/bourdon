@@ -459,7 +459,6 @@ Built using Csound sound engine and Qt framework.
                                     bourdonForm.advancePreset(-1);
                                   }
                                 }
-
             }
         }
 

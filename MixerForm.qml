@@ -130,7 +130,6 @@ Rectangle {
         RowLayout {
             spacing: 5
             width: parent.width
-            // TODO: prestModel.soundType somehow...
             visible: bourdonForm.soundTypeCombobox.currentIndex === 2 ||
                      bourdonForm.soundTypeCombobox.currentText === "Custom"
 
