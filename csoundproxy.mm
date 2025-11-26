@@ -196,3 +196,15 @@ void CsoundProxy::setChannel(QString channel, double value)
 }
 
 
+
+void CsoundProxy::compileOrc(const QString &code)
+{
+    if (csound) {
+        csoundCompileOrc(csound, code.toLocal8Bit()) ;
+
+    } else {
+        qDebug() << "Csound is null";
+    }
+}
+
+

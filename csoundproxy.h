@@ -16,6 +16,7 @@ public:
     Q_INVOKABLE void setChannel(QString channel, double value);
     Q_INVOKABLE void stop();
     Q_INVOKABLE void restartCsound();
+    Q_INVOKABLE void compileOrc(const QString &code);
 
     //CSOUND * getCsound();
 
