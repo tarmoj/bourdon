@@ -125,7 +125,7 @@ Rectangle {
                     delegate: ItemDelegate {
                             width: comboBox.width
                             text: modelData
-                            enabled: index>0 || (index===0  && app.useSamples)
+                            enabled: true  //index>0 || (index===0  && app.useSamples)
 
                             onClicked: {
                                 if (enabled) {

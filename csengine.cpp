@@ -47,16 +47,16 @@ void CsEngine::initializeCsound()
     cs->setOpenSlCallbacks(); // for android audio to work
 
     // Set SSDIR environment variable to the writable samples directory
-    QString ssdirOption = "--env:SSDIR=" + samplesDir + "/";
-    qDebug() << "Setting SSDIR:" << ssdirOption;
-    cs->SetOption(ssdirOption.toLocal8Bit().data());
+    // QString ssdirOption = "--env:SSDIR=" + samplesDir + "/";
+    // qDebug() << "Setting SSDIR:" << ssdirOption;
+    // cs->SetOption(ssdirOption.toLocal8Bit().data());
 #elif defined(Q_OS_MACOS)
     cs = new Csound();
     //QString SSDirOption = "--env:SSDIR=" + QCoreApplication::applicationDirPath()
                           + "/../Resources/samples";
     //qDebug() << "MacOS samples path: " << SSDirOption;
     //cs->SetOption(SSDirOption.toLocal8Bit().data());
-    cs->SetOption(QString("--env:SSDIR=%1/").arg(samplesDir).toLocal8Bit().data());
+    //cs->SetOption(QString("--env:SSDIR=%1/").arg(samplesDir).toLocal8Bit().data());
     cs->SetOption("-+rtaudio=auhal");
 #else
     cs = new Csound();

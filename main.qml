@@ -33,7 +33,9 @@ ApplicationWindow {
     property var soundTypes: [ "--", "saw", "synthesized", "custom"] // same - check the widget and Csound, when changed
     property int volumeTable: 303 // NB! make sure that it is the same in Csound code!
 
-    property bool useSamples: true // enable samples in sound comboboxes
+    // property bool useSamples: false // enable samples in sound comboboxes
+
+
 
     ListModel {
         id: presetModel
@@ -150,6 +152,10 @@ ApplicationWindow {
         } else {
             console.error("Failed to load file");
         }
+    }
+
+    function play(fadeOutTime=0.1) {
+
     }
 
 
