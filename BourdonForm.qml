@@ -200,7 +200,7 @@ Item {
 
                 ComboBox {
                     id: soundTypeCombobox
-                    currentIndex: 2
+                    currentIndex: 1
                     Layout.preferredWidth: 160
                     model: [qsTr("Saw wave"), qsTr("Synthesized"), qsTr("Custom") ]
 

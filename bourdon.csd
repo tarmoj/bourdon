@@ -26,7 +26,6 @@ chnset 2, "type"
 chnset 0, "volumeCorrection"
 chnset 1, "timbre" ; square by defult
 
-gkFade chnexport "fadeTime", 3
 
 ; indexes of the notes in giFrequencies[] and giRatiosX[] arrays
 #define G #0#

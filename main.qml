@@ -9,6 +9,8 @@ import QtCore
 import MyApp.FileIO 1.0 // for loading/saving files
 
 
+// TODO: examine  switching   between presets (and sanbox)
+// -  change the soundType after fadeout, otherwise might cause a jump in the spectrum
 
 ApplicationWindow {
     id: app
@@ -70,13 +72,12 @@ ApplicationWindow {
 
     Timer {
         id: btSoundsOffTimer
-        interval: (slowFadeTime + 0.1)*1000
+        interval: (slowFadeTime + 0.25)*1000
         onTriggered: {
             console.log("Turning faded out notes off")
             bourdonForm.stopAll()
             bourdonForm.playButton.checked = false;
             csound.compileOrc("gkFade init 1")
-            //csound.setChannel("fade", 1) // se it back to 1 - a manual press may follow
         }
         running: false
         repeat: false
