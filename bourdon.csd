@@ -263,11 +263,18 @@ instr SlowFade
   endif  	
 endin
 
+instr ResetFadeAmp
+	gkFade init 1
+endin
+
+
 </CsInstruments>
 <CsScore>
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 

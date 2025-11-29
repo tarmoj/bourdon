@@ -72,12 +72,12 @@ ApplicationWindow {
 
     Timer {
         id: btSoundsOffTimer
-        interval: (slowFadeTime + 0.25)*1000
+        interval: (slowFadeTime + 0.1)*1000
         onTriggered: {
             console.log("Turning faded out notes off")
             bourdonForm.stopAll()
             bourdonForm.playButton.checked = false;
-            csound.compileOrc("gkFade init 1")
+            csound.readScore("i \"ResetFadeAmp\" 0.25 0")
         }
         running: false
         repeat: false
@@ -175,13 +175,13 @@ ApplicationWindow {
     }
 
     function fadeStart() {
-        console.log("Test PLAY");
+        console.log("Test FADEIN");
         csound.readScore(`i "SlowFade" 0 ${slowFadeTime} 0`)
         bourdonForm.playButton.checked = true;
     }
 
     function fadeStop() {
-        console.log("Test STOP");
+        console.log("Test FADEOUT");
         csound.readScore(`i "SlowFade" 0 ${slowFadeTime} 1`)
         btSoundsOffTimer.start()
     }
