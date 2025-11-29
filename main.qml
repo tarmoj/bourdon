@@ -349,21 +349,21 @@ Built using Csound sound engine and Qt framework.
             }
 
 
-            MenuItem {
-                text: qsTr("TEST PLAY")
-                onTriggered: {
-                    drawer.close()
-                    fadeStart()
-                }
-            }
+            // MenuItem {
+            //     text: qsTr("TEST PLAY")
+            //     onTriggered: {
+            //         drawer.close()
+            //         fadeStart()
+            //     }
+            // }
 
-            MenuItem {
-                text: qsTr("TEST STOP")
-                onTriggered: {
-                    drawer.close()
-                    fadeStop()
-                }
-            }
+            // MenuItem {
+            //     text: qsTr("TEST STOP")
+            //     onTriggered: {
+            //         drawer.close()
+            //         fadeStop()
+            //     }
+            // }
 
             Item {Layout.fillHeight: true}
 
@@ -485,6 +485,12 @@ Built using Csound sound engine and Qt framework.
         anchors.fill: parent
         anchors.topMargin:10
         currentIndex: 1
+        property bool disableFirst: true
+
+        onCurrentIndexChanged: {
+            if (disableFirst && currentIndex === 0)
+                currentIndex = 1
+        }
 
         LockForm {
         }

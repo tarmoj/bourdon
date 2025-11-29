@@ -37,9 +37,9 @@ Rectangle {
 
     Rectangle { // the dragging line
         anchors.horizontalCenter: parent.horizontalCenter
-        y: 15
+        y: 5
         height: 2
-        width: 80
+        width: 100
         color: Material.backgroundDimColor
     }
 
@@ -61,7 +61,9 @@ Rectangle {
         anchors.rightMargin: 5
         icon.source: "qrc:/images/lock.svg"
         onClicked: {
+            app.mainView.disableFirst = false
             app.mainView.setCurrentIndex(0) // switch to LockForm
+            app.mainView.disableFirst = true
         }
     }
 
