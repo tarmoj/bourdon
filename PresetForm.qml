@@ -39,8 +39,19 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         y: 15
         height: 2
-        width: 100
+        width: 80
         color: Material.backgroundDimColor
+    }
+
+    ToolButton {
+        id: restartButton
+
+        anchors.right: lockButton.left
+        anchors.rightMargin: 5
+        icon.source: "qrc:/images/restart.svg"
+        onClicked: {
+            csound.restartCsound()
+        }
     }
 
     ToolButton {

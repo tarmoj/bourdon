@@ -256,6 +256,7 @@ endin
 
 instr SlowFade
 	iInOut = p4	
+	print p3, iInOut
 	if iInOut==$IN then
 		gkFade line 0, p3, 1
 	else
@@ -263,10 +264,9 @@ instr SlowFade
   endif  	
 endin
 
-instr ResetFadeAmp
+instr RestoreFadeLevel
 	gkFade init 1
 endin
-
 
 </CsInstruments>
 <CsScore>

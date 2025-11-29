@@ -36,7 +36,7 @@ ApplicationWindow {
     property int volumeTable: 303 // NB! make sure that it is the same in Csound code!
 
 
-    property double slowFadeTime: 2.0  // this is set to true when a slow fade-in/fade-out is needed, for example when BT play/stop is pessed
+    property double slowFadeTime: 5.0  // this is set to true when a slow fade-in/fade-out is needed, for example when BT play/stop is pessed
 
     // property bool useSamples: false // enable samples in sound comboboxes
 
@@ -72,12 +72,12 @@ ApplicationWindow {
 
     Timer {
         id: btSoundsOffTimer
-        interval: (slowFadeTime + 0.1)*1000
+
         onTriggered: {
             console.log("Turning faded out notes off")
             bourdonForm.stopAll()
             bourdonForm.playButton.checked = false;
-            csound.readScore("i \"ResetFadeAmp\" 0.25 0")
+            csound.readScore(`i "RestoreFadeLevel" 0.25 0`)
         }
         running: false
         repeat: false
@@ -175,13 +175,13 @@ ApplicationWindow {
     }
 
     function fadeStart() {
-        console.log("Test FADEIN");
+        console.log("FADE START");
         csound.readScore(`i "SlowFade" 0 ${slowFadeTime} 0`)
         bourdonForm.playButton.checked = true;
     }
 
     function fadeStop() {
-        console.log("Test FADEOUT");
+        console.log("FADE STOP");
         csound.readScore(`i "SlowFade" 0 ${slowFadeTime} 1`)
         btSoundsOffTimer.start()
     }
@@ -445,9 +445,13 @@ Built using Csound sound engine and Qt framework.
             }
             function onPause() {
                 console.log("Pause received in QML"); // acts as toggle pause
-                // TODO: start or stop?
-                bourdonForm.playButton.checked = !bourdonForm.playButton.checked;
+                if (bourdonForm.isPlaying()) {
+                    fadeStop()
+                } else {
+                    fadeStart()
+                }
             }
+
             function onStop() {
                 console.log("Stop received in QML");
                 fadeStop()
@@ -490,19 +494,20 @@ Built using Csound sound engine and Qt framework.
                 focus: true
                 visible: false
 
+
                 Keys.onPressed: (event) => {
                                   //console.log("Key pressed:", event.key)
 
                                   if (event.key === Qt.Key_MediaPlay) {
                                     console.log("MediaPlay key was pressed!")
-                                    bourdonForm.playButton.checked = true
+                                    fadeStart()
                                   }
 
                                   if (event.key === 16777349) {
                                     console.log("MediaStop key was pressed!")
-                                    bourdonForm.playButton.checked = false
-                                    bourdonForm.stopAll() // in case playBotton.checked was already false
-                                  }
+
+                                    fadeStop()
+                                }
 
                                   if (event.key === Qt.Key_MediaNext) {
                                     console.log("MediaNext key was pressed!")
