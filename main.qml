@@ -18,7 +18,7 @@ ApplicationWindow {
     height: 720
     minimumWidth: 350
     visible: true
-    property string version: "0.9.0"
+    property string version: "0.9.1"
     title: qsTr("Bourdon Player "+ version)
 
     property color backgroundColor: Material.background // expose to C++
@@ -27,12 +27,12 @@ ApplicationWindow {
 
 
     // sandBox is sort of preset 0, for tryout, it is not used in next/previous preset
-    property var sandBoxData: {"tuning": "EQ", "sound": 2, "notes":""}
+    property var sandBoxData: {"tuning": "EQ", "sound": 1, "notes":""}
 
     property var bourdonNotes: ["G", "A", "c", "d", "e", "f", "fis", "g", "a", "h", "c1", "d1", "e1", "f1", "fis1", "g1", "a1", "h1"] // make sure the notes are loaded to tables in Csound with according numbers (index+1)
     property double lastPressTime: 0
     property var tunings: ["EQ","G", "D", "A", "C", "E", "?!"] // make sure that this is aligned with the widget and the logic in Csound
-    property var soundTypes: [ "--", "saw", "synthesized", "custom"] // same - check the widget and Csound, when changed
+    property var soundTypes: [ "saw", "synthesized", "custom"] // same - check the widget and Csound, when changed
     property int volumeTable: 303 // NB! make sure that it is the same in Csound code!
 
 
@@ -176,14 +176,18 @@ ApplicationWindow {
 
     function fadeStart() {
         console.log("FADE START");
-        csound.readScore(`i "SlowFade" 0 ${slowFadeTime} 0`)
+        // NO slow fade in for now
+        //csound.readScore(`i "SlowFade" 0 ${slowFadeTime} 0`)
         bourdonForm.playButton.checked = true;
     }
 
     function fadeStop() {
         console.log("FADE STOP");
-        csound.readScore(`i "SlowFade" 0 ${slowFadeTime} 1`)
-        btSoundsOffTimer.start()
+        // NO slow fade for now, just stop immediately
+        //csound.readScore(`i "SlowFade" 0 ${slowFadeTime} 1`)
+        //btSoundsOffTimer.start()
+        bourdonForm.stopAll()
+        bourdonForm.playButton.checked = false;
     }
 
 
