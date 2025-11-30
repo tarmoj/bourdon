@@ -22,6 +22,7 @@ public:
     Q_INVOKABLE void compileOrc(const QString &code);
     Q_INVOKABLE void startCsound();
     Q_INVOKABLE void stopCsound();
+    Q_INVOKABLE bool isPlaying() const;
 
     //CSOUND * getCsound();
 
@@ -32,7 +33,6 @@ private:
     
     void initializeCsound();
     void processEventQueue();
-    bool isCsoundReady() const;
 };
 
 #endif // CSOUNDPROXY_H

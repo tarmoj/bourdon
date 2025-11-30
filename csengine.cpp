@@ -174,7 +174,7 @@ void CsEngine::setChannel(const QString &channel, MYFLT value)
 
 void CsEngine::readScore(const QString &scoreLine)
 {
-    if (isCsoundReady()) {
+    if (isPlaying()) {
         perfThread->InputMessage(scoreLine.toLocal8Bit());
     } else {
         qDebug() << "Csound not ready, queuing event:" << scoreLine;
@@ -224,7 +224,7 @@ QVariant CsEngine::getAudioDevices()
 
 void CsEngine::processEventQueue()
 {
-    if (!isCsoundReady()) {
+    if (!isPlaying()) {
         qDebug() << "Cannot process event queue - Csound not ready";
         return;
     }
@@ -236,7 +236,7 @@ void CsEngine::processEventQueue()
     }
 }
 
-bool CsEngine::isCsoundReady() const
+bool CsEngine::isPlaying() const
 {
     return perfThread != nullptr && cs != nullptr;
 }

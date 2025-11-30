@@ -77,7 +77,7 @@ void CsoundProxy::startCsound()
     qDebug() << "Starting Csound...";
     
     // If already running, don't reinitialize
-    if (isCsoundReady()) {
+    if (isPlaying()) {
         qDebug() << "Csound already running";
         return;
     }
@@ -183,7 +183,7 @@ void CsoundProxy::stop()
 
 void CsoundProxy::readScore(const QString &scoreLine)
 {
-    if (isCsoundReady()) {
+    if (isPlaying()) {
         csoundInputMessage(csound, scoreLine.toLocal8Bit());
     } else {
         qDebug() << "Csound not ready, queuing event:" << scoreLine;
@@ -216,7 +216,7 @@ void CsoundProxy::compileOrc(const QString &code)
 
 void CsoundProxy::processEventQueue()
 {
-    if (!isCsoundReady()) {
+    if (!isPlaying()) {
         qDebug() << "Cannot process event queue - Csound not ready";
         return;
     }
@@ -228,7 +228,7 @@ void CsoundProxy::processEventQueue()
     }
 }
 
-bool CsoundProxy::isCsoundReady() const
+bool CsoundProxy::isPlaying() const
 {
     return csound != nullptr && cs != nullptr;
 }

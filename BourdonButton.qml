@@ -16,8 +16,8 @@ ToolButton {
             const instrument = "1."+sound.toString()
             let scoreLine = "";
             if (checked) {
-                // Start Csound if no sound was playing before
-                if (!bourdonForm.isPlaying()) {
+                // Start Csound if not already running
+                if (!csound.isPlaying()) {
                     csound.startCsound();
                 }
                 scoreLine = `i ${instrument} 0 -1 ${sound}`;
