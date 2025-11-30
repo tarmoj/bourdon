@@ -6,9 +6,6 @@ ToolButton {
     id: bourdonButton
     checkable: true
     property int sound: 0
-    
-    // Delay before checking if Csound should be stopped (in ms)
-    readonly property int stopCheckDelay: 50
 
     onCheckedChanged: {
 
@@ -30,7 +27,7 @@ ToolButton {
             csound.readScore(scoreLine)
             
             // Stop Csound if no sound is playing after unchecking
-            // Use a short delay to allow the score event to be processed
+            // Use fade time + 0.1 seconds to allow the sound to fade out
             if (!checked) {
                 stopCsoundTimer.start()
             }
@@ -39,7 +36,7 @@ ToolButton {
 
     Timer {
         id: stopCsoundTimer
-        interval: stopCheckDelay
+        interval: (app.fadeTime + 0.1) * 1000  // fade time + extra time for fade out
         running: false
         repeat: false
         onTriggered: {

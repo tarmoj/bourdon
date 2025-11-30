@@ -16,7 +16,6 @@
 class CsEngine : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(double fadeTime READ fadeTime WRITE setFadeTime NOTIFY fadeTimeChanged)
 
 public:
     explicit CsEngine(QObject *parent = 0);
@@ -24,9 +23,6 @@ public:
 
     void play();
     int open(QString csd);
-
-    double fadeTime() const { return m_fadeTime; }
-    void setFadeTime(double fadeTime);
 
 public slots:
 
@@ -42,9 +38,6 @@ public slots:
     //Q_INVOKABLE double getChannel(const char *channel);
     Q_INVOKABLE QVariant getAudioDevices();
 
-signals:
-    void fadeTimeChanged();
-
 private:
     bool mStop;
 #ifdef Q_OS_ANDROID
@@ -55,12 +48,10 @@ private:
 
     CsoundPerformanceThread *perfThread;
     QQueue<QString> m_eventQueue;
-    double m_fadeTime = 0.1;
 
     void initializeCsound();
     void processEventQueue();
     bool isCsoundReady() const;
-    void doStopCsound();
 };
 
 #endif // CSENGINE_H

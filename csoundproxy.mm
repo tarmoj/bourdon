@@ -6,7 +6,6 @@
 
 #include <QDebug>
 #include <QThread>
-#include <QTimer>
 #include <cstdlib>
 
 
@@ -30,8 +29,7 @@ CsoundProxy::CsoundProxy(QObject *parent)
 
 CsoundProxy::~CsoundProxy()
 {
-    // Use synchronous stop in destructor to ensure proper cleanup
-    doStopCsound();
+    stopCsound();
 }
 
 void CsoundProxy::initializeCsound()
@@ -134,18 +132,6 @@ void CsoundProxy::stopCsound()
 {
     qDebug() << "Stopping Csound...";
     
-    // Wait for fade time + 0.1 seconds to allow sounds to fade out
-    // Use QTimer::singleShot to avoid blocking the UI thread
-    int delayMs = static_cast<int>((m_fadeTime + 0.1) * 1000);
-    qDebug() << "Scheduling Csound stop in" << delayMs << "ms for fade out...";
-    
-    QTimer::singleShot(delayMs, this, &CsoundProxy::doStopCsound);
-}
-
-void CsoundProxy::doStopCsound()
-{
-    qDebug() << "Executing Csound stop...";
-    
     if (cs) {
         // Stop the CsoundObj
         [(CsoundObj *)cs stop];
@@ -164,8 +150,8 @@ void CsoundProxy::restartCsound()
 {
     qDebug() << "Restarting Csound...";
     
-    // Use synchronous stop for restart
-    doStopCsound();
+    // Stop Csound
+    stopCsound();
     
     // Wait a bit for the background thread to finish
     QThread::msleep(200);
@@ -225,14 +211,6 @@ void CsoundProxy::compileOrc(const QString &code)
 
     } else {
         qDebug() << "Csound is null";
-    }
-}
-
-void CsoundProxy::setFadeTime(double fadeTime)
-{
-    if (m_fadeTime != fadeTime) {
-        m_fadeTime = fadeTime;
-        emit fadeTimeChanged();
     }
 }
 
