@@ -24,17 +24,12 @@ CsoundProxy::CsoundProxy(QObject *parent)
 {
     cs = nullptr;
     csound = nullptr;
-    initializeCsound();
+    // Don't auto-start Csound - it will be started when sound is needed
 }
 
 CsoundProxy::~CsoundProxy()
 {
-    if (cs) {
-        [(CsoundObj *)cs stop];
-    }
-    // Let ARC handle cleanup
-    cs = nullptr;
-    csound = nullptr;
+    stopCsound();
 }
 
 void CsoundProxy::initializeCsound()
@@ -81,9 +76,21 @@ void CsoundProxy::startCsound()
 {
     qDebug() << "Starting Csound...";
     
-    if (!cs) {
-        qWarning() << "CsoundObj not initialized";
+    // If already running, don't reinitialize
+    if (isPlaying()) {
+        qDebug() << "Csound already running";
         return;
+    }
+    
+    if (!cs) {
+        // Create a new CsoundObj if needed
+        CsoundObj *csObj = [[CsoundObj alloc] init];
+        cs = (void *)csObj;
+        
+        if (!cs) {
+            qWarning() << "Failed to create CsoundObj";
+            return;
+        }
     }
     
     // Set SSDIR environment variable at process level for iOS
@@ -112,6 +119,8 @@ void CsoundProxy::startCsound()
     
     if (csound) {
         qDebug() << "Csound is ready:" << csound << "in " << attempts*10 << " ms";
+        // Process any queued events
+        processEventQueue();
     } else {
         qWarning() << "Timeout: Csound did not initialize in time.";
     }
@@ -132,6 +141,7 @@ void CsoundProxy::stopCsound()
     // Clear our reference to the CSOUND instance
     // The CsoundObj will handle its own cleanup
     csound = nullptr;
+    cs = nullptr;
     
     qDebug() << "Csound stopped successfully";
 }
@@ -140,20 +150,14 @@ void CsoundProxy::restartCsound()
 {
     qDebug() << "Restarting Csound...";
     
-    // Simply stop current instance and create a fresh one
-    if (cs) {
-        [(CsoundObj *)cs stop];
-    }
-    
-    // Clear references
-    csound = nullptr;
-    cs = nullptr;
+    // Stop Csound
+    stopCsound();
     
     // Wait a bit for the background thread to finish
     QThread::msleep(200);
     
-    // Create fresh instance
-    initializeCsound();
+    // Start again
+    startCsound();
     
     qDebug() << "Csound restarted successfully";
 }
@@ -179,8 +183,11 @@ void CsoundProxy::stop()
 
 void CsoundProxy::readScore(const QString &scoreLine)
 {
-    if (csound) {
+    if (isPlaying()) {
         csoundInputMessage(csound, scoreLine.toLocal8Bit());
+    } else {
+        qDebug() << "Csound not ready, queuing event:" << scoreLine;
+        m_eventQueue.enqueue(scoreLine);
     }
 }
 
@@ -207,4 +214,22 @@ void CsoundProxy::compileOrc(const QString &code)
     }
 }
 
+void CsoundProxy::processEventQueue()
+{
+    if (!isPlaying()) {
+        qDebug() << "Cannot process event queue - Csound not ready";
+        return;
+    }
+    
+    while (!m_eventQueue.isEmpty()) {
+        QString event = m_eventQueue.dequeue();
+        qDebug() << "Processing queued event:" << event;
+        csoundInputMessage(csound, event.toLocal8Bit());
+    }
+}
+
+bool CsoundProxy::isPlaying() const
+{
+    return csound != nullptr && cs != nullptr;
+}
 

@@ -1,6 +1,8 @@
 #ifndef CSENGINE_H
 #define CSENGINE_H
 #include <QObject>
+#include <QQueue>
+#include <QString>
 #include <QVariant>
 
 #ifdef Q_OS_ANDROID
@@ -28,6 +30,7 @@ public slots:
     Q_INVOKABLE void startCsound();
     Q_INVOKABLE void stopCsound();
     Q_INVOKABLE void restartCsound();
+    Q_INVOKABLE bool isPlaying() const;
     void setChannel(const QString &channel, double value);
     void readScore(const QString &event);
     void compileOrc(const QString &code);
@@ -45,8 +48,10 @@ private:
 #endif
 
     CsoundPerformanceThread *perfThread;
+    QQueue<QString> m_eventQueue;
 
     void initializeCsound();
+    void processEventQueue();
 };
 
 #endif // CSENGINE_H

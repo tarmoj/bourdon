@@ -16,7 +16,7 @@ CsEngine::CsEngine(QObject *parent)
     mStop = false;
     cs = nullptr;
 
-    initializeCsound();
+    // Don't auto-start Csound - it will be started when sound is needed
 }
 
 void CsEngine::initializeCsound()
@@ -113,11 +113,17 @@ void CsEngine::startCsound()
 {
     qDebug() << "Starting Csound...";
     if (cs) {
-        // If already running, stop first
-        stopCsound();
+        // If already running, don't reinitialize
+        qDebug() << "Csound already running";
+        return;
     }
 
     initializeCsound();
+    play();
+    
+    // Process any queued events
+    processEventQueue();
+    
     qDebug() << "Csound started successfully";
 }
 
@@ -149,9 +155,13 @@ void CsEngine::stopCsound()
 void CsEngine::restartCsound()
 {
     qDebug() << "Restarting Csound...";
+    
+    // First stop Csound
     stopCsound();
+    
+    // Then start again
     startCsound();
-    play();
+    
     qDebug() << "Csound restarted successfully";
 }
 
@@ -164,8 +174,11 @@ void CsEngine::setChannel(const QString &channel, MYFLT value)
 
 void CsEngine::readScore(const QString &scoreLine)
 {
-    if (perfThread) {
+    if (isPlaying()) {
         perfThread->InputMessage(scoreLine.toLocal8Bit());
+    } else {
+        qDebug() << "Csound not ready, queuing event:" << scoreLine;
+        m_eventQueue.enqueue(scoreLine);
     }
 }
 
@@ -207,4 +220,23 @@ QVariant CsEngine::getAudioDevices()
     csoundDestroy(csound);
 
     return QVariant(deviceList);
+}
+
+void CsEngine::processEventQueue()
+{
+    if (!isPlaying()) {
+        qDebug() << "Cannot process event queue - Csound not ready";
+        return;
+    }
+    
+    while (!m_eventQueue.isEmpty()) {
+        QString event = m_eventQueue.dequeue();
+        qDebug() << "Processing queued event:" << event;
+        perfThread->InputMessage(event.toLocal8Bit());
+    }
+}
+
+bool CsEngine::isPlaying() const
+{
+    return perfThread != nullptr && cs != nullptr;
 }

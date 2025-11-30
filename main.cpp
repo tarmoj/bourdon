@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
     mediaButtonHandler.setupRemoteCommandCenter();
 #else
     CsEngine *cs = new CsEngine();
-    cs->play();
+    // Don't auto-start Csound - it will be started when sound is needed
 #endif
 
     QQmlApplicationEngine engine;

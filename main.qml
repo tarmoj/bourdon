@@ -18,7 +18,7 @@ ApplicationWindow {
     height: 720
     minimumWidth: 350
     visible: true
-    property string version: "0.9.1"
+    property string version: "0.9.2"
     title: qsTr("Bourdon Player "+ version)
 
     property color backgroundColor: Material.background // expose to C++
@@ -37,6 +37,8 @@ ApplicationWindow {
 
 
     property double slowFadeTime: 5.0  // this is set to true when a slow fade-in/fade-out is needed, for example when BT play/stop is pessed
+
+    property double fadeTime: 0.1  // fade time for sound envelope, used when stopping Csound
 
     // property bool useSamples: false // enable samples in sound comboboxes
 
