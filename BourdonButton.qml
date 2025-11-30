@@ -16,12 +16,34 @@ ToolButton {
             const instrument = "1."+sound.toString()
             let scoreLine = "";
             if (checked) {
+                // Start Csound if no sound was playing before
+                if (!bourdonForm.isPlaying()) {
+                    csound.startCsound();
+                }
                 scoreLine = `i ${instrument} 0 -1 ${sound}`;
             } else {
                 scoreLine = `i -${instrument} 0 -0 ${sound}`;
             }
             csound.readScore(scoreLine)
+            
+            // Stop Csound if no sound is playing after unchecking
+            // Use a short delay to allow the score event to be processed
+            if (!checked) {
+                stopCsoundTimer.start()
+            }
         // }
+    }
+
+    Timer {
+        id: stopCsoundTimer
+        interval: 50  // Short delay to allow score event to be processed
+        running: false
+        repeat: false
+        onTriggered: {
+            if (!bourdonForm.isPlaying()) {
+                csound.stopCsound();
+            }
+        }
     }
 
     onClicked: {

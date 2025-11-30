@@ -38,6 +38,8 @@ ApplicationWindow {
 
     property double slowFadeTime: 5.0  // this is set to true when a slow fade-in/fade-out is needed, for example when BT play/stop is pessed
 
+    property double fadeTime: 0.1  // fade time for sound envelope, used when stopping Csound
+
     // property bool useSamples: false // enable samples in sound comboboxes
 
 

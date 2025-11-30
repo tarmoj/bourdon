@@ -24,7 +24,7 @@ CsoundProxy::CsoundProxy(QObject *parent)
 {
     cs = nullptr;
     csound = nullptr;
-    initializeCsound();
+    // Don't auto-start Csound - it will be started when sound is needed
 }
 
 CsoundProxy::~CsoundProxy()
@@ -81,9 +81,21 @@ void CsoundProxy::startCsound()
 {
     qDebug() << "Starting Csound...";
     
-    if (!cs) {
-        qWarning() << "CsoundObj not initialized";
+    // If already running, don't reinitialize
+    if (isCsoundReady()) {
+        qDebug() << "Csound already running";
         return;
+    }
+    
+    if (!cs) {
+        // Create a new CsoundObj if needed
+        CsoundObj *csObj = [[CsoundObj alloc] init];
+        cs = (void *)csObj;
+        
+        if (!cs) {
+            qWarning() << "Failed to create CsoundObj";
+            return;
+        }
     }
     
     // Set SSDIR environment variable at process level for iOS
@@ -112,6 +124,8 @@ void CsoundProxy::startCsound()
     
     if (csound) {
         qDebug() << "Csound is ready:" << csound << "in " << attempts*10 << " ms";
+        // Process any queued events
+        processEventQueue();
     } else {
         qWarning() << "Timeout: Csound did not initialize in time.";
     }
@@ -123,6 +137,11 @@ void CsoundProxy::stopCsound()
 {
     qDebug() << "Stopping Csound...";
     
+    // Wait for fade time + 0.1 seconds to allow sounds to fade out
+    int delayMs = static_cast<int>((m_fadeTime + 0.1) * 1000);
+    qDebug() << "Waiting" << delayMs << "ms for fade out...";
+    QThread::msleep(delayMs);
+    
     if (cs) {
         // Stop the CsoundObj
         [(CsoundObj *)cs stop];
@@ -132,6 +151,7 @@ void CsoundProxy::stopCsound()
     // Clear our reference to the CSOUND instance
     // The CsoundObj will handle its own cleanup
     csound = nullptr;
+    cs = nullptr;
     
     qDebug() << "Csound stopped successfully";
 }
@@ -179,8 +199,11 @@ void CsoundProxy::stop()
 
 void CsoundProxy::readScore(const QString &scoreLine)
 {
-    if (csound) {
+    if (isCsoundReady()) {
         csoundInputMessage(csound, scoreLine.toLocal8Bit());
+    } else {
+        qDebug() << "Csound not ready, queuing event:" << scoreLine;
+        m_eventQueue.enqueue(scoreLine);
     }
 }
 
@@ -207,4 +230,30 @@ void CsoundProxy::compileOrc(const QString &code)
     }
 }
 
+void CsoundProxy::setFadeTime(double fadeTime)
+{
+    if (m_fadeTime != fadeTime) {
+        m_fadeTime = fadeTime;
+        emit fadeTimeChanged();
+    }
+}
+
+void CsoundProxy::processEventQueue()
+{
+    if (!isCsoundReady()) {
+        qDebug() << "Cannot process event queue - Csound not ready";
+        return;
+    }
+    
+    while (!m_eventQueue.isEmpty()) {
+        QString event = m_eventQueue.dequeue();
+        qDebug() << "Processing queued event:" << event;
+        csoundInputMessage(csound, event.toLocal8Bit());
+    }
+}
+
+bool CsoundProxy::isCsoundReady() const
+{
+    return csound != nullptr && cs != nullptr;
+}
 

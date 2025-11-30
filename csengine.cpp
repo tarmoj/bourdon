@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QFile>
 #include <QTemporaryFile>
+#include <QThread>
+#include <QTimer>
 
 //#include <QDateTime>
 
@@ -16,7 +18,7 @@ CsEngine::CsEngine(QObject *parent)
     mStop = false;
     cs = nullptr;
 
-    initializeCsound();
+    // Don't auto-start Csound - it will be started when sound is needed
 }
 
 void CsEngine::initializeCsound()
@@ -113,17 +115,28 @@ void CsEngine::startCsound()
 {
     qDebug() << "Starting Csound...";
     if (cs) {
-        // If already running, stop first
-        stopCsound();
+        // If already running, don't reinitialize
+        qDebug() << "Csound already running";
+        return;
     }
 
     initializeCsound();
+    play();
+    
+    // Process any queued events
+    processEventQueue();
+    
     qDebug() << "Csound started successfully";
 }
 
 void CsEngine::stopCsound()
 {
     qDebug() << "Stopping Csound...";
+
+    // Wait for fade time + 0.1 seconds to allow sounds to fade out
+    int delayMs = static_cast<int>((m_fadeTime + 0.1) * 1000);
+    qDebug() << "Waiting" << delayMs << "ms for fade out...";
+    QThread::msleep(delayMs);
 
     // Stop performance thread first
     if (perfThread) {
@@ -164,8 +177,11 @@ void CsEngine::setChannel(const QString &channel, MYFLT value)
 
 void CsEngine::readScore(const QString &scoreLine)
 {
-    if (perfThread) {
+    if (isCsoundReady()) {
         perfThread->InputMessage(scoreLine.toLocal8Bit());
+    } else {
+        qDebug() << "Csound not ready, queuing event:" << scoreLine;
+        m_eventQueue.enqueue(scoreLine);
     }
 }
 
@@ -207,4 +223,31 @@ QVariant CsEngine::getAudioDevices()
     csoundDestroy(csound);
 
     return QVariant(deviceList);
+}
+
+void CsEngine::setFadeTime(double fadeTime)
+{
+    if (m_fadeTime != fadeTime) {
+        m_fadeTime = fadeTime;
+        emit fadeTimeChanged();
+    }
+}
+
+void CsEngine::processEventQueue()
+{
+    if (!isCsoundReady()) {
+        qDebug() << "Cannot process event queue - Csound not ready";
+        return;
+    }
+    
+    while (!m_eventQueue.isEmpty()) {
+        QString event = m_eventQueue.dequeue();
+        qDebug() << "Processing queued event:" << event;
+        perfThread->InputMessage(event.toLocal8Bit());
+    }
+}
+
+bool CsEngine::isCsoundReady() const
+{
+    return perfThread != nullptr && cs != nullptr;
 }
