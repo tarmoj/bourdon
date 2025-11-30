@@ -479,6 +479,8 @@ Built using Csound sound engine and Qt framework.
         languageComboBox.currentIndex = 0
         languageManager.switchLanguage("EN")
       }
+      // Set the fade time for Csound engine
+      csound.fadeTime = fadeTime;
     }
 
 

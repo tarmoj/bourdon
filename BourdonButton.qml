@@ -6,6 +6,9 @@ ToolButton {
     id: bourdonButton
     checkable: true
     property int sound: 0
+    
+    // Delay before checking if Csound should be stopped (in ms)
+    readonly property int stopCheckDelay: 50
 
     onCheckedChanged: {
 
@@ -36,7 +39,7 @@ ToolButton {
 
     Timer {
         id: stopCsoundTimer
-        interval: 50  // Short delay to allow score event to be processed
+        interval: stopCheckDelay
         running: false
         repeat: false
         onTriggered: {

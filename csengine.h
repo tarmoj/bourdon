@@ -60,6 +60,7 @@ private:
     void initializeCsound();
     void processEventQueue();
     bool isCsoundReady() const;
+    void doStopCsound();
 };
 
 #endif // CSENGINE_H

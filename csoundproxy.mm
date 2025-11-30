@@ -6,6 +6,7 @@
 
 #include <QDebug>
 #include <QThread>
+#include <QTimer>
 #include <cstdlib>
 
 
@@ -29,12 +30,8 @@ CsoundProxy::CsoundProxy(QObject *parent)
 
 CsoundProxy::~CsoundProxy()
 {
-    if (cs) {
-        [(CsoundObj *)cs stop];
-    }
-    // Let ARC handle cleanup
-    cs = nullptr;
-    csound = nullptr;
+    // Use synchronous stop in destructor to ensure proper cleanup
+    doStopCsound();
 }
 
 void CsoundProxy::initializeCsound()
@@ -138,9 +135,16 @@ void CsoundProxy::stopCsound()
     qDebug() << "Stopping Csound...";
     
     // Wait for fade time + 0.1 seconds to allow sounds to fade out
+    // Use QTimer::singleShot to avoid blocking the UI thread
     int delayMs = static_cast<int>((m_fadeTime + 0.1) * 1000);
-    qDebug() << "Waiting" << delayMs << "ms for fade out...";
-    QThread::msleep(delayMs);
+    qDebug() << "Scheduling Csound stop in" << delayMs << "ms for fade out...";
+    
+    QTimer::singleShot(delayMs, this, &CsoundProxy::doStopCsound);
+}
+
+void CsoundProxy::doStopCsound()
+{
+    qDebug() << "Executing Csound stop...";
     
     if (cs) {
         // Stop the CsoundObj
@@ -160,20 +164,14 @@ void CsoundProxy::restartCsound()
 {
     qDebug() << "Restarting Csound...";
     
-    // Simply stop current instance and create a fresh one
-    if (cs) {
-        [(CsoundObj *)cs stop];
-    }
-    
-    // Clear references
-    csound = nullptr;
-    cs = nullptr;
+    // Use synchronous stop for restart
+    doStopCsound();
     
     // Wait a bit for the background thread to finish
     QThread::msleep(200);
     
-    // Create fresh instance
-    initializeCsound();
+    // Start again
+    startCsound();
     
     qDebug() << "Csound restarted successfully";
 }

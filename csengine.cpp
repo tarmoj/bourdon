@@ -75,7 +75,8 @@ void CsEngine::initializeCsound()
 
 CsEngine::~CsEngine()
 {
-    stopCsound();
+    // Use synchronous stop in destructor to ensure proper cleanup
+    doStopCsound();
 }
 
 void CsEngine::play()
@@ -134,9 +135,16 @@ void CsEngine::stopCsound()
     qDebug() << "Stopping Csound...";
 
     // Wait for fade time + 0.1 seconds to allow sounds to fade out
+    // Use QTimer::singleShot to avoid blocking the UI thread
     int delayMs = static_cast<int>((m_fadeTime + 0.1) * 1000);
-    qDebug() << "Waiting" << delayMs << "ms for fade out...";
-    QThread::msleep(delayMs);
+    qDebug() << "Scheduling Csound stop in" << delayMs << "ms for fade out...";
+    
+    QTimer::singleShot(delayMs, this, &CsEngine::doStopCsound);
+}
+
+void CsEngine::doStopCsound()
+{
+    qDebug() << "Executing Csound stop...";
 
     // Stop performance thread first
     if (perfThread) {
@@ -162,9 +170,13 @@ void CsEngine::stopCsound()
 void CsEngine::restartCsound()
 {
     qDebug() << "Restarting Csound...";
-    stopCsound();
+    
+    // First stop Csound synchronously
+    doStopCsound();
+    
+    // Then start again
     startCsound();
-    play();
+    
     qDebug() << "Csound restarted successfully";
 }
 
