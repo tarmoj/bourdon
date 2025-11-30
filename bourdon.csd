@@ -22,7 +22,7 @@ chn_k "volumeCorrection", 3
 
 
 chnset 440, "a4"
-chnset 2, "type"
+chnset 1, "type"
 chnset 0, "volumeCorrection"
 chnset 1, "timbre" ; square by defult
 

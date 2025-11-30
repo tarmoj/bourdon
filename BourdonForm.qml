@@ -84,7 +84,7 @@ Item {
             }
         }
         preset.notes = noteArray.join(",")
-        console.log("Preset from buttons: ", preset.notes)
+        //console.log("Preset from buttons: ", preset.notes, preset.sound)
 
         return preset;
     }
@@ -111,7 +111,7 @@ Item {
 
     function getPresetData() {
         if (currentPreset===-1) {
-            console.log("Sandbox ")
+            //console.log("Sandbox ", app.sandBoxData.sound)
             return app.sandBoxData
         } else {
           return presetModel.get(currentPreset);

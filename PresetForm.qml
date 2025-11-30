@@ -43,16 +43,16 @@ Rectangle {
         color: Material.backgroundDimColor
     }
 
-    ToolButton {
-        id: restartButton
+    // ToolButton {
+    //     id: restartButton
 
-        anchors.right: lockButton.left
-        anchors.rightMargin: 5
-        icon.source: "qrc:/images/restart.svg"
-        onClicked: {
-            csound.restartCsound()
-        }
-    }
+    //     anchors.right: lockButton.left
+    //     anchors.rightMargin: 5
+    //     icon.source: "qrc:/images/restart.svg"
+    //     onClicked: {
+    //         csound.restartCsound()
+    //     }
+    // }
 
     ToolButton {
         id: lockButton
