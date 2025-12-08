@@ -4,72 +4,79 @@
 <context>
     <name>BourdonForm</name>
     <message>
-        <location filename="../BourdonForm.qml" line="207"/>
         <source>Sample</source>
-        <translation>Sämpel</translation>
+        <translation type="vanished">Sämpel</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="207"/>
+        <location filename="../BourdonForm.qml" line="205"/>
         <source>Saw wave</source>
         <translation>Saehammas</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="207"/>
+        <location filename="../BourdonForm.qml" line="205"/>
         <source>Synthesized</source>
         <translation>Sünteseeritud</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="207"/>
         <source>Saw 2</source>
-        <translation>Saehammas 2</translation>
+        <translation type="vanished">Saehammas 2</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="270"/>
+        <location filename="../BourdonForm.qml" line="205"/>
+        <source>Custom</source>
+        <translation>Kohandatud</translation>
+    </message>
+    <message>
+        <location filename="../BourdonForm.qml" line="268"/>
         <source>Equal temp.</source>
         <translation>Võrdtemp.</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="270"/>
+        <location filename="../BourdonForm.qml" line="268"/>
         <source>Natural G</source>
         <translation>Naturaalne G</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="270"/>
+        <location filename="../BourdonForm.qml" line="268"/>
         <source>Natural D</source>
         <translation>Naturaalne D</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="270"/>
+        <location filename="../BourdonForm.qml" line="268"/>
         <source>Natural A</source>
         <translation>Naturaalne A</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="271"/>
+        <location filename="../BourdonForm.qml" line="269"/>
         <source>Natural C</source>
         <translation>Naturaalne C</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="271"/>
+        <location filename="../BourdonForm.qml" line="269"/>
         <source>Natural E</source>
         <translation>Naturaalne E</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="301"/>
+        <location filename="../BourdonForm.qml" line="269"/>
+        <source>Surprise!</source>
+        <translation>Üllatus!</translation>
+    </message>
+    <message>
+        <location filename="../BourdonForm.qml" line="300"/>
         <source>Sandbox</source>
         <translation>Liivakast</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="357"/>
         <source>Add to presets</source>
-        <translation>Lisa presettidesse</translation>
+        <translation type="vanished">Lisa presettidesse</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="453"/>
+        <location filename="../BourdonForm.qml" line="469"/>
         <source>Next/Prev.</source>
         <translation>Järgmine/Eelmine</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="465"/>
+        <location filename="../BourdonForm.qml" line="485"/>
         <source>Play/Stop</source>
         <translation>Mängi/Peata</translation>
     </message>
@@ -131,7 +138,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Tühista</translation>
+        <translation type="vanished">Tühista</translation>
     </message>
 </context>
 <context>
@@ -165,27 +172,32 @@
         <translation>Lähtesta</translation>
     </message>
     <message>
-        <location filename="../MixerForm.qml" line="134"/>
+        <location filename="../MixerForm.qml" line="137"/>
+        <source>Timbre: sine-saw-square:</source>
+        <translation>Tämber: siinus-saehammas-nelinurk</translation>
+    </message>
+    <message>
+        <location filename="../MixerForm.qml" line="163"/>
         <source>Adjust individually:</source>
         <translation>Reguleeri eraldi:</translation>
     </message>
     <message>
-        <location filename="../MixerForm.qml" line="147"/>
+        <location filename="../MixerForm.qml" line="176"/>
         <source>0dB</source>
         <translation>0dB</translation>
     </message>
     <message>
-        <location filename="../MixerForm.qml" line="148"/>
+        <location filename="../MixerForm.qml" line="177"/>
         <source>All volumes to 0dB</source>
         <translation>Kõik helitugevused 0dB-le</translation>
     </message>
     <message>
-        <location filename="../MixerForm.qml" line="164"/>
+        <location filename="../MixerForm.qml" line="193"/>
         <source>All pans to center</source>
         <translation>Kõik panoraamid keskele</translation>
     </message>
     <message>
-        <location filename="../MixerForm.qml" line="163"/>
+        <location filename="../MixerForm.qml" line="192"/>
         <source>Center</source>
         <translation>Keskele</translation>
     </message>
@@ -198,24 +210,27 @@
         <translation>Presetid</translation>
     </message>
     <message>
-        <location filename="../PresetForm.qml" line="118"/>
         <source>Sample</source>
-        <translation>Sämpel</translation>
+        <translation type="vanished">Sämpel</translation>
     </message>
     <message>
-        <location filename="../PresetForm.qml" line="118"/>
+        <location filename="../PresetForm.qml" line="131"/>
         <source>Saw</source>
         <translation>Saeh.</translation>
     </message>
     <message>
-        <location filename="../PresetForm.qml" line="118"/>
+        <location filename="../PresetForm.qml" line="131"/>
         <source>Synth</source>
         <translation>Sünt.</translation>
     </message>
     <message>
-        <location filename="../PresetForm.qml" line="118"/>
+        <location filename="../PresetForm.qml" line="131"/>
+        <source>Custom</source>
+        <translation>Kohandatud</translation>
+    </message>
+    <message>
         <source>Saw 2</source>
-        <translation>Saeh. 2</translation>
+        <translation type="vanished">Saeh. 2</translation>
     </message>
 </context>
 <context>
@@ -226,32 +241,32 @@
         <translation type="vanished">Bourdon Player</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="261"/>
+        <location filename="../main.qml" line="301"/>
         <source>Load Presets</source>
         <translation>Lae presetid</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="275"/>
+        <location filename="../main.qml" line="315"/>
         <source>Save Presets</source>
         <translation>Salvesta presetid</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="300"/>
+        <location filename="../main.qml" line="340"/>
         <source>Buy me a coffee</source>
         <translation>Osta mulle kohvi</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="305"/>
+        <location filename="../main.qml" line="345"/>
         <source>Info</source>
         <translation>Info</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="327"/>
+        <location filename="../main.qml" line="384"/>
         <source>Save Presets to File</source>
         <translation>Salvesta presetid faili</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="344"/>
+        <location filename="../main.qml" line="401"/>
         <source>Load Presets from File</source>
         <translation>Lae presetid failist</translation>
     </message>
@@ -267,7 +282,7 @@ You can start/stop the sound from bluetooth speaker or pedal.
 Built using Csound sound engine and Qt framework.
 
 (c) Tarmo Johannes trmjhnns@gmail.com</source>
-        <translation>Bourdon Player
+        <translation type="vanished">Bourdon Player
 
 on rakendus torupillimängijatele (või miks mitte teistele muusikutele), kes soovivad mängida pikkade burdoon-nootide peale.
 
@@ -281,7 +296,7 @@ Loodud Csound helimootori ja Qt raamistiku abil.
 (c) Tarmo Johannes trmjhnns@gmail.com</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="289"/>
+        <location filename="../main.qml" line="329"/>
         <source>Restart Sound Engine</source>
         <translation>Taaskäivita helimootor</translation>
     </message>

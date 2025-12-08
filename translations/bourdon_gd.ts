@@ -1,75 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="gd">
+<TS version="2.1" language="gd_GB">
 <context>
     <name>BourdonForm</name>
     <message>
-        <location filename="../BourdonForm.qml" line="207"/>
         <source>Sample</source>
-        <translation>Eisimpleir</translation>
+        <translation type="vanished">Eisimpleir</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="207"/>
+        <location filename="../BourdonForm.qml" line="205"/>
         <source>Saw wave</source>
         <translation>Tonn-sàibh</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="207"/>
+        <location filename="../BourdonForm.qml" line="205"/>
         <source>Synthesized</source>
         <translation>Co-chur</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="207"/>
         <source>Saw 2</source>
-        <translation>Tonn-sàibh 2</translation>
+        <translation type="vanished">Tonn-sàibh 2</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="270"/>
+        <location filename="../BourdonForm.qml" line="205"/>
+        <source>Custom</source>
+        <translation>Gnàthaichte</translation>
+    </message>
+    <message>
+        <location filename="../BourdonForm.qml" line="268"/>
         <source>Equal temp.</source>
         <translation>Gleusadh co-ionann</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="270"/>
+        <location filename="../BourdonForm.qml" line="268"/>
         <source>Natural G</source>
         <translation>G nàdarra</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="270"/>
+        <location filename="../BourdonForm.qml" line="268"/>
         <source>Natural D</source>
         <translation>D nàdarra</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="270"/>
+        <location filename="../BourdonForm.qml" line="268"/>
         <source>Natural A</source>
         <translation>A nàdarra</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="271"/>
+        <location filename="../BourdonForm.qml" line="269"/>
         <source>Natural C</source>
         <translation>C nàdarra</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="271"/>
+        <location filename="../BourdonForm.qml" line="269"/>
         <source>Natural E</source>
         <translation>E nàdarra</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="301"/>
+        <location filename="../BourdonForm.qml" line="269"/>
+        <source>Surprise!</source>
+        <translation>Iongantas!</translation>
+    </message>
+    <message>
+        <location filename="../BourdonForm.qml" line="300"/>
         <source>Sandbox</source>
         <translation>Bogsa-gainmhich</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="357"/>
         <source>Add to presets</source>
-        <translation>Cuir ri ro-shuidheachaidhean</translation>
+        <translation type="vanished">Cuir ri ro-shuidheachaidhean</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="453"/>
+        <location filename="../BourdonForm.qml" line="469"/>
         <source>Next/Prev.</source>
         <translation>Air adhart/Air ais</translation>
     </message>
     <message>
-        <location filename="../BourdonForm.qml" line="465"/>
+        <location filename="../BourdonForm.qml" line="485"/>
         <source>Play/Stop</source>
         <translation>Cluich/Stad</translation>
     </message>
@@ -131,7 +138,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cuir dheth</translation>
+        <translation type="vanished">Cuir dheth</translation>
     </message>
 </context>
 <context>
@@ -165,27 +172,32 @@
         <translation>Ath-shuidhich</translation>
     </message>
     <message>
-        <location filename="../MixerForm.qml" line="134"/>
+        <location filename="../MixerForm.qml" line="137"/>
+        <source>Timbre: sine-saw-square:</source>
+        <translation>Tonnan: sìne – sàbh – ceàrnag:</translation>
+    </message>
+    <message>
+        <location filename="../MixerForm.qml" line="163"/>
         <source>Adjust individually:</source>
         <translation>Atharraich leotha fhèin:</translation>
     </message>
     <message>
-        <location filename="../MixerForm.qml" line="147"/>
+        <location filename="../MixerForm.qml" line="176"/>
         <source>0dB</source>
         <translation>0dB</translation>
     </message>
     <message>
-        <location filename="../MixerForm.qml" line="148"/>
+        <location filename="../MixerForm.qml" line="177"/>
         <source>All volumes to 0dB</source>
         <translation>Gach meud gu 0dB</translation>
     </message>
     <message>
-        <location filename="../MixerForm.qml" line="164"/>
+        <location filename="../MixerForm.qml" line="193"/>
         <source>All pans to center</source>
         <translation>Gach pan chun a’ mheadhain.</translation>
     </message>
     <message>
-        <location filename="../MixerForm.qml" line="163"/>
+        <location filename="../MixerForm.qml" line="192"/>
         <source>Center</source>
         <translation>Meadhan</translation>
     </message>
@@ -198,24 +210,27 @@
         <translation>Ro-shuidheachaidhean</translation>
     </message>
     <message>
-        <location filename="../PresetForm.qml" line="118"/>
         <source>Sample</source>
-        <translation>Eisimpleir</translation>
+        <translation type="vanished">Eisimpleir</translation>
     </message>
     <message>
-        <location filename="../PresetForm.qml" line="118"/>
+        <location filename="../PresetForm.qml" line="131"/>
         <source>Saw</source>
         <translation>Sàbh</translation>
     </message>
     <message>
-        <location filename="../PresetForm.qml" line="118"/>
+        <location filename="../PresetForm.qml" line="131"/>
         <source>Synth</source>
         <translation>Co-chur</translation>
     </message>
     <message>
-        <location filename="../PresetForm.qml" line="118"/>
+        <location filename="../PresetForm.qml" line="131"/>
+        <source>Custom</source>
+        <translation>Gnàthaichte</translation>
+    </message>
+    <message>
         <source>Saw 2</source>
-        <translation>Sàbh 2</translation>
+        <translation type="vanished">Sàbh 2</translation>
     </message>
 </context>
 <context>
@@ -223,35 +238,35 @@
     <message>
         <source>Bourdon Player </source>
         <translatorcomment>ei tõlgi</translatorcomment>
-        <translation>Bourdon Player</translation>
+        <translation type="vanished">Bourdon Player</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="261"/>
+        <location filename="../main.qml" line="301"/>
         <source>Load Presets</source>
         <translation>Luchdaich ro-shuidheachaidhean</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="275"/>
+        <location filename="../main.qml" line="315"/>
         <source>Save Presets</source>
         <translation>Sàbhail ro-shuidheachaidhean</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="300"/>
+        <location filename="../main.qml" line="340"/>
         <source>Buy me a coffee</source>
         <translation>Ceannaich cofaidh dhomh</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="305"/>
+        <location filename="../main.qml" line="345"/>
         <source>Info</source>
         <translation>Fiosrachadh</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="327"/>
+        <location filename="../main.qml" line="384"/>
         <source>Save Presets to File</source>
         <translation>Sàbhail ro-shuidheachaidhean gu faidhle</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="344"/>
+        <location filename="../main.qml" line="401"/>
         <source>Load Presets from File</source>
         <translation>Luchdaich ro-shuidheachaidhean bho fhaidhle</translation>
     </message>
@@ -267,7 +282,7 @@ You can start/stop the sound from bluetooth speaker or pedal.
 Built using Csound sound engine and Qt framework.
 
 (c) Tarmo Johannes trmjhnns@gmail.com</source>
-        <translation>Cluicheadair Bourdonn
+        <translation type="vanished">Cluicheadair Bourdonn
 
 &apos;S e app a th&apos; ann do luchd-ciùil pìob-mhòire (no ciùil eile) a tha airson cluich le notaichean drone fada.
 
@@ -280,7 +295,7 @@ Air a thogail a&apos; cleachdadh Csound agus frèam Qt.
 (c) Tarmo Johannes trmjhnns@gmail.com</translation>
     </message>
     <message>
-        <location filename="../main.qml" line="289"/>
+        <location filename="../main.qml" line="329"/>
         <source>Restart Sound Engine</source>
         <translation>Ath-thòisich an Einnsean Fuaime</translation>
     </message>
