@@ -328,14 +328,14 @@ Built using Csound sound engine and Qt framework.
                 }
             }
 
-            MenuItem {
-                text: qsTr("Restart Sound Engine")
-                icon.source: "qrc:/images/restart.svg"  // Using existing icon for now
-                onTriggered: {
-                    drawer.close()
-                    csound.restartCsound()
-                }
-            }
+            // MenuItem {
+            //     text: qsTr("Restart Sound Engine")
+            //     icon.source: "qrc:/images/restart.svg"  // Using existing icon for now
+            //     onTriggered: {
+            //         drawer.close()
+            //         csound.restartCsound()
+            //     }
+            // }
 
             MenuItem {
                 id: buyMeACoffeeItem
