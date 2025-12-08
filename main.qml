@@ -46,8 +46,7 @@ ApplicationWindow {
 
     ListModel {
         id: presetModel
-        ListElement { tuning: "G"; sound: 0; notes: "G,g,c1"; volumeCorrection: 0; timbre: 0 }
-        ListElement { tuning: "C"; sound: 2; notes: "c,e,g"; volumeCorrection: 0 ; timbre: 0 }
+        ListElement { tuning: "G"; sound: 0; notes: "G,g,d1";  }
     }
 
     //onWidthChanged: console.log("window width: ", width)
@@ -126,6 +125,10 @@ ApplicationWindow {
 
     function updatePresetModel(index, preset) {
       console.log("insert to preset model: ", preset.tuning, preset.sound, preset.notes, index)
+      if (index < 0 || index >= presetModel.count) {
+          console.warn("updatePresetModel: Invalid index", index, "model count:", presetModel.count)
+          return
+      }
       presetModel.set(index, {
                            tuning: preset.tuning,
                            sound: preset.sound,
