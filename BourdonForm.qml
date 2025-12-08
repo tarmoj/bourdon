@@ -288,6 +288,7 @@ Item {
 
 
             RowLayout {
+                id: sandBoxRow
                 width: parent.width
                 spacing: 10
 
@@ -315,27 +316,43 @@ Item {
                     }
                 }
 
-                Repeater {
-                    id: sandboxNotesRepeater
-                    model: app.sandBoxData.notes ? app.sandBoxData.notes.split(",") : []
+                ScrollView {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    clip: true
+                    
+                    ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+                    ScrollBar.horizontal.policy: ScrollBar.AsNeeded
+                    contentHeight: sandBoxButton.height
 
-                    Rectangle {
-                        Layout.alignment:  Qt.AlignVCenter
-                        width: textItem.implicitWidth + 10
-                        height: textItem.implicitHeight + 5
-                        border.color: Material.frameColor
-                        radius: 4
-                        color: "transparent"
+                    RowLayout {
+                        spacing: 10
+                        height: parent.height
+                        
+                        Repeater {
+                            id: sandboxNotesRepeater
+                            model: app.sandBoxData.notes ? app.sandBoxData.notes.split(",") : []
 
-                        Label {
-                            id: textItem
-                            text: modelData
-                            anchors.centerIn: parent
+                            Rectangle {
+                                Layout.alignment: Qt.AlignVCenter
+                                width: textItem.implicitWidth + 10
+                                height: textItem.implicitHeight + 5
+                                border.color: Material.frameColor
+                                radius: 4
+                                color: "transparent"
+
+                                Label {
+                                    id: textItem
+                                    text: modelData
+                                    anchors.centerIn: parent
+                                }
+                            }
                         }
                     }
                 }
 
                 ToolButton {
+
                     icon.source: "qrc:/images/backspace.svg"
                     //icon.name: "delete"
                     visible: sandboxNotesRepeater.model.length>0
