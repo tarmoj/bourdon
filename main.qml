@@ -337,12 +337,12 @@ Built using Csound sound engine and Qt framework.
             //     }
             // }
 
-            MenuItem {
-                id: buyMeACoffeeItem
-                icon.source: "qrc:/images/bmc-logo.svg"
-                text: qsTr("Buy me a coffee")
-                onTriggered: Qt.openUrlExternally("https://ko-fi.com/tarmojohannes")
-            }
+            // MenuItem {
+            //     id: buyMeACoffeeItem
+            //     icon.source: "qrc:/images/bmc-logo.svg"
+            //     text: qsTr("Buy me a coffee")
+            //     onTriggered: Qt.openUrlExternally("https://ko-fi.com/tarmojohannes")
+            // }
 
             MenuItem {
                 text: qsTr("Info")
