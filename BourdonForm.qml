@@ -143,7 +143,9 @@ Item {
     onPresetChanged: {
       const preset = getPresetFromButtons();
       console.log("Notes in preset now: ", preset.notes, currentPreset)
-      updatePresetModel(currentPreset, preset)
+      if (currentPreset >= 0) {
+        updatePresetModel(currentPreset, preset)
+      }
     }
 
     onSandboxChanged: {
@@ -152,6 +154,7 @@ Item {
     }
 
     onCurrentPresetChanged: {
+        //console.log("currentPreset (index) changed to:", currentPreset)
         updateComboBoxes()
         if (isPlaying()) {
             stopAll();

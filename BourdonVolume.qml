@@ -37,8 +37,6 @@ Item {
 
     function updateVolumeAndPanFromPreset() {
 
-
-        const item = presetModel.get(bourdonForm.currentPreset)
         const volumeChannel = "volume" + bourdonIndex
         const panChannel = "pan" + bourdonIndex
 
@@ -47,6 +45,7 @@ Item {
             panSlider.value = app.sandBoxData[panChannel] ? app.sandBoxData[panChannel] : 0
 
         } else {
+            const item = presetModel.get(bourdonForm.currentPreset)
 
             if (item && volumeChannel in item && item[volumeChannel]!==undefined) {
                 volumeSlider.value = item[volumeChannel]
