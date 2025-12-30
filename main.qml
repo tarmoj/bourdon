@@ -21,6 +21,10 @@ ApplicationWindow {
     property string version: "0.9.3"
     title: qsTr("Bourdon Player "+ version)
 
+    color: Material.background
+
+    flags: Qt.ExpandedClientAreaHint | Qt.NoTitleBarBackgroundHint
+
     property color backgroundColor: Material.background // expose to C++
     property alias presetModel: presetModel // expose it to PresetForm
     property alias mainView: mainView
@@ -218,6 +222,8 @@ ApplicationWindow {
         visible: mainView.currentIndex !== 0 // hide when LockForm is visible
 
         background: Rectangle {color: "transparent" }
+
+        topPadding: parent.SafeArea ? parent.SafeArea.margins.top : 0
 
         Item {
             anchors.fill: parent

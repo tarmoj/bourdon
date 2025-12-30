@@ -107,14 +107,14 @@ int main(int argc, char *argv[])
 
             // test:
             // try setting titlebar color here...
-            window.callMethod<void>("addFlags", "(I)V", 0x80000000);
-            window.callMethod<void>("clearFlags", "(I)V", 0x04000000);
-            window.callMethod<void>(
-                "setStatusBarColor",
-                "(I)V",
-                0x1c1b1f); // hardcoded color for now. later try to get via QML engine Material.background
-            QJniObject decorView = window.callObjectMethod("getDecorView", "()Landroid/view/View;");
-            decorView.callMethod<void>("setSystemUiVisibility", "(I)V", 0x00002000);
+            // window.callMethod<void>("addFlags", "(I)V", 0x80000000);
+            // window.callMethod<void>("clearFlags", "(I)V", 0x04000000);
+            // window.callMethod<void>(
+            //     "setStatusBarColor",
+            //     "(I)V",
+            //     0x1c1b1f); // hardcoded color for now. later try to get via QML engine Material.background
+            // QJniObject decorView = window.callObjectMethod("getDecorView", "()Landroid/view/View;");
+            // decorView.callMethod<void>("setSystemUiVisibility", "(I)V", 0x00002000);
         }
         QJniEnvironment env;
         if (env->ExceptionCheck()) {
