@@ -28,10 +28,12 @@ RESOURCES += qml.qrc
 
 INCLUDEPATH += /usr/local/include/csound/
 
+exists(config.user.pri): include(config.user.pri)
+# to define variables CSOUND_ANDROID_LIB_DIR
 
 android {
   QT += core-private
-  INCLUDEPATH += /home/tarmo/src/csound/Android/CsoundAndroid/jni/	 #TODO: should have an extra varaible, not hardcoded personal library
+  INCLUDEPATH += $$PWD/AndroidCsound/csound6/
   HEADERS += AndroidCsound.hpp \
             mediabuttonhandler.h
   SOURCES += mediabuttonhandler.cpp
@@ -39,11 +41,22 @@ android {
 
 #message(ANDROID_TARGET_ARCH: $$ANDROID_TARGET_ARCH)
 
-    LIBS +=  -L/home/tarmo/src/csound-android-6.18.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/$$ANDROID_TARGET_ARCH/ -lcsoundandroid -lsndfile -lc++_shared
+    isEmpty(CSOUND_ANDROID_LIB_DIR) {
+        message("CSOUND_ANDROID_LIB_DIR  is empty, using default path")
+        CSOUND_ANDROID_LIB_DIR = "/home/tarmo/src/csound-android-6.18.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs"
+    }
+
+# Link against the libraries
+# Note: No space between -L and the path; ensure the slash is handled correctly
+    LIBS += -L"$$CSOUND_ANDROID_LIB_DIR/$$ANDROID_TARGET_ARCH" \
+            -lcsoundandroid \
+            -lsndfile \
+            #-lc++_shared
 
     ANDROID_EXTRA_LIBS = \
-        $$PWD/../../../../src/csound-android-6.18.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/$$ANDROID_TARGET_ARCH/libsndfile.so \
-        $$PWD/../../../../src/csound-android-6.18.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/$$ANDROID_TARGET_ARCH/libcsoundandroid.so \
+        $$CSOUND_ANDROID_LIB_DIR/$$ANDROID_TARGET_ARCH/libsndfile.so \
+        $$CSOUND_ANDROID_LIB_DIR/$$ANDROID_TARGET_ARCH/libcsoundandroid.so
+
 
     ANDROID_PACKAGE_SOURCE_DIR = \
         $$PWD/android
@@ -103,6 +116,7 @@ DISTFILES += \
     android/res/mipmap-xxxhdpi/ic_launcher_round.png \
     android/res/values/ic_launcher_background.xml \
     android/res/values/libs.xml \
+    config.user.pri \
     images/stop-button.png \
 
 
