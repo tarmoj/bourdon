@@ -18,7 +18,7 @@ ApplicationWindow {
     height: 720
     minimumWidth: 350
     visible: true
-    property string version: "0.9.3"
+    property string version: "0.9.5"
     title: qsTr("Bourdon Player "+ version)
 
     color: Material.background
@@ -40,7 +40,7 @@ ApplicationWindow {
     property int volumeTable: 303 // NB! make sure that it is the same in Csound code!
 
 
-    property double slowFadeTime: 5.0  // this is set to true when a slow fade-in/fade-out is needed, for example when BT play/stop is pessed
+    property double slowFadeTime: 2  // this is set to true when a slow fade-in/fade-out is needed, for example when BT play/stop is pessed
 
     property double fadeTime: 0.1  // fade time for sound envelope, used when stopping Csound
 
@@ -218,20 +218,26 @@ ApplicationWindow {
     header: ToolBar {
         id: toolBar
         width: parent.width
-        height: titleLabel.height + 20
+        // height: titleLabel.height + 20
         visible: mainView.currentIndex !== 0 // hide when LockForm is visible
+        implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
 
         background: Rectangle {color: "transparent" }
 
-        topPadding: parent.SafeArea ? parent.SafeArea.margins.top : 0
+        topPadding: parent.SafeArea ? parent.SafeArea.margins.top : 10
+        bottomPadding: 10
 
-        Item {
-            anchors.fill: parent
+        contentItem:  Item {
+            //anchors.fill: parent
+            anchors.topMargin: 10
+            implicitHeight: titleLabel.implicitHeight + 10
+
+            //Rectangle {color: "green"; anchors.fill: parent; visible: true}
 
             Label {
                 id: titleLabel
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.centerIn: parent
+                //anchors.verticalCenter: parent.verticalCenter
                 text: "Bourdon  v" + app.version
                 font.pointSize: 16
                 font.bold: true
@@ -241,7 +247,7 @@ ApplicationWindow {
 
             ToolButton {
                 id: menuButton
-                //height: titleLabel.height
+
                 anchors.left: parent.left
                 anchors.leftMargin: 5
                 anchors.verticalCenter: parent.verticalCenter
@@ -277,7 +283,7 @@ Built using Csound sound engine and Qt framework.
 
     Drawer {
         id: drawer
-        width: buyMeACoffeeItem + 40
+        //width is automatic
         height: app.height - toolBar.height
         y: toolBar.height
         property int marginLeft: 20
