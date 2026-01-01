@@ -105,16 +105,39 @@ int main(int argc, char *argv[])
             const int FLAG_KEEP_SCREEN_ON = 128;
             window.callMethod<void>("addFlags", "(I)V", FLAG_KEEP_SCREEN_ON);
 
-            // test:
-            // try setting titlebar color here...
-            // window.callMethod<void>("addFlags", "(I)V", 0x80000000);
-            // window.callMethod<void>("clearFlags", "(I)V", 0x04000000);
-            // window.callMethod<void>(
-            //     "setStatusBarColor",
-            //     "(I)V",
-            //     0x1c1b1f); // hardcoded color for now. later try to get via QML engine Material.background
-            // QJniObject decorView = window.callObjectMethod("getDecorView", "()Landroid/view/View;");
-            // decorView.callMethod<void>("setSystemUiVisibility", "(I)V", 0x00002000);
+
+            QJniObject insetsController =
+                window.callObjectMethod(
+                    "getInsetsController",
+                    "()Landroid/view/WindowInsetsController;"
+                    );
+
+            if (insetsController.isValid()) {
+                const int APPEARANCE_LIGHT_STATUS_BARS = 0x00000008;
+
+                // Remove LIGHT_STATUS_BARS → light icons on dark background
+                insetsController.callMethod<void>(
+                    "setSystemBarsAppearance",
+                    "(II)V",
+                    0,                              // appearance
+                    APPEARANCE_LIGHT_STATUS_BARS    // mask
+                    );
+            }
+
+
+            // to support Android<11
+            QJniObject decorView =
+                window.callObjectMethod("getDecorView", "()Landroid/view/View;");
+
+            if (decorView.isValid()) {
+                int flags = decorView.callMethod<int>("getSystemUiVisibility", "()I");
+                const int SYSTEM_UI_FLAG_LIGHT_STATUS_BAR = 0x00002000;
+
+                flags &= ~SYSTEM_UI_FLAG_LIGHT_STATUS_BAR; // light icons
+                decorView.callMethod<void>("setSystemUiVisibility", "(I)V", flags);
+            }
+
+
         }
         QJniEnvironment env;
         if (env->ExceptionCheck()) {

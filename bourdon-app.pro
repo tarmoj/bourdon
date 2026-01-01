@@ -27,14 +27,17 @@ ios {
 RESOURCES += qml.qrc
 
 INCLUDEPATH += /usr/local/include/csound/
+#TODO: add variable for CSOUND_INCLUDE_DIR to config.user.pru
+INCLUDEPATH += /Library/Frameworks/CsoundLib64.framework/Versions/6.0/Headers
 
-exists(config.user.pri): include(config.user.pri)
+
+exists($$PWD/config.user.pri): include($$PWD/config.user.pri)
 # to define variables CSOUND_ANDROID_LIB_DIR
 
 android {
   QT += core-private
   INCLUDEPATH += $$PWD/AndroidCsound/csound6/
-  HEADERS += AndroidCsound.hpp \
+  HEADERS += AndroidCsound/csound6/AndroidCsound.hpp \
             mediabuttonhandler.h
   SOURCES += mediabuttonhandler.cpp
 
@@ -63,6 +66,8 @@ android {
 
     # build with 16 kB pagesize to comply with Google Play requirements
     QMAKE_LFLAGS += -Wl,-z,max-page-size=65536
+
+    message("Android lib: " CSOUND_ANDROID_LIB_DIR)
 
 }
 
@@ -232,10 +237,5 @@ TRANSLATIONS += \
     translations/bourdon_ga.ts \
     translations/bourdon_gd.ts
 
-contains(ANDROID_TARGET_ARCH,arm64-v8a) {
-    ANDROID_EXTRA_LIBS = \
-        /home/tarmo/tarmo/programm/bourdon/bourdon-app2/../../../../src/csound-android-6.18.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/arm64-v8a/libsndfile.so \
-        /home/tarmo/tarmo/programm/bourdon/bourdon-app2/../../../../src/csound-android-6.18.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/arm64-v8a/libcsoundandroid.so
-}
 
 
