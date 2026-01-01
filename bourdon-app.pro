@@ -129,6 +129,7 @@ DISTFILES += \
 
 ios {
 
+    QMAKE_BUNDLE_IDENTIFIER = org.tarmoj.bourdon
 
     csdfiles.files = bourdon.csd
     QMAKE_BUNDLE_DATA += csdfiles

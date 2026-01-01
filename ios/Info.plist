@@ -15,7 +15,7 @@
 	<key>CFBundleIcons~ipad</key>
 	<dict/>
 	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<string>org.tarmoj.bourdon</string>
 	<key>CFBundleName</key>
 	<string>bourdon-app</string>
 	<key>CFBundlePackageType</key>
