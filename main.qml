@@ -199,6 +199,43 @@ ApplicationWindow {
         bourdonForm.playButton.checked = false;
     }
 
+    function syncAllChannelsToCsound() {
+        console.log("Syncing all channels to Csound");
+
+        // Sound type and tuning
+        csound.setChannel("type", bourdonForm.soundTypeCombobox.currentIndex);
+        csound.setChannel("tuning", bourdonForm.tuningCombobox.currentIndex);
+        csound.setChannel("a4", bourdonForm.a4SpinBox.value);
+
+        // Master volume
+        csound.setChannel("volumeCorrection", mixerForm.volumeCorrection);
+
+        // Individual volumes and pans for all bourdons
+        for (let i = 0; i < app.bourdonNotes.length; i++) {
+            const volumeChannel = "volume" + i;
+            const panChannel = "pan" + i;
+
+            if (bourdonForm.currentPreset < 0) {
+                // Sandbox mode
+                const volumeValue = app.sandBoxData[volumeChannel] || 0;
+                const panValue = app.sandBoxData[panChannel] || 0;
+                csound.setChannel(volumeChannel, volumeValue);
+                csound.setChannel(panChannel, panValue);
+            } else {
+                // Preset mode
+                const preset = presetModel.get(bourdonForm.currentPreset);
+                const volumeValue = preset[volumeChannel] || 0;
+                const panValue = preset[panChannel] || 0;
+                csound.setChannel(volumeChannel, volumeValue);
+                csound.setChannel(panChannel, panValue);
+            }
+        }
+
+        console.log("All channels synced");
+    }
+
+
+
 
     // These are bluetooth shortcuts, Airturn Duo, mode 2 (keyboard mode)
     Shortcut {
@@ -480,6 +517,15 @@ Built using Csound sound engine and Qt framework.
             }
             function onNext() {console.log("Next received in QML");  bourdonForm.advancePreset(1); }
             function onPrevious() {console.log("Previous received in QML"); bourdonForm.advancePreset(-1); }
+    }
+
+    Connections {
+        target: csound
+
+        function onCsoundReady() {
+            console.log("Csound ready signal received, syncing channels");
+            syncAllChannelsToCsound();
+        }
     }
 
 

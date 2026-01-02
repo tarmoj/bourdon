@@ -19,12 +19,6 @@ ToolButton {
                 // Start Csound if not already running
                 if (!csound.isPlaying()) {
                     csound.startCsound();
-
-                    // this gurantees that if Csound gets started, the channels are set correctly
-                    // events are taken from queue, setting channel may happen too early, when Csound gets started
-                    const soundType = bourdonForm.soundTypeCombobox.currentIndex
-                    const tuning = bourdonForm.tuningCombobox.currentIndex
-                    csound.readScore(`i "SetSoundAndTuning" 0 0.1 ${soundType} ${tuning}`)
                 }
                 scoreLine = `i ${instrument} 0 -1 ${sound}`;
             } else {

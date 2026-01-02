@@ -123,7 +123,8 @@ void CsEngine::startCsound()
     
     // Process any queued events
     processEventQueue();
-    
+    emit csoundReady();
+
     qDebug() << "Csound started successfully";
 }
 

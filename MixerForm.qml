@@ -19,6 +19,7 @@ Rectangle {
     }
 
     property alias individualVolume: individualVolumeCheckbox.checked
+    property alias volumeCorrection: presetVolume.value
 
     function updateVolumeFromPreset() {
         if (bourdonForm.currentPreset < 0) {

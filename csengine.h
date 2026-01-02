@@ -39,6 +39,9 @@ public slots:
     //Q_INVOKABLE double getChannel(const char *channel);
     Q_INVOKABLE QVariant getAudioDevices();
 
+signals:
+    void csoundReady();
+
 private:
     bool mStop;
 #ifdef Q_OS_ANDROID
