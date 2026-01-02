@@ -91,15 +91,16 @@ Item {
 
 
     function playFromPreset(preset) {
-        const tuning = preset.tuning
-        const sound = preset.sound
+        const tuningIndex = tunings.indexOf(preset.tuning)
+        const sound =  preset.sound
         const notes = preset.notes.split(",")
-        console.log("Play from preset:", tuning, sound, notes)
+        console.log("Play from preset:", tuningIndex, sound, notes)
 
         if (notes.length===0) {
             console.log("No notes in preset", preset)
             return
         }
+
         for  (let note of notes) {
             const index = app.bourdonNotes.indexOf(note);
             if (index>=0) {

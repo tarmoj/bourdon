@@ -12,6 +12,8 @@ ksmps = 32
 nchnls = 2
 0dbfs = 1
 
+seed 0
+
 ;;channels
 chn_k "tuning",3
 chn_k "type",3
@@ -141,7 +143,7 @@ opcode getFrequency,k, i; in args: base note by index in giFrequencies (negative
 	kA4 chnget "a4"
 	
 	kTuning chnget "tuning"
-	;printk2 kTuning
+	printk2 kTuning
 	if kTuning==1 then
 		kBaseFrequency = giFrequencies[$G]
 		kRatio = giRatiosG[iNoteIndex]
@@ -268,11 +270,31 @@ instr RestoreFadeLevel
 	gkFade init 1
 endin
 
+; schedule "SetSoundAndTuning", 0, 0, 2, 5
+instr SetSoundAndTuning 
+	iSoundType = p4
+	iTuning = p5
+	
+	if chnget:i("tuning") != iTuning then
+		chnset iTuning, "tuning"
+		printf_i("Tuning to: %d\n", 1, iTuning)
+	endif
+	
+	if chnget:i("type") != iSoundType then
+		chnset iSoundType, "type"
+		printf_i("Sound to: %d\n", 1, iSoundType)
+
+	endif
+	
+endin
+
 </CsInstruments>
 <CsScore>
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 
@@ -563,7 +585,7 @@ endin
   <eventLine>i1.9 0 -1 9</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -673,7 +695,7 @@ endin
   <eventLine>i1.16 0 -1 16</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
