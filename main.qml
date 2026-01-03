@@ -354,8 +354,7 @@ Built using Csound sound engine and Qt framework.
                 icon.source: "qrc:/images/open.svg"
                 onTriggered: {
                     drawer.close()
-                    loadDialogMobile.open()
-                    if (Qt.platform.os === "ios" || Qt.platform.os === "android")  {
+                    if (Qt.platform.os === "ios" /*|| Qt.platform.os === "android"*/)  {
                         loadDialogMobile.open()
                     } else {
                         loadDialog.open();
@@ -368,8 +367,8 @@ Built using Csound sound engine and Qt framework.
                 icon.source: "qrc:/images/save.svg"
                 onTriggered: {
                     drawer.close()
-                    savePresetDialogMobile.open()
-                    if (Qt.platform.os === "ios" || Qt.platform.os === "android")  {
+                    //savePresetDialogMobile.open()
+                    if (Qt.platform.os === "ios" /*|| Qt.platform.os === "android"*/)  {
                         savePresetDialogMobile.open()
                     } else {
                         saveDialog.open();
@@ -435,8 +434,7 @@ Built using Csound sound engine and Qt framework.
         id: saveDialog
         title: qsTr("Save Presets to File")
         fileMode: FileDialog.SaveFile
-        //currentFolder: StandardPaths.writableLocation(StandardPaths.MusicLocation) + "/Bourdon"
-        currentFolder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
+        currentFolder: "file://" + fileio.presetsPath()
 
         nameFilters: ["JSON files (*.json)", "All files (*)"]
         onAccepted: {
@@ -452,6 +450,7 @@ Built using Csound sound engine and Qt framework.
         id: loadDialog
         title: qsTr("Load Presets from File")
         fileMode: FileDialog.OpenFile
+        currentFolder: "file://" + fileio.presetsPath()
         nameFilters: ["All files (*)"]
         onAccepted: {
             loadPresetsFromFile(selectedFile)
