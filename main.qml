@@ -143,12 +143,25 @@ ApplicationWindow {
 
     function addToPresetModel(preset) {
         console.log("Add to preset model: ", preset)
-        presetModel.append({
+
+        // Base fields
+        const newPreset = {
             tuning: preset.tuning,
             sound: preset.sound,
-            notes: preset.notes
-        })
-      savePresets()
+            notes: preset.notes,
+            volumeCorrection: preset.volumeCorrection || 0
+        }
+
+        // Carry over individual volume/pan channels
+        for (let i = 0; i < app.bourdonNotes.length; i++) {
+            const volumeChannel = "volume" + i
+            const panChannel = "pan" + i
+            newPreset[volumeChannel] = preset[volumeChannel] !== undefined ? preset[volumeChannel] : (app.sandBoxData[volumeChannel] || 0)
+            newPreset[panChannel]    = preset[panChannel]    !== undefined ? preset[panChannel]    : (app.sandBoxData[panChannel] || 0)
+        }
+
+        presetModel.append(newPreset)
+        savePresets()
     }
 
     function savePresets() {
