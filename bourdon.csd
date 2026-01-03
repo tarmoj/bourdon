@@ -181,21 +181,23 @@ opcode getFrequency,k, i; in args: base note by index in giFrequencies (negative
 
 endop 
 
-
+; schedule -1.1,0, 0 
 instr Bourdon
 	iTable =  p4
 	iNoteIndex = iTable-1
+	kType init chnget:i("type")
 	
-	kType chnget "type"
+	
+	if release()==0 then ; test if this solves squeak on preset changes -- no
+		kType chnget "type" ; do not change the sound in release phase
+	endif
 	
 	kFreq getFrequency iNoteIndex
 	
 	if (kType==$SAW) then ; saw wave
-   kamp = 0.2
+    kamp = 0.2
 		aSaw vco2 kamp, kFreq ;, 10
-		if (kType==1) then ; donät filter for Saw 2
-			aSaw butterlp aSaw, 4000	  
-		endif
+		aSaw butterlp aSaw, 4000	  
 	  aOut = aSaw	
 	elseif (kType==$CUSTOM) then	
 		kTimbre port chnget:k("timbre"), 0.02, chnget:i("timbre")
@@ -215,7 +217,7 @@ instr Bourdon
 		endif
 	  aOut squinewave a(kFreq), a(kClip), a(kSkew) 
 	  aOut *= kamp
-	  
+	 
 	  
 	else ; default is synthesized sound, type 1
 		kamp = 0.2
@@ -231,13 +233,14 @@ instr Bourdon
 	iFade = 0.1
 		
 	;aEnv linenr 1, iFade, iFade, 0.01
-	aEnv madsr iFade, 0, 1, iFade
+	aEnv madsr iFade, 0, 1, iFade*2
   kBourdonVolume chnget sprintf("volume%d", iNoteIndex) 
   kPan chnget sprintf("pan%d", iNoteIndex) // comes in in scale -1...1, 0 gives center
   kPan = kPan/2 + 0.5 
+  kPan port kPan, 0.02
 	kVolume = 0.2 * ampdbfs(chnget:k("volumeCorrection")) *
 		ampdbfs(kBourdonVolume)
-	kVolume port kVolume, 0.01  
+	kVolume port kVolume, 0.02  
 	aOut *= aEnv * kVolume *gkFade ; 
 	aL, aR pan2 aOut, kPan
 	out aL, aR	
@@ -497,7 +500,7 @@ endin
   <eventLine>i1.3 0 -1 3</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -541,7 +544,7 @@ endin
   <eventLine>i1.5 0 -1 5</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -695,7 +698,7 @@ endin
   <eventLine>i1.16 0 -1 16</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -782,23 +785,18 @@ endin
   <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
-    <name>---</name>
+    <name>saw</name>
     <value>0</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>saw</name>
+    <name>synthesized</name>
     <value>1</value>
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>synthesized</name>
-    <value>2</value>
-    <stringvalue/>
-   </bsbDropdownItem>
-   <bsbDropdownItem>
     <name> squine</name>
-    <value>3</value>
+    <value>2</value>
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
@@ -846,7 +844,7 @@ endin
   <eventLine>i1.14 0 -1 14</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -941,7 +939,7 @@ endin
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>6</selectedIndex>
+  <selectedIndex>4</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">

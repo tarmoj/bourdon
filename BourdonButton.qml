@@ -22,7 +22,7 @@ ToolButton {
                 }
                 scoreLine = `i ${instrument} 0 -1 ${sound}`;
             } else {
-                scoreLine = `i -${instrument} 0 -0 ${sound}`;
+                scoreLine = `i -${instrument} 0 0 ${sound}`;
             }
             csound.readScore(scoreLine)
             
@@ -36,7 +36,7 @@ ToolButton {
 
     Timer {
         id: stopCsoundTimer
-        interval: (app.fadeTime + 0.1) * 1000  // fade time + extra time for fade out
+        interval: (app.fadeTime + 1) * 1000  // fade time + extra time for fade out
         running: false
         repeat: false
         onTriggered: {

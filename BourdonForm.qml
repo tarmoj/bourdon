@@ -119,12 +119,25 @@ Item {
         }
     }
 
+    Timer { // tryout for smoother sound change -  no satisfacrtory efect
+        id: updateComboboxTimer
+        interval: 5
+        repeat: false
+        running: false
+        onTriggered: {
+            var preset = getPresetData();
+            console.log("Update comboboxes: ", preset.tuning, preset.sound)
+            tuningCombobox.currentIndex = tunings.indexOf(preset.tuning)
+            soundTypeCombobox.currentIndex = parseInt(preset.sound)
+        }
+    }
 
     function updateComboBoxes() {
-        var preset = getPresetData();
-        console.log("Update comboboxes: ", preset.tuning, preset.sound)
-        tuningCombobox.currentIndex = tunings.indexOf(preset.tuning)
-        soundTypeCombobox.currentIndex = parseInt(preset.sound) //soundTypes.indexOf(preset.sound)
+        // var preset = getPresetData();
+        // console.log("Update comboboxes: ", preset.tuning, preset.sound)
+        // tuningCombobox.currentIndex = tunings.indexOf(preset.tuning)
+        // soundTypeCombobox.currentIndex = parseInt(preset.sound)
+        updateComboboxTimer.start()
     }
 
     function advancePreset(advance=1) { // either +1 or -1
