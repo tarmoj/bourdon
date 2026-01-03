@@ -50,7 +50,7 @@ bool FileIO::writeFile(const QString &path, const QString &content)
 
 QStringList FileIO::listPresets()
 {
-    QDir dir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+    QDir dir(presetsPath());
     QStringList list = dir.entryList(QStringList() << "*", QDir::Files);
     qDebug() << "File list in c++ " << list;
     return list;

@@ -26,6 +26,9 @@ public:
 
     //CSOUND * getCsound();
 
+signals:
+    void csoundReady();
+
 private:
     void *cs; // CsoundObj will be pointed here. Cannot import Objective C CsoundObj here
     CSOUND *csound;
