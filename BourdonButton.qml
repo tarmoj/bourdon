@@ -9,29 +9,25 @@ ToolButton {
 
     onCheckedChanged: {
 
-        // if (bourdonForm.editMode) {
-        //     // make changes in model but do not play
-        //     bourdonForm.presetChanged();
-        // } else {
-            const instrument = "1."+sound.toString()
-            let scoreLine = "";
-            if (checked) {
-                // Start Csound if not already running
-                if (!csound.isPlaying()) {
-                    csound.startCsound();
-                }
-                scoreLine = `i ${instrument} 0 -1 ${sound}`;
-            } else {
-                scoreLine = `i -${instrument} 0 0 ${sound}`;
+        const instrument = "1."+sound.toString().padStart(2, '0') // 1.01, 1.02, 1.1, 1.11 etc
+        let scoreLine = "";
+        if (checked) {
+            // Start Csound if not already running
+            if (!csound.isPlaying()) {
+                csound.startCsound();
             }
-            csound.readScore(scoreLine)
-            
-            // Stop Csound if no sound is playing after unchecking
-            // Use fade time + 0.1 seconds to allow the sound to fade out
-            if (!checked) {
-                stopCsoundTimer.start()
-            }
-        // }
+            scoreLine = `i ${instrument} 0 -1 ${sound}`;
+        } else {
+            scoreLine = `i -${instrument} 0 0 ${sound}`;
+        }
+        csound.readScore(scoreLine)
+
+        // Stop Csound if no sound is playing after unchecking
+        // Use fade time + 0.1 seconds to allow the sound to fade out
+        if (!checked) {
+            stopCsoundTimer.start()
+        }
+
     }
 
     Timer {
