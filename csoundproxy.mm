@@ -119,6 +119,7 @@ void CsoundProxy::startCsound()
     
     if (csound) {
         qDebug() << "Csound is ready:" << csound << "in " << attempts*10 << " ms";
+        emit csoundReady();
         // Process any queued events
         processEventQueue();
     } else {
@@ -126,6 +127,7 @@ void CsoundProxy::startCsound()
     }
     
     qDebug() << "Csound started successfully";
+
 }
 
 void CsoundProxy::stopCsound()
