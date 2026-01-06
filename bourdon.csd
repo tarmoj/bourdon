@@ -183,6 +183,7 @@ endop
 
 ; schedule -1.1,0, 0 
 instr Bourdon
+
 	iTable =  p4
 	iNoteIndex = iTable-1
 	kType init chnget:i("type")
@@ -296,6 +297,8 @@ endin
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 
@@ -500,7 +503,7 @@ endin
   <eventLine>i1.3 0 -1 3</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -544,7 +547,7 @@ endin
   <eventLine>i1.5 0 -1 5</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -588,7 +591,7 @@ endin
   <eventLine>i1.9 0 -1 9</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -844,7 +847,7 @@ endin
   <eventLine>i1.14 0 -1 14</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">

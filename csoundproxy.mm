@@ -185,7 +185,7 @@ void CsoundProxy::stop()
 void CsoundProxy::readScore(const QString &scoreLine)
 {
     if (isPlaying()) {
-        csoundInputMessage(csound, scoreLine.toLocal8Bit());
+        if (csound) csoundInputMessage(csound, scoreLine.toLocal8Bit());
     } else {
         qDebug() << "Csound not ready, queuing event:" << scoreLine;
         m_eventQueue.enqueue(scoreLine);
