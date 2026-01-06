@@ -52,16 +52,10 @@ void CsEngine::initializeCsound()
     // cs->SetOption(ssdirOption.toLocal8Bit().data());
 #elif defined(Q_OS_MACOS)
     cs = new Csound();
-    //QString SSDirOption = "--env:SSDIR=" + QCoreApplication::applicationDirPath()
-    +"/../Resources/samples";
-    //qDebug() << "MacOS samples path: " << SSDirOption;
-    //cs->SetOption(SSDirOption.toLocal8Bit().data());
-    //cs->SetOption(QString("--env:SSDIR=%1/").arg(samplesDir).toLocal8Bit().data());
     cs->SetOption("-+rtaudio=auhal");
 #else
     cs = new Csound();
     //cs->SetOption("--env:SSDIR=/home/tarmo/tarmo/programm/bourdon/bourdon-app2/ogg/"); // for local build only.
-    // cs->SetOption(QString("--env:SSDIR=%1/").arg(samplesDir).toLocal8Bit().data());
 #endif
     cs->SetOption("-odac");
     cs->SetOption("-d");

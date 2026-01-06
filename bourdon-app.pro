@@ -31,7 +31,9 @@ isEmpty( CSOUND_INCLUDE_DIR) {
   CSOUND_INCLUDE_DIR = /usr/local/include/csound/ # Linux default
 }
 
-!ios: INCLUDEPATH += CSOUND_INCLUDE_DIR
+!ios: INCLUDEPATH += $$CSOUND_INCLUDE_DIR
+
+message("Csound headers in: " $$CSOUND_INCLUDE_DIR)
 
 android {
   QT += core-private
@@ -66,7 +68,7 @@ android {
     # build with 16 kB pagesize to comply with Google Play requirements
     QMAKE_LFLAGS += -Wl,-z,max-page-size=65536
 
-    message("Android lib: " CSOUND_ANDROID_LIB_DIR)
+    message("Android lib: " $$CSOUND_ANDROID_LIB_DIR)
 
 }
 
