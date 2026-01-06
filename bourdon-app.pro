@@ -20,19 +20,18 @@ HEADERS += \
     languagemanager.h \
 
 
-ios {
-
-}
-
 RESOURCES += qml.qrc
 
-INCLUDEPATH += /usr/local/include/csound/
-#TODO: add variable for CSOUND_INCLUDE_DIR to config.user.pru
-INCLUDEPATH += /Library/Frameworks/CsoundLib64.framework/Versions/6.0/Headers
 
-
+# to define variables CSOUND_ANDROID_LIB_DIR, CSOUND_INCLUDE_DIR
 exists($$PWD/config.user.pri): include($$PWD/config.user.pri)
-# to define variables CSOUND_ANDROID_LIB_DIR
+
+
+isEmpty( CSOUND_INCLUDE_DIR) {
+  CSOUND_INCLUDE_DIR = /usr/local/include/csound/ # Linux default
+}
+
+!ios: INCLUDEPATH += CSOUND_INCLUDE_DIR
 
 android {
   QT += core-private
