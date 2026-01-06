@@ -9,7 +9,7 @@
 class CsoundProxy : public QObject
 {
     Q_OBJECT
-    
+
 public:
     explicit CsoundProxy(QObject *parent = nullptr);
     ~CsoundProxy();
@@ -35,7 +35,7 @@ private:
     void *cs; // CsoundObj will be pointed here. Cannot import Objective C CsoundObj here
     CSOUND *csound;
     QQueue<QString> m_eventQueue;
-    
+
     void initializeCsound();
     void processEventQueue();
 };

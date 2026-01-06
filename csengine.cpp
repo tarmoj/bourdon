@@ -1,9 +1,9 @@
 #include "csengine.h"
-#include "fileio.h"
 #include <QCoreApplication>
 #include <QDebug>
 #include <QFile>
 #include <QTemporaryFile>
+#include "fileio.h"
 
 //#include <QDateTime>
 
@@ -53,7 +53,7 @@ void CsEngine::initializeCsound()
 #elif defined(Q_OS_MACOS)
     cs = new Csound();
     //QString SSDirOption = "--env:SSDIR=" + QCoreApplication::applicationDirPath()
-                          + "/../Resources/samples";
+    +"/../Resources/samples";
     //qDebug() << "MacOS samples path: " << SSDirOption;
     //cs->SetOption(SSDirOption.toLocal8Bit().data());
     //cs->SetOption(QString("--env:SSDIR=%1/").arg(samplesDir).toLocal8Bit().data());
@@ -120,10 +120,11 @@ void CsEngine::startCsound()
 
     initializeCsound();
     play();
-    
+
     // Process any queued events
     processEventQueue();
     emit csoundReady();
+
 
     qDebug() << "Csound started successfully";
 }
@@ -156,13 +157,13 @@ void CsEngine::stopCsound()
 void CsEngine::restartCsound()
 {
     qDebug() << "Restarting Csound...";
-    
+
     // First stop Csound
     stopCsound();
-    
+
     // Then start again
     startCsound();
-    
+
     qDebug() << "Csound restarted successfully";
 }
 
@@ -229,7 +230,7 @@ void CsEngine::processEventQueue()
         qDebug() << "Cannot process event queue - Csound not ready";
         return;
     }
-    
+
     while (!m_eventQueue.isEmpty()) {
         QString event = m_eventQueue.dequeue();
         qDebug() << "Processing queued event:" << event;

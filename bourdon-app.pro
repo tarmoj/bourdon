@@ -140,10 +140,18 @@ ios {
     #     QMAKE_APPLE_TARGETED_DEVICE_FAMILY = 1,2
     # }
 
+
     QMAKE_ASSET_CATALOGS += $$PWD/ios/Assets.xcassets
     QMAKE_ASSET_CATALOGS_APP_ICON = AppIcon
 
     QMAKE_IOS_LAUNCH_SCREEN = $$PWD/ios/LaunchScreen.storyboard
+
+    QMAKE_TARGET_BUNDLE_PREFIX = org.tarmoj
+    TARGET = bourdon
+
+    QMAKE_BUNDLE_NAME = "Bourdon Player"
+    QMAKE_BUNDLE_DISPLAY_NAME = "Bourdon Player"
+
 
     SOURCES += \
         csoundproxy.mm \
