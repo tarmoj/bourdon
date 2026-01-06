@@ -5,6 +5,9 @@
 #include <QFileInfo>
 #include <QStandardPaths>
 #include <QDirIterator>
+#ifdef Q_OS_ANDROID
+#include <QJniObject>
+#endif
 
 FileIO::FileIO(QObject *parent)
     : QObject(parent)
@@ -47,7 +50,7 @@ bool FileIO::writeFile(const QString &path, const QString &content)
 
 QStringList FileIO::listPresets()
 {
-    QDir dir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+    QDir dir(presetsPath());
     QStringList list = dir.entryList(QStringList() << "*", QDir::Files);
     qDebug() << "File list in c++ " << list;
     return list;
@@ -56,6 +59,42 @@ QStringList FileIO::listPresets()
 QString FileIO::documentsPath() const
 {
     return QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+}
+
+QString FileIO::presetsPath() const
+{
+#ifdef Q_OS_ANDROID
+    // Prefer public Downloads; fallback to scoped DownloadLocation
+    QString downloadPath = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
+
+    // If DownloadLocation is sandboxed (contains /Android/data/), try public downloads via JNI
+    if (downloadPath.contains("/Android/data/")) {
+        QJniObject envDir = QJniObject::callStaticObjectMethod(
+            "android/os/Environment",
+            "getExternalStoragePublicDirectory",
+            "(Ljava/lang/String;)Ljava/io/File;",
+            QJniObject::fromString("Download").object<jstring>());
+
+        if (envDir.isValid()) {
+            const QString publicDownload = envDir.callObjectMethod<jstring>("toString").toString();
+            if (!publicDownload.isEmpty()) {
+                downloadPath = publicDownload;
+            }
+        }
+    }
+
+    QString presetsDir = downloadPath + "/BourdonPresets";
+    QDir().mkpath(presetsDir);
+    qDebug() << "Android presets path:" << presetsDir;
+    return presetsDir;
+#else
+    // Use Documents folder on iOS and desktop
+    QString docsPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    QString presetsDir = docsPath + "/BourdonPresets";
+    QDir().mkpath(presetsDir);
+    qDebug() << "Presets path:" << presetsDir;
+    return presetsDir;
+#endif
 }
 
 bool FileIO::fileExists(const QString &path) const

@@ -143,12 +143,25 @@ ApplicationWindow {
 
     function addToPresetModel(preset) {
         console.log("Add to preset model: ", preset)
-        presetModel.append({
+
+        // Base fields
+        const newPreset = {
             tuning: preset.tuning,
             sound: preset.sound,
-            notes: preset.notes
-        })
-      savePresets()
+            notes: preset.notes,
+            volumeCorrection: preset.volumeCorrection || 0
+        }
+
+        // Carry over individual volume/pan channels
+        for (let i = 0; i < app.bourdonNotes.length; i++) {
+            const volumeChannel = "volume" + i
+            const panChannel = "pan" + i
+            newPreset[volumeChannel] = preset[volumeChannel] !== undefined ? preset[volumeChannel] : (app.sandBoxData[volumeChannel] || 0)
+            newPreset[panChannel]    = preset[panChannel]    !== undefined ? preset[panChannel]    : (app.sandBoxData[panChannel] || 0)
+        }
+
+        presetModel.append(newPreset)
+        savePresets()
     }
 
     function savePresets() {
@@ -354,8 +367,7 @@ Built using Csound sound engine and Qt framework.
                 icon.source: "qrc:/images/open.svg"
                 onTriggered: {
                     drawer.close()
-                    loadDialogMobile.open()
-                    if (Qt.platform.os === "ios" || Qt.platform.os === "android")  {
+                    if (Qt.platform.os === "ios" /*|| Qt.platform.os === "android"*/)  {
                         loadDialogMobile.open()
                     } else {
                         loadDialog.open();
@@ -368,8 +380,8 @@ Built using Csound sound engine and Qt framework.
                 icon.source: "qrc:/images/save.svg"
                 onTriggered: {
                     drawer.close()
-                    savePresetDialogMobile.open()
-                    if (Qt.platform.os === "ios" || Qt.platform.os === "android")  {
+                    //savePresetDialogMobile.open()
+                    if (Qt.platform.os === "ios" /*|| Qt.platform.os === "android"*/)  {
                         savePresetDialogMobile.open()
                     } else {
                         saveDialog.open();
@@ -435,8 +447,7 @@ Built using Csound sound engine and Qt framework.
         id: saveDialog
         title: qsTr("Save Presets to File")
         fileMode: FileDialog.SaveFile
-        //currentFolder: StandardPaths.writableLocation(StandardPaths.MusicLocation) + "/Bourdon"
-        currentFolder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
+        currentFolder: "file://" + fileio.presetsPath()
 
         nameFilters: ["JSON files (*.json)", "All files (*)"]
         onAccepted: {
@@ -452,6 +463,7 @@ Built using Csound sound engine and Qt framework.
         id: loadDialog
         title: qsTr("Load Presets from File")
         fileMode: FileDialog.OpenFile
+        currentFolder: "file://" + fileio.presetsPath()
         nameFilters: ["All files (*)"]
         onAccepted: {
             loadPresetsFromFile(selectedFile)

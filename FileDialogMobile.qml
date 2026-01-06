@@ -219,7 +219,7 @@ Dialog {
             return
         }
 
-        const basePath = fileio.documentsPath()
+        const basePath = fileio.presetsPath()
         const fullPath = basePath + "/" + nameField.text
 
 

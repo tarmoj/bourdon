@@ -135,6 +135,11 @@ ios {
 
     QMAKE_INFO_PLIST = $$PWD/ios/Info.plist
 
+    # ios {
+    #     QMAKE_IOS_DEPLOYMENT_TARGET = 26.0
+    #     QMAKE_APPLE_TARGETED_DEVICE_FAMILY = 1,2
+    # }
+
     QMAKE_ASSET_CATALOGS += $$PWD/ios/Assets.xcassets
     QMAKE_ASSET_CATALOGS_APP_ICON = AppIcon
 
