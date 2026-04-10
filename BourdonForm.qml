@@ -257,7 +257,7 @@ Item {
                 SpinBox {
                     id: a4SpinBox
                     scale: 0.75
-                    from: 430
+                    from: 415
                     to: 450
                     editable: true
                     stepSize: 1

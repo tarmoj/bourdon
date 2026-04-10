@@ -18,7 +18,7 @@ ApplicationWindow {
     height: 720
     minimumWidth: 350
     visible: true
-    property string version: "0.9.5"
+    property string version: "0.9.6"
     title: qsTr("Bourdon Player "+ version)
 
     color: Material.background
